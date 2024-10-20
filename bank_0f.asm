@@ -570,17 +570,108 @@ BFEDCD:
 .byte $85,$04,$a9,$70,$85,$05,$a0,$00,$b1,$04,$45,$00,$85,$00,$a5,$03
 .byte $0a,$26,$00,$26,$01,$26,$02,$26,$03,$e6,$04,$d0,$02,$e6,$05,$a5
 .byte $04,$c9,$5a,$a5,$05,$e9,$78,$d0,$dd,$4c,$d4,$f6,$a9,$c0,$d0,$06
-.byte $a9,$80,$d0,$02,$a9,$40,$8d,$01,$a0,$60,$a0,$00,$b1,$10,$c9,$ff
-.byte $f0,$77,$aa,$10,$06,$29,$40,$f0,$44,$d0,$06,$29,$40,$f0,$27,$d0
-.byte $57,$8a,$29,$3f,$aa,$a0,$01,$b1,$10,$48,$c8,$b1,$10,$a8,$68,$8d
-;$F700
-.byte $07,$20,$8c,$07,$20,$ca,$d0,$f7,$18,$a9,$03,$65,$10,$85,$10,$90
-.byte $02,$e6,$11,$4c,$da,$f6,$c8,$b1,$10,$8d,$07,$20,$c8,$ca,$d0,$f7
-.byte $18,$98,$65,$10,$85,$10,$90,$02,$e6,$11,$4c,$da,$f6,$8a,$29,$3f
-.byte $aa,$c8,$b1,$10,$8d,$07,$20,$ca,$d0,$fa,$18,$a9,$02,$65,$10,$85
-.byte $10,$90,$02,$e6,$11,$4c,$da,$f6,$8a,$29,$3f,$aa,$c8,$b1,$10,$a8
-.byte $8c,$07,$20,$c8,$ca,$d0,$f9,$f0,$e1
-	RTS			; F759	$60
+.byte $a9,$80,$d0,$02,$a9,$40,$8d,$01,$a0,$60
+
+; Name	:
+; Marks	: Decode and set screen tile map
+;	  ?cdd dddd
+;	  if c == 1 || ? == 1
+;	   dd dddd is count
+;	   tile index(2) is 2nd, 3rd byte of ($10),Y
+;	  1111 1111 is end of tilemap decode
+;	  if c == 0 || ? == 1
+;	   dd dddd is count
+;	   tile index is 2nd, repeat for count
+;	  if c == 0 || ? == 0
+;	   tile index is next for count
+;	  Y = count
+	LDY #$00		; F6DA	$a0 $00
+	LDA ($10),Y		; F6DC	$b1 $10
+	CMP #$FF		; F6DE  C9 FF          
+	BEQ BFF759		; F6E0  F0 77          
+	TAX			; F6E2  AA             
+	BPL BFF6EB		; F6E3  10 06		branch if ? is 0
+	AND #$40		; F6E5  29 40          
+	BEQ BFF72D		; F6E7  F0 44          
+	BNE BFF6F1		; F6E9  D0 06          
+BFF6EB:
+	AND #$40		; F6EB  29 40          
+	BEQ BFF716		; F6ED  F0 27          
+	BNE BFF748		; F6EF  D0 57          
+BFF6F1:
+	TXA			; F6F1  8A             
+	AND #$3F		; F6F2  29 3F          
+	TAX			; F6F4  AA             
+	LDY #$01		; F6F5  A0 01		2nd data
+	LDA ($10),Y		; F6F7  B1 10          
+	PHA			; F6F9  48             
+	INY			; F6FA  C8		3rd data
+	LDA ($10),Y		; F6FB  B1 10          
+	TAY			; F6FD  A8             
+	PLA			; F6FE  68             
+BFF6FF:
+	STA PpuData_2007	; F6FF  8D 07 20       
+	STY PpuData_2007	; F702  8C 07 20       
+	DEX			; F705  CA             
+	BNE BFF6FF		; F706  D0 F7          
+	CLC			; F708  18             
+	LDA #$03		; F709  A9 03          
+	ADC $10			; F70B  65 10          
+	STA $10			; F70D  85 10          
+	BCC BFF713		; F70F  90 02          
+	INC $11			; F711  E6 11          
+BFF713:
+	JMP $F6DA		; F713  4C DA F6       
+BFF716:
+	INY			; F716  C8             
+BFF717:
+	LDA ($10),Y		; F717  B1 10          
+	STA PpuData_2007	; F719  8D 07 20       
+	INY			; F71C  C8             
+	DEX			; F71D  CA             
+	BNE BFF717		; F71E  D0 F7          
+	CLC			; F720  18             
+	TYA			; F721  98             
+	ADC $10			; F722  65 10          
+	STA $10			; F724  85 10          
+	BCC BFF72A		; F726  90 02          
+	INC $11			; F728  E6 11          
+BFF72A:
+	JMP $F6DA		; F72A  4C DA F6       
+BFF72D:
+	TXA			; F72D  8A             
+	AND #$3F		; F72E  29 3F          
+	TAX			; F730  AA             
+	INY			; F731  C8             
+	LDA ($10),Y		; F732  B1 10          
+BFF734:
+	STA PpuData_2007	; F734  8D 07 20       
+	DEX			; F737  CA             
+	BNE BFF734		; F738  D0 FA          
+BFF73A:
+	CLC			; F73A  18             
+	LDA #$02		; F73B  A9 02          
+	ADC $10			; F73D  65 10          
+	STA $10			; F73F  85 10          
+	BCC BFF745		; F741  90 02          
+	INC $11			; F743  E6 11          
+BFF745:
+	JMP $F6DA		; F745  4C DA F6       
+BFF748:
+	TXA			; F748  8A             
+	AND #$3F		; F749  29 3F          
+	TAX			; F74B  AA             
+	INY			; F74C  C8             
+	LDA ($10),Y		; F74D  B1 10          
+	TAY			; F74F  A8             
+BFF750:
+	STY PpuData_2007	; F750  8C 07 20       
+	INY			; F753  C8             
+	DEX			; F754  CA             
+	BNE BFF750		; F755  D0 F9          
+	BEQ BFF73A		; F757  F0 E1          
+BFF759:
+	RTS                     ; F759  60             
 
 ;$F75A
 .byte $a9,$00,$38,$e5,$16,$85
@@ -621,9 +712,27 @@ BFEDCD:
 .byte $6d,$f9,$a2,$0d,$a9,$62,$9d,$00,$03,$ca,$10,$fa,$60,$a2,$7f,$a9
 .byte $20,$9d,$00,$03,$ca,$10,$fa,$60,$a2,$1d,$a9,$00,$95,$d1,$ca,$10
 .byte $fb,$60,$a2,$3f,$a9,$20,$9d,$00,$03,$ca,$10,$fa,$60,$a9,$00,$85
-.byte $2a,$a9,$03,$85,$2b,$60,$a9,$d1,$85,$2a,$a9,$00,$85,$2b,$60,$a5
-.byte $62,$4a,$48,$20,$65,$f5,$a2,$54,$a0,$00,$b1,$10,$99,$00,$03,$c8
-.byte $ca,$d0,$f7,$68,$4c,$70,$f5,$a9,$50,$85,$10,$a9,$04,$85,$11,$a9
+.byte $2a,$a9,$03,$85,$2b,$60,$a9,$d1,$85,$2a,$a9,$00,$85,$2b,$60
+
+; Name	:
+; Marks	: Load string from table ??
+	LDA $62			; F99F	$a5 $62
+	LSR A			; F9A1	$4a
+	PHA			; F9A2	$48
+	JSR $F565		; F9A3	$20 $65 $f5
+	LDX #$54		; F9A6	$a2 $54
+	LDY #$00		; F9A8	$a0 $00
+BFF9AA:
+	LDA ($10),Y		; F9AA	$b1 $10
+	STA $0300,Y		; F9AC	$99 $00 $03
+	INY			; F9AF	$c8
+	DEX			; F9B0	$ca
+	BNE BFF9AA		; F9B1	$d0 $f7
+	PLA			; F9B3	$68
+	JMP $F570		; F9B4	$4c $70 $f5
+
+;$F9B7
+.byte $a9,$50,$85,$10,$a9,$04,$85,$11,$a9
 .byte $08,$85,$00,$4c,$d2,$f9,$a9,$54,$85,$00
 
 ; Name	:
@@ -871,7 +980,7 @@ BFFEEB:
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .else
 ; Name	:
-; Marks	: To menu
+; Marks	: To menu / To choose the scenario
 	LDA #$00		; FF27	$a9 $00
 	STA $44			; FF29	$85 $44
 	STA $5A			; FF2B	$85 $5a
