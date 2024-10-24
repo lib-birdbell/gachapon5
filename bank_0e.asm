@@ -79,12 +79,50 @@
 .byte $00,$85,$90,$a9,$00,$85,$91,$a9,$04,$85,$8f,$a9,$00,$85,$10,$a9
 .byte $80,$85,$11,$20,$ed,$fa,$a9,$8c,$85,$12,$a9,$c4,$85,$13,$20,$07
 .byte $80,$a5,$90,$30,$16,$48,$0a,$a8,$b1,$12,$85,$66,$c8,$b1,$12,$85
-.byte $67,$20,$96,$f5,$68,$85,$90,$a5,$9c,$f0,$c8,$60,$2a,$a5,$48,$86
-.byte $ca,$81,$46,$d2,$20,$c8,$f3,$20,$d4,$f3,$a9,$00,$85,$90,$a9,$00
-.byte $85,$91,$a9,$04,$85,$8f,$a9,$54,$85,$10,$a9,$80,$85,$11,$20,$ed
-.byte $fa,$a9,$d5,$85,$12,$a9,$c4,$85,$13,$20,$07,$80,$a5,$90,$30,$14
-.byte $48,$0a,$a8,$b1,$12,$85,$66,$c8,$b1,$12,$85,$67,$20,$96,$f5,$68
-.byte $85,$90,$10,$ca,$60,$1b,$8f,$e9,$8d,$d4,$8d,$3b,$90,$a9,$f0,$8d
+.byte $67,$20,$96,$f5,$68,$85,$90,$a5,$9c,$f0,$c8,$60
+;$C48C - data block =
+.byte $2a,$a5,$48,$86
+.byte $ca,$81,$46,$d2
+
+; Name	:
+	JSR $F3C8		; C494  20 C8 F3       
+	JSR $F3D4		; C497  20 D4 F3       
+	LDA #$00		; C49A  A9 00          
+	STA $90			; C49C  85 90          
+BEC49E:
+	LDA #$00		; C49E  A9 00          
+	STA $91			; C4A0  85 91          
+	LDA #$04		; C4A2  A9 04          
+	STA $8F			; C4A4  85 8F          
+	LDA #$54		; C4A6  A9 54          
+	STA $10			; C4A8  85 10          
+	LDA #$80		; C4AA  A9 80          
+	STA $11			; C4AC  85 11		BANK 06 06/8054 ??
+	JSR $FAED               ; C4AE  20 ED FA       
+	LDA #$D5		; C4B1  A9 D5          
+	STA $12			; C4B3  85 12          
+	LDA #$C4		; C4B5  A9 C4          
+	STA $13			; C4B7  85 13          
+	JSR $8007		; C4B9  20 07 80       
+	LDA $90			; C4BC  A5 90          
+	BMI BEC4D4		; C4BE  30 14          
+	PHA			; C4C0  48             
+	ASL A			; C4C1  0A             
+	TAY			; C4C2  A8             
+	LDA ($12),Y		; C4C3  B1 12          
+	STA $66			; C4C5  85 66          
+	INY			; C4C7  C8             
+	LDA ($12),Y		; C4C8  B1 12          
+	STA $67			; C4CA  85 67          
+	JSR $F596		; C4CC  20 96 F5       
+	PLA			; C4CF  68             
+	STA $90			; C4D0  85 90          
+	BPL BEC49E		; C4D2  10 CA          
+BEC4D4:
+	RTS			; C4D4  60             
+
+;$C4D5
+.byte $1b,$8f,$e9,$8d,$d4,$8d,$3b,$90,$a9,$f0,$8d
 .byte $10,$02,$4c,$d0,$f3,$a5,$62,$4a,$48,$20,$68,$f5,$b1,$14,$85,$9b
 .byte $68,$4c,$70,$f5,$aa,$a5,$62,$4a,$48,$20,$68,$f5,$bd,$49,$9c,$85
 ;$C500
@@ -92,8 +130,24 @@
 .byte $68,$f5,$bd,$71,$9c,$85,$14,$bd,$72,$9c,$85,$15,$68,$4c,$70,$f5
 .byte $aa,$a5,$62,$4a,$48,$20,$68,$f5,$bd,$99,$9c,$85,$14,$bd,$9a,$9c
 .byte $85,$15,$68,$4c,$70,$f5,$aa,$a5,$62,$4a,$48,$a9,$9c,$85,$10,$a9
-.byte $b5,$85,$11,$4c,$d5,$c5,$c9,$09,$90,$02,$a9,$09,$aa,$a5,$62,$4a
-.byte $48,$a9,$35,$85,$10,$a9,$98,$85,$11,$4c,$d5,$c5,$aa,$a5,$62,$4a
+.byte $b5,$85,$11,$4c,$d5,$c5
+; Name	:
+	CMP #$09		; C546  C9 09          
+	BCC BEC54C		; C548  90 02          
+	LDA #$09		; C54A  A9 09          
+BEC54C:
+	TAX			; C54C  AA             
+	LDA $62			; C54D  A5 62          
+	LSR A			; C54F  4A             
+	PHA			; C550  48             
+	LDA #$35		; C551  A9 35          
+	STA $10			; C553  85 10          
+	LDA #$98		; C555  A9 98          
+	STA $11			; C557  85 11		BANK 08 08/9835
+	JMP $C5D5		; C559  4C D5 C5       
+
+;$C55C
+.byte $aa,$a5,$62,$4a
 .byte $48,$a9,$1c,$85,$10,$a9,$9c,$85,$11,$4c,$d5,$c5,$aa,$a5,$62,$4a
 .byte $48,$a9,$31,$85,$10,$a9,$9c,$85,$11,$4c,$d5,$c5
 
@@ -140,6 +194,7 @@
 	CPX #$29		; C5CF  E0 29          
 	BCC BEC5D5		; C5D1  90 02          
 	LDX #$28		; C5D3  A2 28          
+; Marks	:
 BEC5D5:
 	JSR $F568		; C5D5  20 68 F5       
 	JSR $C5F8		; C5D8  20 F8 C5       
@@ -164,7 +219,9 @@ BEC5ED:
 	JMP $F570		; C5F5  4C 70 F5       
 
 ; Name	:
-; Marks	: Load string
+; X	: string number to find
+; Marks	: Find specific string address
+;	  Seperator character is 00h
 	CPX #$00		; C5F8  E0 00          
 	BEQ BEC614		; C5FA  F0 18          
 BEC5FC:

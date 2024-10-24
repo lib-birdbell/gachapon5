@@ -700,7 +700,7 @@ BFF294:
 .byte $c0,$03,$ca,$10,$fa,$a9,$01,$85,$2f,$4c,$dc,$f4
 
 ; Name	:
-; Marks	:
+; Marks	: BANK SWAP
 	LDA #$00		; F55C  A9 00          
 	BIT $01A9               ; F55E  2C A9 01       
 	BIT $02A9               ; F561  2C A9 02       
@@ -911,11 +911,36 @@ BFF759:
 .byte $01,$01,$01,$01,$01,$02,$02,$02,$02,$02,$03,$03,$03,$03,$03,$20
 .byte $6d,$f9,$a2,$0d,$a9,$62,$9d,$00,$03,$ca,$10,$fa,$60,$a2,$7f,$a9
 .byte $20,$9d,$00,$03,$ca,$10,$fa,$60,$a2,$1d,$a9,$00,$95,$d1,$ca,$10
-.byte $fb,$60,$a2,$3f,$a9,$20,$9d,$00,$03,$ca,$10,$fa,$60,$a9,$00,$85
-.byte $2a,$a9,$03,$85,$2b,$60,$a9,$d1,$85,$2a,$a9,$00,$85,$2b,$60
+.byte $fb,$60
+
+; Name	:
+; Marks	: Reset tile buffer ??
+	LDX #$3F		; F982  A2 3F          
+	LDA #$20		; F984  A9 20          
+BFF986:
+	STA $0300,X		; F986  9D 00 03       
+	DEX			; F989  CA             
+	BPL BFF986		; F98A  10 FA          
+	RTS			; F98C  60             
+
+; Name	:
+	LDA #$00		; F98D  A9 00          
+	STA $2A			; F98F  85 2A          
+	LDA #$03		; F991  A9 03          
+	STA $2B			; F993  85 2B          
+	RTS			; F995  60             
+
+; Name	:
+	LDA #$D1		; F996	$a9 $d1
+	STA $2A			; F998	$85 $2a
+	LDA #$00		; F99A	$a9 $00
+	STA $2B			; F99C	$85 $2b
+	RTS			; F99E	$60
 
 ; Name	:
 ; Marks	: Load string from table ??
+;	  Copy to $0300
+;	  X is Size of copy
 	LDA $62			; F99F	$a5 $62
 	LSR A			; F9A1	$4a
 	PHA			; F9A2	$48
@@ -931,17 +956,26 @@ BFF9AA:
 	PLA			; F9B3	$68
 	JMP $F570		; F9B4	$4c $70 $f5
 
-;$F9B7
-.byte $a9,$50,$85,$10,$a9,$04,$85,$11,$a9
-.byte $08,$85,$00,$4c,$d2,$f9,$a9,$54,$85,$00
+; Name	:
+	LDA #$50		; F9B7	$a9 $50
+	STA $10			; F9B9	$85 $10
+	LDA #$04		; F9BB	$a9 $04
+	STA $11			; F9BD	$85 $11
+	LDA #$08		; F9BF	$a9 $08
+	STA $00			; F9C1	$85 $00
+	JMP $F9D2		; F9C3	$4c $d2 $f9
 
 ; Name	:
 ; Marks	: text table to tile table ??
 ;	  $0300 convert $0300
+	LDA #$54		; F9C6	$a9 $54
+	STA $00			; F9C8	$85 $00
+; Name	:
 	LDA #$00		; F9CA	$a9 $00
 	STA $10			; F9CC	$85 $10
 	LDA #$03		; F9CE	$a9 $03
 	STA $11			; F9D0	$85 $11
+; Name	:
 	LDX $00			; F9D2	$a6 $00
 	LDY #$00		; F9D4	$a0,$00
 BFF9D6:
