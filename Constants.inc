@@ -26,4 +26,3 @@ ApuStatus_4015           = $4015
 Ctrl1_4016               = $4016
 Ctrl2_FrameCtr_4017      = $4017
 
-ORIGINAL		= 0

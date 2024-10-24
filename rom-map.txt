@@ -1,0 +1,10 @@
+
+
+アムロ(b1 d1 db)
+$11513(BANK 08 $9513)
+アムロ・(b1 d1 db a5 da b2
+$11609(BANK 08 $9609)
+クワトロ(b8 dc c4 db)
+$11596(BANK 08)
+クワトロ・ハ"シ"ナ(b8 dc c4 db a5 ca de bc de b0 c5)
+$116D2(BANK 08)
