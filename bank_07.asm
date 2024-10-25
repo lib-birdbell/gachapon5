@@ -2,6 +2,7 @@
 
 .segment "BANK_07"
 
+;$A000
 .byte $20,$ce,$f2,$e6,$8e,$4c,$e1,$9f,$a9,$01,$24,$7e,$f0,$d3,$20,$d6
 .byte $f2,$a5,$8e,$4a,$60,$a9,$f0,$8d,$00,$02,$a5,$24,$29,$10,$d0,$17
 .byte $a6,$8e,$bd,$3b,$a0,$8d,$00,$02,$a9,$00,$8d,$02,$02,$a9,$01,$8d
@@ -18,6 +19,7 @@
 .byte $e3,$85,$14,$a9,$a0,$85,$15,$c6,$95,$20,$38,$e4,$20,$2f,$e5,$68
 .byte $85,$91,$60,$f6,$03,$f5,$04,$fe,$21,$0b,$0d,$fe,$1f,$f4,$20,$ff
 .byte $bd,$23,$f9,$85,$00,$a6,$95,$bd,$19,$62,$aa,$bd,$1a,$f9,$18,$65
+;$A100
 .byte $00,$85,$96,$a9,$14,$85,$14,$a9,$a1,$85,$15,$c6,$95,$20,$38,$e4
 .byte $20,$2f,$e5,$60,$f6,$03,$f5,$03,$fe,$22,$04,$23,$ff,$bd,$23,$f9
 .byte $85,$00,$a6,$95,$bd,$19,$62,$aa,$bd,$1a,$f9,$18,$65,$00,$85,$96
@@ -34,6 +36,7 @@
 .byte $20,$20,$20,$20,$20,$48,$47,$20,$20,$83,$6f,$80,$72,$7c,$9b,$20
 .byte $20,$48,$65,$4a,$4a,$4a,$4a,$4a,$4a,$4a,$4a,$4a,$4a,$66,$c0,$c1
 .byte $c2,$c3,$c4,$c5,$c6,$c7,$c8,$c9,$d0,$d1,$d2,$d3,$d4,$d5,$d6,$d7
+;$A200
 .byte $d8,$d9,$e0,$e1,$e2,$e3,$e4,$e5,$e6,$e7,$e8,$e9,$f0,$f1,$f2,$f3
 .byte $f4,$f5,$f6,$f7,$f8,$f9,$ca,$cb,$cc,$cd,$ce,$cf,$ea,$eb,$ec,$ed
 .byte $da,$db,$dc,$dd,$de,$df,$fa,$fb,$fc,$fd,$00,$00,$00,$00,$55,$55
@@ -50,6 +53,7 @@
 .byte $20,$20,$20,$30,$5c,$48,$65,$4a,$4a,$4a,$4a,$4a,$4a,$4a,$4a,$4a
 .byte $4a,$66,$ad,$13,$62,$0a,$0a,$38,$e9,$04,$aa,$a0,$00,$98,$99,$4c
 .byte $04,$bd,$90,$04,$99,$d1,$00,$bd,$a0,$04,$99,$d5,$00,$e8,$c8,$c0
+;$A300
 .byte $04,$90,$ea,$20,$dd,$a7,$ad,$4d,$04,$8d,$cf,$61,$ad,$4e,$04,$8d
 .byte $d0,$61,$ad,$4f,$04,$8d,$d1,$61,$ad,$4c,$04,$8d,$d2,$61,$60,$a2
 .byte $0f,$86,$01,$20,$d3,$f4,$a9,$00,$9d,$90,$04,$9d,$a0,$04,$bd,$59
@@ -66,6 +70,7 @@
 .byte $48,$a9,$00,$85,$07,$a6,$94,$bd,$59,$63,$29,$10,$d0,$07,$bd,$59
 .byte $63,$29,$40,$d0,$17,$a6,$92,$bd,$a3,$62,$cd,$13,$62,$f0,$03,$4c
 .byte $51,$a5,$bd,$4b,$62,$29,$20,$f0,$03,$4c,$51,$a5,$20,$8c,$a7,$90
+;$A400
 .byte $03,$4c,$51,$a5,$20,$58,$a5,$a6,$92,$bd,$77,$62,$85,$18,$20,$ca
 .byte $f7,$a5,$16,$85,$18,$a5,$17,$85,$19,$a9,$4b,$85,$16,$a9,$00,$85
 .byte $17,$20,$0c,$f8,$a5,$18,$18,$65,$07,$85,$07,$a2,$0f,$a9,$00,$85
@@ -82,6 +87,7 @@
 .byte $c9,$c8,$b0,$37,$85,$16,$a9,$04,$85,$84,$20,$e0,$fc,$a5,$84,$85
 .byte $18,$20,$ca,$f7,$a5,$16,$85,$18,$a5,$17,$85,$19,$a9,$0a,$85,$16
 .byte $a9,$00,$85,$17,$20,$0c,$f8,$a5,$18,$a6,$92,$dd,$8d,$62,$b0,$0b
+;$A500
 .byte $a5,$07,$38,$e9,$1e,$b0,$02,$a9,$00,$85,$07,$a4,$94,$b9,$e9,$63
 .byte $c9,$3c,$90,$11,$4a,$4a,$dd,$8d,$62,$90,$0a,$a5,$07,$18,$69,$1e
 .byte $85,$07,$4c,$51,$a5,$b9,$e9,$63,$c9,$50,$90,$10,$4a,$dd,$8d,$62
@@ -98,6 +104,7 @@
 .byte $28,$28,$18,$0f,$0d,$28,$28,$14,$0c,$0c,$0f,$1e,$1e,$10,$0b,$00
 .byte $04,$06,$08,$0a,$a0,$04,$a9,$00,$99,$d3,$61,$99,$d8,$61,$88,$10
 .byte $f7,$a6,$94,$bd,$69,$63,$85,$92,$85,$a6,$8d,$d8,$61,$aa,$a9,$00
+;$A600
 .byte $85,$0e,$bd,$a3,$62,$cd,$13,$62,$d0,$02,$c6,$0e,$20,$cd,$a3,$8d
 .byte $d3,$61,$ad,$dd,$61,$f0,$05,$a9,$00,$8d,$d3,$61,$a0,$00,$a5,$92
 .byte $0a,$0a,$aa,$86,$0f,$bd,$32,$d8,$30,$24,$85,$92,$85,$a6,$aa,$bd
@@ -114,6 +121,7 @@
 .byte $04,$04,$04,$03,$03,$02,$00,$04,$04,$04,$03,$01,$00,$04,$03,$04
 .byte $02,$02,$03,$03,$04,$03,$03,$02,$03,$04,$04,$04,$a6,$94,$bd,$59
 .byte $63,$29,$40,$f0,$52,$bd,$59,$63,$29,$10,$d0,$42,$a5,$a4,$f0,$3e
+;$A700
 .byte $c9,$80,$f0,$1f,$20,$48,$a7,$20,$15,$d0,$20,$4c,$d0,$20,$83,$a8
 .byte $20,$46,$ce,$ad,$64,$05,$d0,$0a,$a9,$00,$85,$92,$8d,$60,$05,$20
 .byte $d0,$d4,$60,$20,$84,$d0,$20,$a3,$a8,$20,$46,$ce,$a5,$9b,$f0,$0d
@@ -130,6 +138,7 @@
 .byte $c5,$02,$bd,$a0,$04,$e5,$03,$b0,$02,$38,$60,$18,$60,$a2,$00,$8a
 .byte $a8,$c8,$b5,$d5,$d9,$d5,$00,$90,$09,$d0,$2d,$b5,$d1,$d9,$d1,$00
 .byte $b0,$26,$b5,$d1,$48,$b9,$d1,$00,$95,$d1,$68,$99,$d1,$00,$b5,$d5
+;$A800
 .byte $48,$b9,$d5,$00,$95,$d5,$68,$99,$d5,$00,$bd,$4c,$04,$48,$b9,$4c
 .byte $04,$9d,$4c,$04,$68,$99,$4c,$04,$c8,$c0,$04,$90,$c5,$e8,$e0,$03
 .byte $90,$bd,$60,$20,$1f,$a3,$20,$ef,$f4,$ad,$13,$62,$0a,$0a,$aa,$ca
@@ -146,6 +155,7 @@
 .byte $fd,$03,$01,$fc,$02,$04,$fe,$fa,$03,$fb,$05,$09,$0b,$0d,$ff,$a6
 .byte $a5,$e4,$a6,$f0,$5b,$e0,$0e,$b0,$22,$a9,$00,$8d,$60,$05,$bd,$6f
 .byte $e0,$8d,$0a,$62,$bd,$85,$e0,$8d,$0c,$62,$a6,$a6,$bd,$6f,$e0,$8d
+;$A900
 .byte $06,$62,$bd,$85,$e0,$8d,$08,$62,$4c,$2a,$a9,$a9,$ff,$8d,$60,$05
 .byte $bd,$9b,$e0,$8d,$0a,$62,$bd,$b1,$e0,$8d,$0c,$62,$a6,$a6,$bd,$9b
 .byte $e0,$8d,$06,$62,$bd,$b1,$e0,$8d,$08,$62,$20,$d0,$d4,$a6,$94,$bd
@@ -162,6 +172,7 @@
 .byte $31,$bd,$b9,$63,$f0,$2c,$20,$35,$c6,$a6,$94,$38,$fd,$c9,$63,$f0
 .byte $21,$85,$01,$bd,$b9,$63,$20,$43,$c6,$85,$a0,$20,$0b,$aa,$a5,$94
 .byte $29,$03,$aa,$a5,$1a,$9d,$e1,$61,$a5,$1b,$9d,$e5,$61,$a5,$1c,$9d
+;$AA00
 .byte $e9,$61,$e6,$94,$a5,$94,$29,$03,$d0,$b7,$60,$85,$16,$a9,$00,$85
 .byte $17,$85,$18,$85,$a1,$85,$a2,$85,$1a,$85,$1b,$85,$1c,$20,$f0,$fb
 .byte $90,$0b,$20,$0e,$fc,$20,$4d,$fc,$c6,$01,$d0,$f1,$38,$60,$a5,$9a
@@ -178,6 +189,7 @@
 .byte $ca,$f7,$a6,$94,$bd,$e9,$63,$38,$e5,$16,$f0,$2d,$90,$25,$85,$18
 .byte $a9,$05,$85,$16,$a9,$00,$85,$17,$85,$19,$20,$0c,$f8,$a5,$16,$f0
 .byte $0a,$a9,$05,$38,$e5,$16,$20,$6b,$ab,$e6,$18,$a5,$18,$20,$93,$ab
+;$AB00
 .byte $4c,$09,$ab,$20,$7a,$f7,$20,$33,$ac,$20,$d3,$ac,$e6,$93,$a5,$93
 .byte $c9,$04,$90,$92,$60,$ac,$13,$62,$b9,$2e,$62,$8d,$ad,$61,$ce,$ad
 .byte $61,$30,$47,$ad,$ac,$61,$20,$f4,$c4,$ac,$ad,$61,$20,$e5,$c4,$a5
@@ -194,6 +206,7 @@
 .byte $32,$62,$18,$ed,$ad,$61,$f0,$42,$85,$16,$a9,$0a,$85,$18,$20,$ca
 .byte $f7,$a5,$01,$c5,$16,$b0,$33,$ae,$13,$62,$bd,$32,$62,$8d,$ad,$61
 .byte $ce,$ad,$61,$a6,$94,$bd,$a9,$63,$18,$6d,$c1,$61,$8d,$c1,$61,$a9
+;$AC00
 .byte $00,$9d,$a9,$63,$ad,$ac,$61,$18,$69,$02,$20,$f4,$c4,$ac,$ad,$61
 .byte $20,$e5,$c4,$a5,$9b,$a6,$94,$9d,$99,$63,$a9,$02,$20,$cd,$ae,$20
 .byte $f0,$fb,$90,$0e,$20,$0e,$fc,$a6,$94,$fe,$a9,$63,$ce,$c1,$61,$d0
@@ -210,6 +223,7 @@
 .byte $ee,$38,$60,$a6,$94,$bd,$d9,$63,$d0,$24,$ac,$13,$62,$b9,$3a,$62
 .byte $a8,$88,$8c,$ad,$61,$ad,$ac,$61,$18,$69,$06,$20,$f4,$c4,$ac,$ad
 .byte $61,$20,$e5,$c4,$a5,$9b,$a6,$94,$9d,$d9,$63,$4c,$08,$ad,$bd,$d9
+;$AD00
 .byte $63,$85,$00,$a9,$06,$20,$b0,$ae,$a9,$06,$20,$cd,$ae,$a5,$a0,$85
 .byte $16,$a5,$a1,$85,$17,$a9,$05,$85,$18,$a9,$00,$85,$19,$20,$d0,$f7
 .byte $a6,$94,$bd,$99,$63,$d0,$24,$ac,$13,$62,$b9,$32,$62,$a8,$88,$8c
@@ -226,6 +240,7 @@
 .byte $a5,$1c,$9d,$2a,$62,$a6,$94,$bd,$59,$63,$29,$20,$f0,$03,$4c,$a4
 .byte $ae,$bd,$59,$63,$29,$08,$d0,$03,$4c,$a4,$ae,$bd,$c9,$63,$f0,$4d
 .byte $85,$18,$a9,$64,$85,$16,$20,$ca,$f7,$a5,$16,$85,$18,$a5,$17,$85
+;$AE00
 .byte $19,$a6,$94,$bd,$b9,$63,$20,$35,$c6,$85,$16,$a9,$00,$85,$17,$20
 .byte $0c,$f8,$a5,$18,$85,$01,$a6,$94,$bd,$b9,$63,$85,$00,$a9,$04,$20
 .byte $b0,$ae,$ae,$13,$62,$bd,$36,$62,$18,$ed,$ad,$61,$f0,$49,$85,$16
@@ -242,6 +257,7 @@
 .byte $61,$20,$0a,$c5,$ad,$ad,$61,$0a,$a8,$20,$e5,$c4,$a5,$9b,$85,$a0
 .byte $c8,$20,$e5,$c4,$a5,$9b,$85,$a1,$a9,$00,$85,$a2,$60,$a9,$04,$20
 .byte $11,$af,$b0,$1c,$20,$d3,$f4,$a9,$00,$20,$11,$af,$b0,$12,$20,$d3
+;$AF00
 .byte $f4,$a9,$06,$20,$11,$af,$b0,$08,$20,$d3,$f4,$a9,$02,$20,$11,$af
 .byte $60,$20,$88,$b1,$a4,$03,$20,$d3,$f4,$84,$01,$b1,$10,$8d,$ad,$61
 .byte $ce,$ad,$61,$b9,$43,$62,$0a,$0a,$0a,$6d,$bf,$61,$8d,$ac,$61,$20
@@ -258,6 +274,7 @@
 .byte $af,$60,$18,$60,$20,$d3,$f4,$a0,$02,$b9,$de,$61,$99,$a0,$00,$88
 .byte $10,$f7,$20,$f0,$fb,$b0,$0b,$20,$d4,$fc,$a5,$84,$c9,$1e,$b0,$02
 .byte $38,$60,$18,$60,$20,$d3,$f4,$ac,$13,$62,$88,$b1,$10,$85,$97,$c6
+;$B000
 .byte $97,$b9,$43,$62,$0a,$0a,$0a,$8d,$ac,$61,$6d,$bf,$61,$4a,$aa,$a5
 .byte $97,$dd,$22,$d8,$b0,$62,$20,$d3,$f4,$ad,$ac,$61,$6d,$bf,$61,$20
 .byte $20,$c5,$a5,$97,$0a,$a8,$c8,$c8,$20,$e5,$c4,$a5,$9b,$85,$a0,$c8
@@ -274,6 +291,7 @@
 .byte $92,$95,$d1,$a6,$92,$ca,$d0,$d2,$60,$a2,$00,$a0,$01,$b5,$d1,$d9
 .byte $d1,$00,$b0,$02,$98,$aa,$c8,$c0,$16,$90,$f2,$60,$a6,$92,$bd,$8d
 .byte $62,$c9,$c7,$90,$08,$a9,$fa,$38,$fd,$8d,$62,$d0,$02,$a9,$32,$85
+;$B100
 .byte $01,$85,$18,$a9,$0a,$85,$16,$20,$ca,$f7,$a5,$16,$85,$a0,$a5,$17
 .byte $85,$a1,$a9,$00,$85,$a2,$20,$f0,$fb,$90,$16,$20,$0e,$fc,$a6,$92
 .byte $a5,$01,$18,$7d,$8d,$62,$9d,$8d,$62,$bd,$4b,$62,$09,$80,$9d,$4b
@@ -290,6 +308,7 @@
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
+;$B200
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
@@ -306,6 +325,7 @@
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
+;$B300
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
@@ -322,6 +342,7 @@
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
+;$B400
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
@@ -338,6 +359,7 @@
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
+;$B500
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
@@ -354,6 +376,7 @@
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
+;$B600
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
@@ -370,6 +393,7 @@
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
+;$B700
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
@@ -386,6 +410,7 @@
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
+;$B800
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
@@ -402,6 +427,7 @@
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
+;$B900
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
@@ -418,6 +444,7 @@
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
+;$BA00
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
@@ -434,6 +461,7 @@
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
+;$BB00
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
@@ -450,6 +478,7 @@
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
+;$BC00
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
@@ -466,6 +495,7 @@
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
+;$BD00
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
@@ -482,6 +512,7 @@
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
+;$BE00
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
@@ -498,6 +529,7 @@
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
+;$BF00
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
