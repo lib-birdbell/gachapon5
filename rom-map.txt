@@ -1,9 +1,13 @@
 PRG_ROM	CPU_ROM	Description
+BANK 6
 $0C054-		$8054-$80A7	일람 いちらん 메뉴화면 14 text x 6 line (84bytes)
-$0C054-0CC23
+$0C000-$0CC23			선택화면 14 text x 6 line x 37 (84bytes x 37 = 3108bytes)
+BANK 8
 $11835-		$9835-$9876	파벌 はばつ 이름 테이블 (42bytes 10names)
 $11877-		$9877-
 $11991-		$9991-
+BANK E
+$1C2D0-				변환된 글자
 
 アムロ(b1 d1 db)
 $11513(BANK 08 $9513)
