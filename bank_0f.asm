@@ -1091,53 +1091,59 @@ BFF523:
 .byte $a9,$80,$d0,$02,$a9,$40,$8d,$01,$a0,$60
 
 ; Name	:
-; Marks	: Decode and set screen tile map
-;	  ?cdd dddd
-;	  if c == 1 || ? == 1
-;	   dd dddd is count
-;	   tile index(2) is 2nd, 3rd byte of ($10),Y
+; Marks	: Decode and set screen tile map, until read data is FFh
+;	  f?cc cccc
+;	  f = next data is fiedx or increased
+;	  c = count of data
+;	  CASE f(bit7) 0 : next data's address or data increase
+;	  ficc cccc
+;	   CASE i(bit6) 0 : increase data address
+;	    EX> $05,$01,$02,$03,$04,$05 -> 01h,02h,03h,04h,05h
+;	   CASE i(bit6) 1 : increase data value
+;	    EX> $45,$01 -> 01h,02h,03h,04h,05h
+;	  CASE f(bit7) 1 : next data is fixed
+;	  fscc cccc
+;	   CASE s(bit6) 0 : data size is 1byte
+;	    EX> $85,$01 -> 01h,01h,01h,01h,01h
+;	   CASE s(bit6) 1 : data size is 2bytes
+;	    EX> $C5,$01,$F2 -> $01,$F2,$01,$F2,$01,$F2,$01,$F2,$01,$F2
 ;	  1111 1111 is end of tilemap decode
-;	  if c == 0 || ? == 1
-;	   dd dddd is count
-;	   tile index is 2nd, repeat for count
-;	  if c == 0 || ? == 0
-;	   tile index is next for count
-;	  Y = count
+;	  Y = text count
 	LDY #$00		; F6DA	$a0 $00
 	LDA ($10),Y		; F6DC	$b1 $10
-	CMP #$FF		; F6DE  C9 FF          
-	BEQ BFF759		; F6E0  F0 77          
-	TAX			; F6E2  AA             
-	BPL BFF6EB		; F6E3  10 06		branch if ? is 0
-	AND #$40		; F6E5  29 40          
-	BEQ BFF72D		; F6E7  F0 44          
-	BNE BFF6F1		; F6E9  D0 06          
+	CMP #$FF		; F6DE  $C9 $FF
+	BEQ BFF759		; F6E0  $F0 $77		branch if data is FFh - loop end
+	TAX			; F6E2  $AA
+	BPL BFF6EB		; F6E3  $10 $06		branch if f(bit7) is 0
+	AND #$40		; F6E5  $29 $40
+	BEQ BFF72D		; F6E7  $F0 $44		branch if c(bit6) is 0
+	BNE BFF6F1		; F6E9  $D0 $06
 BFF6EB:
-	AND #$40		; F6EB  29 40          
-	BEQ BFF716		; F6ED  F0 27          
-	BNE BFF748		; F6EF  D0 57          
+	AND #$40		; F6EB  $29 $40
+	BEQ BFF716		; F6ED  $F0 $27		branch if c(bit6) is 0
+	BNE BFF748		; F6EF  $D0 $57
 BFF6F1:
-	TXA			; F6F1  8A             
-	AND #$3F		; F6F2  29 3F          
-	TAX			; F6F4  AA             
-	LDY #$01		; F6F5  A0 01		2nd data
-	LDA ($10),Y		; F6F7  B1 10          
-	PHA			; F6F9  48             
-	INY			; F6FA  C8		3rd data
-	LDA ($10),Y		; F6FB  B1 10          
-	TAY			; F6FD  A8             
-	PLA			; F6FE  68             
+	TXA			; F6F1  $8A
+	AND #$3F		; F6F2  $29 $3F
+	TAX			; F6F4  $AA
+	LDY #$01		; F6F5  $A0 $01		2nd data
+	LDA ($10),Y		; F6F7  $B1 $10
+	PHA			; F6F9  $48
+	INY			; F6FA  $C8     	3rd data
+	LDA ($10),Y		; F6FB  $B1 $10
+	TAY			; F6FD  $A8
+	PLA			; F6FE  $68
 BFF6FF:
-	STA PpuData_2007	; F6FF  8D 07 20       
-	STY PpuData_2007	; F702  8C 07 20       
-	DEX			; F705  CA             
-	BNE BFF6FF		; F706  D0 F7          
-	CLC			; F708  18             
-	LDA #$03		; F709  A9 03          
-	ADC $10			; F70B  65 10          
-	STA $10			; F70D  85 10          
-	BCC BFF713		; F70F  90 02          
-	INC $11			; F711  E6 11          
+	STA PpuData_2007	; F6FF  $8D $07 $20
+	STY PpuData_2007	; F702  $8C $07 $20
+	DEX			; F705  $CA
+	BNE BFF6FF		; F706  $D0 $F7
+	CLC			; F708  $18
+	LDA #$03		; F709  $A9 $03
+	ADC $10			; F70B  $65 $10
+	STA $10			; F70D  $85 $10
+	BCC BFF713		; F70F  $90 $02
+	INC $11			; F711  $E6 $11
 BFF713:
 	JMP $F6DA		; F713  4C DA F6       
 BFF716:

@@ -9,7 +9,7 @@
 #include <time.h>
 
 
-#define VERSION	"V0.11 20241028\0"
+#define VERSION	"V0.12 20241031\0"
 const unsigned char bmp_header[54] = {0x42,0x4D,0x36,0x1A,0x04,0x00,0x00,0x00,0x00,0x00,	\
 							 		  0x36,0x00,0x00,0x00,0x28,0x00,0x00,0x00,0x40,0x01,	\
 							 		  0x00,0x00,0x18,0x01,0x00,0x00,0x01,0x00,0x18,0x00,	\
@@ -40,11 +40,13 @@ const unsigned char table[256] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
 
 void Show_how_to_use(void);
-void Bmp_save(unsigned char *pBmp);
+void Bmp_save(unsigned char *pBmp, int seed);
 unsigned char* Get_bmp_p(unsigned char *bmp, int x, int y, int line);
 unsigned char Get_tile(unsigned char *tile_map, int tile_num, int tile_line, int even);
 void Swap_updown(unsigned char *bmp);
 void Convert_tile(unsigned char *bmp, unsigned char *tile_map, int tileX, int tileY, unsigned char *checkRom, int use);
+void Write_tile_to_bmp(unsigned char *bmp, unsigned char *tile_map, unsigned char tileNum, int x, int y);
+void Decompress_tile(unsigned char *bmp, unsigned char *tile_map, unsigned char *checkRom);
 
 
 
@@ -53,7 +55,9 @@ void Convert_tile(unsigned char *bmp, unsigned char *tile_map, int tileX, int ti
 int main(int argc, char** argv){
 	int fd;
 	int i;
-	int tileX, tileY, tileA, checkA;
+	int tileX, tileY;
+	int tileA, tileA1, tileA2, tileA3;
+	int checkA;
 	unsigned char bmp[(320*280*3)];
 	char tempCh[256];
 	char fileName[256];
@@ -61,9 +65,9 @@ int main(int argc, char** argv){
 	unsigned char rom[8*2*256*8];
 	int useTable;
 
-	printf("%s\n", VERSION);
+	printf("%s %s\n", argv[0], VERSION);
 
-	if(argc < 11){
+	if(argc < 17){
 		printf("This program makes a BMP file for tile map.\n");
 		printf("Currently 320 x 280 fixed size serve.\n");
 		Show_how_to_use();
@@ -86,9 +90,21 @@ int main(int argc, char** argv){
 			i++;
 			tileY = atoi(argv[i]);
 		}
-		if(strcmp(argv[i], "-a") == 0){
+		if(strcmp(argv[i], "-a0") == 0){
 			i++;
 			tileA = atoi(argv[i]);
+		}
+		if(strcmp(argv[i], "-a1") == 0){
+			i++;
+			tileA1 = atoi(argv[i]);
+		}
+		if(strcmp(argv[i], "-a2") == 0){
+			i++;
+			tileA2 = atoi(argv[i]);
+		}
+		if(strcmp(argv[i], "-a3") == 0){
+			i++;
+			tileA3 = atoi(argv[i]);
 		}
 		if(strcmp(argv[i], "-i") == 0){
 			i++;
@@ -100,6 +116,9 @@ int main(int argc, char** argv){
 		}
 		if(strcmp(argv[i], "-t") == 0){
 			useTable = 1;
+		}
+		if(strcmp(argv[i], "-d") == 0){
+			useTable = 2;
 		}
 	}
 	
@@ -133,7 +152,20 @@ int main(int argc, char** argv){
 	lseek(fd, tileA, SEEK_SET);
 
 	// Read file (tile map)
-	read(fd, tile_map, 8*2*16*16);
+	//read(fd, tile_map, 8*2*16*16);
+	read(fd, tile_map, 0x400);
+	
+	// 0x0400-0x07FF
+	lseek(fd, tileA1, SEEK_SET);
+	read(fd, &tile_map[0x400], 0x400);
+
+	// 0x0800-0x0BFF	
+	lseek(fd, tileA2, SEEK_SET);
+	read(fd, &tile_map[0x800], 0x400);
+
+	// 0x0C00-0x0FFF	
+	lseek(fd, tileA3, SEEK_SET);
+	read(fd, &tile_map[0xC00], 0x400);
 	
 	// Read file (strings)
 	lseek(fd, checkA, SEEK_SET);
@@ -143,10 +175,15 @@ int main(int argc, char** argv){
 	
 	// Convert tile map to BMP
 	memset(bmp, 0, (320*280*3));
-	Convert_tile(bmp, tile_map, tileX, tileY, rom, useTable);
+	if(useTable == 2){
+		Decompress_tile(bmp, tile_map, rom);
+	}else{
+		Convert_tile(bmp, tile_map, tileX, tileY, rom, useTable);
+	}
+	
 	Swap_updown(bmp);
 	
-	Bmp_save(bmp);
+	Bmp_save(bmp, checkA);
 
 	return 0;
 }
@@ -157,30 +194,46 @@ int main(int argc, char** argv){
 
 void Show_how_to_use(void){
 		printf("How to use.\n");
-		printf(" -a : tile address (decimal)\n");
+		printf(" -a0 : tile address 0 (decimal)\n");
+		printf(" -a1 : tile address 1 (decimal)\n");
+		printf(" -a2 : tile address 2 (decimal)\n");
+		printf(" -a3 : tile address 3 (decimal)\n");
 		printf(" -x : x offset size(from tile map)\n");
 		printf(" -y : y offset size(from tile map)\n");
 		printf(" -i : input rom file name\n");
-		printf(" -c : check string table address\n");
-		printf(" -t : table file (option)\n");
+		printf(" -c : check string table address 0(decimal)\n");
+		printf(" -t : use table(option)\n");
+		printf(" -d : decompress(option))\n");
+		printf("Output file name is [time+minute+second_random(5digit).bmp]\n");
+		printf(" 320x280 size\n");
 }
 
 
 
-void Bmp_save(unsigned char *pBmp){
+void Bmp_save(unsigned char *pBmp, int seed){
 	int fd;
 	struct tm *now;
 	time_t now_t;
 	char fileName[256];
 	int count = 0;
+	int fileExist;
 	
+	srand(seed);
+
+RETRY:
 	// Get time
 	time(&now_t);
 	now = localtime(&now_t);
-	
+
 	memset(fileName, 0, 256);
+	//sprintf(fileName, "%04d%02d%02d_%02d%02d%02d.bmp", now->tm_year+1900, now->tm_mon+1, now->tm_mday, now->tm_hour, now->tm_min, now->tm_sec);
+	sprintf(fileName, "%02d%02d%02d_%05d.bmp", now->tm_hour, now->tm_min, now->tm_sec, rand());
 	
-	sprintf(fileName, "%04d%02d%02d_%02d%02d%02d.bmp", now->tm_year+1900, now->tm_mon+1, now->tm_mday, now->tm_hour, now->tm_min, now->tm_sec);
+	// Chekc file name(cannot be same)
+	fileExist = access(fileName, 00);
+	if(fileExist == 0){
+		goto RETRY;
+	}
 	
 	_fmode = O_BINARY;
 	
@@ -211,6 +264,7 @@ unsigned char* Get_bmp_p(unsigned char *bmp, int x, int y, int line){
 	return &bmp[(320*3)*(y*8)+(3*8*x)+(320*3*line)];
 	//return NULL;
 }
+
 
 
 unsigned char Get_tile(unsigned char *tile_map, int tile_num, int tile_line, int even){
@@ -263,7 +317,7 @@ void Convert_tile(unsigned char *bmp, unsigned char *tile_map, int tileX, int ti
 
 				for(q=0;q<8;q++){
 					tileNum = checkRom[i+(j*tileX)];
-					if(use){
+					if(use == 1){
 						tileNum = table[tileNum];
 					}
 					lbyte = (Get_tile(tile_map, tileNum, k, 0) << q) & 0x80;
@@ -304,4 +358,120 @@ void Convert_tile(unsigned char *bmp, unsigned char *tile_map, int tileX, int ti
 	}
 	
 	return;
+}
+
+
+
+void Write_tile_to_bmp(unsigned char *bmp, unsigned char *tile_map, unsigned char tileNum, int x, int y){
+	unsigned char *tmp;
+	unsigned char lbyte, rbyte;
+	unsigned char r, g, b;
+	int k, q;
+
+	// 8 line
+	for(k=0;k<8;k++){
+		tmp = Get_bmp_p(bmp, x, y, k);
+
+		for(q=0;q<8;q++){
+			lbyte = (Get_tile(tile_map, tileNum, k, 0) << q) & 0x80;
+			rbyte = (Get_tile(tile_map, tileNum, k, 1) << q) & 0x80;
+
+			rbyte = rbyte >> 6;
+			lbyte = lbyte >> 7;
+			rbyte = lbyte | rbyte;
+			if(rbyte == 0){
+				r = 0x00;
+				g = 0x00;
+				b = 0x1F;
+			}else if(rbyte == 1){
+				r = 136;
+				g = 42;
+				b = 0x00;
+			}else if(rbyte == 2){
+				r = 0x00;
+				g = 0xFF;
+				b = 0x00;
+			}else{
+				r = 0xFF;
+				g = 0xFF;
+				b = 0xFF;
+			}
+			tmp[(q*3)+0] = r;
+			tmp[(q*3)+1] = g;
+			tmp[(q*3)+2] = b;
+		}
+	}
+}
+
+void Decompress_tile(unsigned char *bmp, unsigned char *tile_map, unsigned char *checkRom){
+	unsigned char r, g, b;
+	unsigned char lbyte, rbyte, tileNum, tileA, tileB;
+	int x, y, k, i;
+	int tile_count = 0;
+	int text_count;
+	
+	x = 0;
+	y = 0;
+	
+	while(tile_count < (32*32)){
+		tileNum = checkRom[tile_count++];
+		//printf("%02x_", tileNum);
+		if(tileNum == 0xFF){
+			break;
+		}
+		text_count = tileNum & 0x3F;
+		
+		if(tileNum & 0x80){
+			if(tileNum & 0x40){
+				tileA = checkRom[tile_count++];
+				tileB = checkRom[tile_count++];
+				for(i=0;i<text_count;i++){
+					Write_tile_to_bmp(bmp, tile_map, tileA, x, y);
+					x++;
+					if(x >= 32){
+						x = 0;
+						y++;
+					}
+					Write_tile_to_bmp(bmp, tile_map, tileB, x, y);
+					x++;
+					if(x >= 32){
+						x = 0;
+						y++;
+					}
+				}
+			}else{
+				tileA = checkRom[tile_count++];
+				for(i=0;i<text_count;i++){
+					Write_tile_to_bmp(bmp, tile_map, tileA, x, y);
+					x++;
+					if(x >= 32){
+						x = 0;
+						y++;
+					}
+				}
+			}
+		}else{
+			if(tileNum & 0x40){
+				tileA = checkRom[tile_count++];
+				for(i=0;i<text_count;i++){
+					Write_tile_to_bmp(bmp, tile_map, tileA++, x, y);
+					x++;
+					if(x >= 32){
+						x = 0;
+						y++;
+					}
+				}
+			}else{
+				for(i=0;i<text_count;i++){
+					tileA = checkRom[tile_count++];
+					Write_tile_to_bmp(bmp, tile_map, tileA, x, y);
+					x++;
+					if(x >= 32){
+						x = 0;
+						y++;
+					}
+				}
+			}
+		}
+	}
 }
