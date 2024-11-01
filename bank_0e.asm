@@ -3,21 +3,120 @@
 .segment "BANK_0E"
 
 ;$C000
-.byte $90,$01,$60,$20,$6e,$f5,$ad,$61,$05,$d0,$00,$a9,$00,$8d,$61,$05
-.byte $85,$9e,$a9,$00,$85,$9c,$8d,$60,$05,$20,$d0,$d4,$20,$55,$c0,$20
-.byte $a1,$86,$a9,$00,$85,$91,$20,$78,$c2,$20,$ef,$c2,$ae,$13,$62,$bd
-.byte $c7,$d6,$85,$92,$ae,$13,$62,$bd,$1d,$62,$85,$98,$10,$09,$20,$65
-.byte $f5,$20,$d4,$e1,$4c,$12,$c0,$20,$77,$c0,$ad,$61,$05,$d0,$bc,$4c
-.byte $12,$c0,$90,$01,$60,$ae,$13,$62,$bd,$1d,$62,$10,$02,$a2,$00,$bd
-.byte $72,$c0,$cd,$43,$07,$d0,$07,$ad,$11,$62,$29,$08,$d0,$03,$20,$86
-.byte $f2,$60,$05,$01,$02,$04,$03,$a9,$00,$85,$24,$20,$80,$87,$20,$e9
-.byte $c0,$a9,$01,$25,$7e,$f0,$16,$a2,$00,$20,$d6,$f2,$20,$84,$c3,$20
-.byte $78,$c2,$20,$ef,$c2,$ad,$61,$05,$05,$9c,$f0,$e2,$60,$a9,$40,$24
-.byte $7e,$f0,$0d,$a6,$92,$bd,$3a,$d7,$85,$92,$a9,$00,$85,$24,$f0,$ce
-.byte $a9,$80,$24,$7e,$f0,$0d,$a6,$92,$bd,$50,$d7,$85,$92,$a9,$00,$85
-.byte $24,$f0,$bb,$a9,$10,$24,$7e,$f0,$0d,$a6,$92,$bd,$66,$d7,$85,$92
-.byte $a9,$00,$85,$24,$f0,$a8,$a9,$20,$24,$7e,$f0,$a2,$a6,$92,$bd,$7c
-.byte $d7,$85,$92,$a9,$00,$85,$24,$f0,$95
+.byte $90,$01,$60
+
+	JSR $F56E		; C003  20 6E F5       
+	LDA $0561		; C006  AD 61 05       
+	BNE BEC00B		; C009  D0 00          
+BEC00B:
+	LDA #$00		; C00B  A9 00          
+	STA $0561		; C00D  8D 61 05       
+	STA $9E			; C010  85 9E          
+	LDA #$00 		; C012  A9 00          
+	STA $9C			; C014  85 9C          
+	STA $0560		; C016  8D 60 05       
+	JSR $D4D0		; C019  20 D0 D4       
+	JSR $C055		; C01C  20 55 C0       
+	JSR $86A1		; C01F  20 A1 86       
+	LDA #$00		; C022  A9 00          
+	STA $91			; C024  85 91          
+	JSR $C278		; C026  20 78 C2       
+	JSR $C2EF		; C029  20 EF C2       
+	LDX $6213		; C02C  AE 13 62       
+	LDA $D6C7,X		; C02F  BD C7 D6       
+	STA $92			; C032  85 92          
+	LDX $6213		; C034  AE 13 62       
+	LDA $621D,X		; C037  BD 1D 62       
+	STA $98			; C03A  85 98          
+	BPL BEC047		; C03C  10 09          
+	JSR $F565		; C03E  20 65 F5       
+
+;$C041
+.byte $20,$d4,$e1,$4c,$12,$c0
+BEC047:
+	JSR $C077		; C047	$20 $77 $c0
+;$C04A
+.byte $ad,$61,$05,$d0,$bc,$4c
+.byte $12,$c0,$90,$01,$60
+
+; Name	:
+	LDX $6213		; C055  AE 13 62       
+	LDA $621D,X		; C058  BD 1D 62       
+	BPL BEC05F		; C05B  10 02          
+	LDX #$00		; C05D  A2 00          
+BEC05F:
+	LDA $C072,X		; C05F  BD 72 C0       
+	CMP $0743		; C062  CD 43 07       
+	BNE BEC06E		; C065  D0 07          
+	LDA $6211		; C067  AD 11 62       
+	AND #$08		; C06A  29 08          
+	BNE BEC071		; C06C  D0 03          
+BEC06E:
+	JSR $F286		; C06E  20 86 F2       
+BEC071:
+	RTS			; C071  60             
+
+;$C072
+.byte $05,$01,$02,$04,$03
+
+; Name	:
+	LDA #$00		; C077  A9 00          
+	STA $24			; C079  85 24          
+	JSR $8780		; C07B  20 80 87       
+BEC07E:
+	JSR $C0E9		; C07E  20 E9 C0       
+	LDA #$01		; C081  A9 01          
+	AND $7E			; C083  25 7E          
+	BEQ BEC09D		; C085  F0 16          
+	LDX #$00		; C087  A2 00          
+	JSR $F2D6		; C089  20 D6 F2       
+	JSR $C384		; C08C  20 84 C3       
+
+
+;$C08F
+.byte $20
+.byte $78,$c2,$20,$ef,$c2,$ad,$61,$05,$05,$9c,$f0,$e2,$60
+BEC09D:
+	LDA #$40		; C09D  A9 40          
+	BIT $7E			; C09F  24 7E          
+	BEQ BEC0B0		; C0A1  F0 0D          
+	LDX $92			; C0A3  A6 92          
+	LDA $D73A,X		; C0A5  BD 3A D7       
+	STA $92			; C0A8  85 92          
+	LDA #$00		; C0AA  A9 00          
+	STA $24			; C0AC  85 24          
+	BEQ BEC07E		; C0AE  F0 CE          
+BEC0B0:
+	LDA #$80		; C0B0  A9 80          
+	BIT $7E			; C0B2  24 7E          
+	BEQ BEC0C3		; C0B4  F0 0D          
+	LDX $92			; C0B6  A6 92          
+	LDA $D750,X		; C0B8  BD 50 D7       
+	STA $92			; C0BB  85 92          
+	LDA #$00		; C0BD  A9 00          
+	STA $24			; C0BF  85 24          
+	BEQ BEC07E		; C0C1  F0 BB          
+BEC0C3:
+	LDA #$10		; C0C3  A9 10          
+	BIT $7E			; C0C5  24 7E          
+	BEQ BEC0D6		; C0C7  F0 0D          
+	LDX $92			; C0C9  A6 92          
+	LDA $D766,X		; C0CB  BD 66 D7       
+	STA $92			; C0CE  85 92          
+	LDA #$00		; C0D0  A9 00          
+	STA $24			; C0D2  85 24          
+	BEQ BEC07E		; C0D4  F0 A8          
+BEC0D6:
+	LDA #$20		; C0D6  A9 20          
+	BIT $7E			; C0D8  24 7E          
+	BEQ BEC07E		; C0DA  F0 A2          
+	LDX $92			; C0DC  A6 92          
+	LDA $D77C,X		; C0DE  BD 7C D7       
+	STA $92			; C0E1  85 92          
+	LDA #$00		; C0E3  A9 00          
+	STA $24			; C0E5  85 24          
+	BEQ BEC07E		; C0E7  F0 95          
+; Name	:
 	LDA #$F0		; C0E9  A9 F0          
 	LDX #$10		; C0EB  A2 10          
 BEC0ED:
@@ -94,48 +193,260 @@ BEC171:
 BEC17A:
 	JMP $CB38		; C17A  4C 38 CB          
 
-;$C17D
-.byte $a5,$62,$4a
-.byte $48,$20,$68,$f5,$ad,$10,$62,$0a,$aa,$bd,$03,$80,$85,$10,$bd,$04
-.byte $80,$85,$11,$a9,$14,$85,$12,$a9,$62,$85,$13,$a9,$05,$85,$14,$a9
-.byte $02,$85,$15,$a0,$00,$b1,$10,$91,$12,$e6,$10,$d0,$02,$e6,$11,$e6
-.byte $12,$d0,$02,$e6,$13,$a5,$14,$d0,$02,$c6,$15,$c6,$14,$a5,$14,$05
-.byte $15,$d0,$e2,$68,$4c,$70,$f5,$a2,$04,$86,$01,$bd,$19,$62,$38,$d0
-.byte $07,$de,$19,$62,$20,$54,$d3,$18,$2e,$22,$62,$a6,$01,$ca,$d0,$e9
-.byte $a0,$ff,$a2,$03,$bd,$1a,$62,$30,$09,$bd,$1e,$62,$30,$04,$c8,$8e
-.byte $12,$62,$ca,$10,$ef,$98,$f0,$05,$a9,$fe,$8d,$12,$62,$ee,$12,$62
-;$C200
-.byte $ad,$10,$62,$d0,$34,$20,$a5,$d3,$20,$ec,$ce,$a2,$00,$86,$00,$a0
-.byte $00,$bd,$1a,$62,$30,$03,$bc,$47,$62,$8a,$0a,$0a,$85,$01,$98,$18
-.byte $65,$01,$aa,$c0,$04,$f0,$0b,$84,$02,$20,$45,$c2,$a4,$02,$e8,$c8
-.byte $d0,$f1,$a6,$00,$e8,$e0,$04,$d0,$d4,$20,$b3,$c9,$ae,$13,$62,$bd
-.byte $c7,$d6,$85,$92,$60,$a9,$00,$9d,$59,$63,$9d,$79,$63,$9d,$89,$63
+; Name	:
+	LDA $62			; C17D  A5 62          
+	LSR A			; C17F  4A             
+	PHA			; C180  48             
+	JSR $F568		; C181  20 68 F5       
+	LDA $6210		; C184  AD 10 62       
+	ASL A			; C187  0A             
+	TAX			; C188  AA             
+	LDA $8003,X		; C189  BD 03 80       
+	STA $10			; C18C  85 10          
+	LDA $8004,X		; C18E  BD 04 80       
+	STA $11			; C191  85 11          
+	LDA #$14		; C193  A9 14          
+	STA $12			; C195  85 12          
+	LDA #$62		; C197  A9 62          
+	STA $13			; C199  85 13          
+	LDA #$05		; C19B  A9 05          
+	STA $14			; C19D  85 14          
+	LDA #$02		; C19F  A9 02          
+	STA $15			; C1A1  85 15          
+	LDY #$00		; C1A3  A0 00          
+BEC1A5:
+	LDA ($10),Y		; C1A5  B1 10          
+	STA ($12),Y		; C1A7  91 12          
+	INC $10			; C1A9  E6 10          
+	BNE BEC1AF		; C1AB  D0 02          
+	INC $11			; C1AD  E6 11          
+BEC1AF:
+	INC $12			; C1AF  E6 12          
+	BNE BEC1B5		; C1B1  D0 02          
+	INC $13			; C1B3  E6 13          
+BEC1B5:
+	LDA $14			; C1B5  A5 14          
+	BNE BEC1BB		; C1B7  D0 02          
+	DEC $15			; C1B9  C6 15          
+BEC1BB:
+	DEC $14			; C1BB  C6 14          
+	LDA $14			; C1BD  A5 14          
+	ORA $15			; C1BF  05 15          
+	BNE BEC1A5		; C1C1  D0 E2          
+	PLA			; C1C3  68             
+	JMP $F570		; C1C4  4C 70 F5       
+
+; Name	:
+	LDX #$04		; C1C7  A2 04          
+BEC1C9:
+	STX $01			; C1C9  86 01          
+	LDA $6219,X		; C1CB  BD 19 62       
+	SEC			; C1CE  38             
+	BNE BEC1D8		; C1CF  D0 07          
+	DEC $6219,X		; C1D1  DE 19 62       
+	JSR $D354		; C1D4  20 54 D3       
+
+;$C1D7
+.byte $18
+BEC1D8:
+	ROL $6222		; C1D8  2E 22 62       
+	LDX $01			; C1DB  A6 01          
+	DEX			; C1DD  CA             
+	BNE BEC1C9		; C1DE  D0 E9          
+	LDY #$FF		; C1E0  A0 FF          
+	LDX #$03		; C1E2  A2 03          
+BEC1E4:
+	LDA $621A,X		; C1E4  BD 1A 62       
+	BMI BEC1F2		; C1E7  30 09          
+	LDA $621E,X		; C1E9  BD 1E 62       
+	BMI BEC1F2		; C1EC  30 04          
+	INY			; C1EE  C8             
+	STX $6212		; C1EF  8E 12 62       
+BEC1F2:
+	DEX			; C1F2  CA             
+	BPL BEC1E4		; C1F3  10 EF          
+	TYA			; C1F5  98             
+	BEQ BEC1FD		; C1F6  F0 05          
+	LDA #$FE		; C1F8  A9 FE          
+	STA $6212		; C1FA  8D 12 62       
+BEC1FD:
+	INC $6212		; C1FD  EE 12 62       
+	LDA $6210		; C200  AD 10 62       
+	BNE BEC239		; C203  D0 34          
+	JSR $D3A5		; C205  20 A5 D3       
+	JSR $CEEC		; C208  20 EC CE       
+	LDX #$00		; C20B  A2 00          
+BEC20D:
+	STX $00			; C20D  86 00          
+	LDY #$00		; C20F  A0 00          
+	LDA $621A,X		; C211  BD 1A 62       
+	BMI BEC219		; C214  30 03          
+	LDY $6247,X		; C216  BC 47 62       
+BEC219:
+	TXA			; C219  8A             
+	ASL A			; C21A  0A             
+	ASL A			; C21B  0A             
+	STA $01			; C21C  85 01          
+	TYA			; C21E  98             
+	CLC			; C21F  18             
+	ADC $01			; C220  65 01          
+	TAX			; C222  AA             
+	CPY #$04		; C223  C0 04          
+	BEQ BEC232		; C225  F0 0B          
+	STY $02			; C227  84 02          
+	JSR $C245		; C229  20 45 C2       
+
+;$C22C
+.byte $a4,$02,$e8,$c8
+.byte $d0,$f1
+BEC232:
+	LDX $00			; C232  A6 00          
+	INX			; C234  E8             
+	CPX #$04		; C235  E0 04          
+	BNE BEC20D		; C237  D0 D4          
+BEC239:
+	JSR $C9B3		; C239  20 B3 C9       
+	LDX $6213		; C23C  AE 13 62       
+	LDA $D6C7,X		; C23F  BD C7 D6       
+	STA $92			; C242  85 92          
+	RTS			; C244  60             
+
+;$C245
+.byte $a9,$00,$9d,$59,$63,$9d,$79,$63,$9d,$89,$63
 .byte $9d,$70,$04,$9d,$99,$63,$9d,$a9,$63,$9d,$b9,$63,$9d,$c9,$63,$9d
 .byte $d9,$63,$9d,$e9,$63,$9d,$69,$63,$8a,$4a,$4a,$a8,$b9,$1a,$62,$30
-.byte $06,$b9,$c8,$d6,$9d,$69,$63,$60,$20,$5f,$f9,$a9,$d0,$a0,$c2,$20
-.byte $09,$fb,$ad,$14,$62,$85,$18,$ad,$15,$62,$85,$19,$20,$8a,$f8,$a2
-.byte $03,$bd,$51,$04,$9d,$13,$03,$ca,$10,$f7,$ad,$16,$62,$20,$d4,$f8
-.byte $8e,$18,$03,$8c,$19,$03,$ae,$13,$62,$bd,$19,$62,$20,$46,$c5,$a9
-.byte $d1,$85,$10,$a9,$00,$85,$11,$a9,$1d,$85,$12,$a9,$03,$85,$13,$20
-.byte $59,$f4,$a9,$2b,$85,$12,$a9,$03,$85,$13,$20,$20,$f4,$4c,$f0,$fa
-;$C2D0 - data block =
-.byte $00,$03,$01,$e0,$02,$e1,$03,$e2,$04,$e3,$0f,$e4,$10,$e5,$11,$e6
-.byte $12,$e7,$1a,$e9,$33,$cc,$34,$aa,$35,$b2,$36,$bd,$28,$de,$ff,$a5
-.byte $62,$4a,$48,$20,$6e,$f5,$20,$5f,$f9,$a9,$65,$a0,$c3,$20,$09,$fb
-;$C300
-.byte $ae,$13,$62,$bd,$22,$62,$85,$18,$bd,$26,$62,$85,$19,$bd,$2a,$62
-.byte $85,$00,$20,$c3,$f8,$a0,$05,$b9,$50,$04,$99,$14,$03,$88,$10,$f7
-.byte $20,$bd,$86,$ae,$13,$62,$bd,$5b,$04,$85,$18,$bd,$5f,$04,$85,$19
-.byte $bd,$63,$04,$85,$00,$20,$c3,$f8,$a0,$05,$b9,$50,$04,$99,$30,$03
-.byte $88,$10,$f7,$ae,$13,$62,$bd,$6b,$04,$20,$d4,$f8,$8e,$4a,$03,$8c
-.byte $4b,$03,$ae,$13,$62,$bd,$46,$62,$18,$69,$30,$8d,$52,$03,$20,$fe
-.byte $fa,$68,$4c,$70,$f5,$00,$03,$0f,$75,$10,$e8,$1a,$5c,$36,$5c,$2b
-.byte $ea,$2c,$eb,$47,$84,$48,$7c,$49,$3a,$4e,$8c,$4f,$80,$50,$72,$40
-.byte $de,$51,$3a,$ff,$20,$dd,$c4,$a9,$00,$85,$90,$a5,$92,$c9,$0e,$90
-.byte $0b,$a9,$f0,$85,$10,$a9,$83,$85,$11,$4c,$a4,$c3,$a9,$9c,$85,$10
-.byte $a9,$83,$85,$11,$20,$ed,$fa,$a9,$d9,$85,$12,$a9,$c3,$85,$13,$a9
-.byte $00,$85,$91,$a9,$04,$85,$8f,$20,$07,$80
+.byte $06,$b9,$c8,$d6,$9d,$69,$63,$60
 
+; Name	:
+; Marks	: Draw left size screen ??
+	JSR $F95F		; C278  20 5F F9       
+	LDA #$D0		; C27B  A9 D0          
+	LDY #$C2		; C27D  A0 C2          
+	JSR $FB09		; C27F  20 09 FB       
+	LDA $6214		; C282  AD 14 62       
+	STA $18			; C285  85 18          
+	LDA $6215		; C287  AD 15 62       
+	STA $19			; C28A  85 19          
+	JSR $F88A		; C28C  20 8A F8       
+	LDX #$03		; C28F  A2 03          
+BEC291:
+	LDA $0451,X		; C291  BD 51 04       
+	STA $0313,X		; C294  9D 13 03       
+	DEX			; C297  CA             
+	BPL BEC291		; C298  10 F7          
+	LDA $6216		; C29A  AD 16 62       
+	JSR $F8D4		; C29D  20 D4 F8       
+	STX $0318		; C2A0  8E 18 03       
+	STY $0319		; C2A3  8C 19 03       
+	LDX $6213		; C2A6  AE 13 62       
+	LDA $6219,X		; C2A9  BD 19 62       
+	JSR $C546		; C2AC  20 46 C5       
+	LDA #$D1		; C2AF  A9 D1          
+	STA $10			; C2B1  85 10          
+	LDA #$00		; C2B3  A9 00          
+	STA $11			; C2B5  85 11          
+	LDA #$1D		; C2B7  A9 1D          
+	STA $12			; C2B9  85 12          
+	LDA #$03		; C2BB  A9 03          
+	STA $13			; C2BD  85 13          
+	JSR $F459		; C2BF  20 59 F4       
+	LDA #$2B		; C2C2  A9 2B          
+	STA $12			; C2C4  85 12          
+	LDA #$03		; C2C6  A9 03          
+	STA $13			; C2C8  85 13          
+	JSR $F420		; C2CA  20 20 F4       
+	JMP $FAF0		; C2CD  4C F0 FA       
+
+;$C2D0 - data block = compressed data : 우주세기 월 페이즈
+; $00,$03 is address
+.byte $00,$03,$01,$e0,$02,$e1,$03,$e2,$04,$e3,$0f,$e4,$10,$e5,$11,$e6
+.byte $12,$e7,$1a,$e9,$33,$cc,$34,$aa,$35,$b2,$36,$bd,$28,$de,$ff
+
+; Name	:
+; Marks	: $0314-$0319 is Money??
+	LDA $62			; C2EF  A5 62          
+	LSR A			; C2F1  4A             
+	PHA			; C2F2  48             
+	JSR $F56E		; C2F3  20 6E F5       
+	JSR $F95F		; C2F6  20 5F F9       
+	LDA #$65		; C2F9  A9 65          
+	LDY #$C3		; C2FB  A0 C3          
+	JSR $FB09		; C2FD  20 09 FB       
+	LDX $6213		; C300  AE 13 62       
+	LDA $6222,X		; C303  BD 22 62       
+	STA $18			; C306  85 18          
+	LDA $6226,X		; C308  BD 26 62       
+	STA $19			; C30B  85 19          
+	LDA $622A,X		; C30D  BD 2A 62       
+	STA $00			; C310  85 00          
+	JSR $F8C3		; C312  20 C3 F8       
+	LDY #$05		; C315  A0 05          
+BEC317:
+	LDA $0450,Y		; C317  B9 50 04       
+	STA $0314,Y		; C31A  99 14 03       
+	DEY			; C31D  88             
+	BPL BEC317		; C31E  10 F7          
+	JSR $86BD		; C320  20 BD 86       
+	LDX $6213		; C323  AE 13 62       
+	LDA $045B,X		; C326  BD 5B 04       
+	STA $18			; C329  85 18          
+	LDA $045F,X		; C32B  BD 5F 04       
+	STA $19			; C32E  85 19          
+	LDA $0463,X		; C330  BD 63 04       
+	STA $00			; C333  85 00          
+	JSR $F8C3		; C335  20 C3 F8       
+	LDY #$05		; C338  A0 05          
+BEC33A:
+	LDA $0450,Y		; C33A  B9 50 04       
+	STA $0330,Y		; C33D  99 30 03       
+	DEY			; C340  88             
+	BPL BEC33A		; C341  10 F7          
+	LDX $6213		; C343  AE 13 62       
+	LDA $046B,X		; C346  BD 6B 04       
+	JSR $F8D4		; C349  20 D4 F8       
+	STX $034A		; C34C  8E 4A 03       
+	STY $034B		; C34F  8C 4B 03       
+	LDX $6213		; C352  AE 13 62       
+	LDA $6246,X		; C355  BD 46 62       
+	CLC			; C358  18             
+	ADC #$30		; C359  69 30          
+	STA $0352		; C35B  8D 52 03       
+	JSR $FAFE		; C35E  20 FE FA       
+	PLA			; C361  68             
+	JMP $F570		; C362  4C 70 F5       
+
+;$C365 - data block = 자금 수입 도시 부대 screen
+.byte $00,$03,$0f,$75,$10,$e8,$1a,$5c,$36,$5c,$2b
+.byte $ea,$2c,$eb,$47,$84,$48,$7c,$49,$3a,$4e,$8c,$4f,$80,$50,$72,$40
+.byte $de,$51,$3a,$ff
+
+; Name	:
+	JSR $C4DD		; C384  20 DD C4       
+	LDA #$00		; C387  A9 00          
+	STA $90			; C389  85 90          
+	LDA $92			; C38B  A5 92          
+	CMP #$0E		; C38D  C9 0E          
+	BCC BEC39C		; C38F  90 0B          
+	LDA #$F0		; C391  A9 F0          
+	STA $10			; C393  85 10          
+	LDA #$83		; C395  A9 83          
+	STA $11			; C397  85 11          
+	JMP $C3A4		; C399  4C A4 C3       
+BEC39C:
+	LDA #$9C		; C39C  A9 9C          
+	STA $10			; C39E  85 10          
+	LDA #$83		; C3A0  A9 83          
+	STA $11			; C3A2  85 11          
+	JSR $FAED		; C3A4  20 ED FA       
+	LDA #$D9		; C3A7  A9 D9          
+	STA $12			; C3A9  85 12          
+	LDA #$C3		; C3AB  A9 C3          
+	STA $13			; C3AD  85 13          
+	LDA #$00		; C3AF  A9 00          
+	STA $91			; C3B1  85 91          
+	LDA #$04		; C3B3  A9 04          
+	STA $8F			; C3B5  85 8F          
+	JSR $8007		; C3B7  20 07 80       
 	LDA $90			; C3BA  A5 90          
 	BMI BEC3D8		; C3BC  30 1A          
 	PHA			; C3BE  48             
@@ -206,16 +517,39 @@ BEC49E:
 BEC4D4:
 	RTS			; C4D4  60             
 
-;$C4D5
+;$C4D5 - data block =
 .byte $1b,$8f,$e9,$8d,$d4,$8d,$3b,$90
+
+; Name	:
 	LDA #$F0		; C4DD	$a9 $f0
 	STA $0210		; C4DF	$8d $10 $02
 	JMP $F3D0		; C4E2	$4c $d0 $f3
-;$C4E5
-.byte $a5,$62,$4a,$48,$20,$68,$f5,$b1,$14,$85,$9b
-.byte $68,$4c,$70,$f5,$aa,$a5,$62,$4a,$48,$20,$68,$f5,$bd,$49,$9c,$85
-;$C500
-.byte $14,$bd,$4a,$9c,$85,$15,$68,$4c,$70,$f5,$aa,$a5,$62,$4a,$48,$20
+
+; Name	:
+	LDA $62			; C4E5  A5 62          
+	LSR A			; C4E7  4A             
+	PHA			; C4E8  48             
+	JSR $F568		; C4E9  20 68 F5       
+	LDA ($14),Y		; C4EC  B1 14          
+	STA $9B			; C4EE  85 9B          
+	PLA			; C4F0  68             
+	JMP $F570		; C4F1  4C 70 F5       
+
+; Name	:
+	TAX			; C4F4  AA             
+	LDA $62			; C4F5  A5 62          
+	LSR A			; C4F7  4A             
+	PHA			; C4F8  48             
+	JSR $F568		; C4F9  20 68 F5       
+	LDA $9C49,X		; C4FC  BD 49 9C       
+	STA $14			; C4FF  85 14          
+	LDA $9C4A,X		; C501  BD 4A 9C       
+	STA $15			; C504  85 15          
+	PLA			; C506  68             
+	JMP $F570		; C507  4C 70 F5       
+
+;$C50A
+.byte $aa,$a5,$62,$4a,$48,$20
 .byte $68,$f5,$bd,$71,$9c,$85,$14,$bd,$72,$9c,$85,$15,$68,$4c,$70,$f5
 .byte $aa,$a5,$62,$4a,$48,$20,$68,$f5,$bd,$99,$9c,$85,$14,$bd,$9a,$9c
 .byte $85,$15,$68,$4c,$70,$f5,$aa,$a5,$62,$4a,$48,$a9,$9c,$85,$10,$a9
@@ -336,9 +670,27 @@ BEC614:
 
 ;$C615
 .byte $aa,$a5,$62,$4a,$48,$20,$68,$f5,$bd,$6f,$9d
-.byte $a8,$68,$20,$70,$f5,$98,$60,$aa,$a5,$62,$4a,$48,$20,$68,$f5,$bd
-.byte $a5,$9d,$4c,$20,$c6,$aa,$a5,$62,$4a,$48,$20,$68,$f5,$bd,$db,$9d
-.byte $4c,$20,$c6,$aa,$a5,$62,$4a,$48,$20,$68,$f5,$bd,$47,$9e,$4c,$20
+	TAY			; C620	$a8
+	PLA			; C621	$68
+	JSR $F570		; C622	$20 $70 $f5
+	TYA			; C625	$98
+	RTS			; C626	$60
+
+;$C627
+.byte $aa,$a5,$62,$4a,$48,$20,$68,$f5,$bd
+.byte $a5,$9d,$4c,$20,$c6
+
+; Name	:
+	TAX			; C635  AA             
+	LDA $62			; C636  A5 62          
+	LSR A			; C638  4A             
+	PHA			; C639  48             
+	JSR $F568		; C63A  20 68 F5       
+	LDA $9DDB,X		; C63D  BD DB 9D       
+	JMP $C620		; C640  4C 20 C6       
+
+;$C643
+.byte $aa,$a5,$62,$4a,$48,$20,$68,$f5,$bd,$47,$9e,$4c,$20
 .byte $c6,$aa,$a5,$62,$4a,$48,$20,$68,$f5,$bd,$11,$9e,$4c,$20,$c6,$aa
 .byte $a5,$62,$4a,$48,$20,$68,$f5,$bd,$0e,$9b,$4c,$20,$c6,$aa,$a5,$62
 .byte $4a,$48,$20,$68,$f5,$bd,$7d,$9e,$4c,$20,$c6,$aa,$a5,$62,$4a,$48
@@ -396,8 +748,21 @@ BEC614:
 .byte $a5,$02,$4a,$90,$02,$a2,$33,$8a,$a6,$88,$9d,$01,$02,$a5,$02,$4a
 .byte $9d,$02,$02,$a4,$02,$b9,$af,$c9,$9d,$00,$02,$b9,$ab,$c9,$18,$69
 .byte $1b,$9d,$03,$02,$e8,$e8,$e8,$e8,$86,$88,$60,$9a,$9a,$ca,$ca,$8f
-.byte $9f,$8f,$9f,$a2,$01,$bd,$19,$62,$10,$03,$e8,$d0,$f8,$8e,$13,$62
-.byte $60,$20,$dd,$c4,$a9,$00,$85,$90,$20,$d9,$c6,$20,$ef,$c2,$a9,$04
+.byte $9f,$8f,$9f
+
+; Name	:
+	LDX #$01		; C9B3  A2 01          
+BEC9B5:
+	LDA $6219,X		; C9B5  BD 19 62       
+	BPL BEC9BD		; C9B8  10 03          
+	INX			; C9BA  E8             
+	BNE BEC9B5		; C9BB  D0 F8          
+BEC9BD:
+	STX $6213		; C9BD  8E 13 62       
+	RTS			; C9C0  60             
+
+;$C9C1
+.byte $20,$dd,$c4,$a9,$00,$85,$90,$20,$d9,$c6,$20,$ef,$c2,$a9,$04
 .byte $85,$91,$a9,$04,$85,$8f,$a9,$48,$85,$10,$a9,$83,$85,$11,$20,$ed
 .byte $fa,$20,$07,$80,$a5,$90,$30,$2b,$ae,$13,$62,$ca,$8a,$0a,$0a,$18
 .byte $65,$90,$a8,$b9,$69,$63,$c5,$92,$f0,$06,$20,$e6,$f2,$4c,$e1,$c9
@@ -446,13 +811,35 @@ BEC614:
 	STA $033F		; CAF4  8D 3F 03       
 	RTS			; CAF7  60             
 
-;$CBF8
-.byte $a9,$20,$85,$10,$a9,$03,$85,$11
-;$CB00
-.byte $a9,$20,$85,$00,$20,$d2,$f9,$ad,$02,$20,$a5,$2d,$8d,$06,$20,$a5
-.byte $2c,$8d,$06,$20,$20,$64,$f1,$18,$a5,$2c,$69,$20,$85,$2c,$a5,$2d
-.byte $69,$00,$85,$2d,$20,$82,$f9,$a9,$47,$8d,$00,$03,$8d,$20,$03,$a9
-.byte $48,$8d,$1f,$03,$8d,$3f,$03,$60
+; Name	:
+	LDA #$20		; CAF8  A9 20          
+	STA $10			; CAFA  85 10          
+	LDA #$03		; CAFC  A9 03          
+	STA $11			; CAFE  85 11          
+	LDA #$20		; CB00  A9 20          
+	STA $00			; CB02  85 00          
+	JSR $F9D2		; CB04  20 D2 F9       
+	LDA PpuStatus_2002	; CB07  AD 02 20       
+	LDA $2D			; CB0A  A5 2D          
+	STA PpuAddr_2006	; CB0C  8D 06 20       
+	LDA $2C			; CB0F  A5 2C          
+	STA PpuAddr_2006	; CB11  8D 06 20       
+	JSR $F164		; CB14  20 64 F1       
+	CLC			; CB17  18             
+	LDA $2C			; CB18  A5 2C          
+	ADC #$20		; CB1A  69 20          
+	STA $2C			; CB1C  85 2C          
+	LDA $2D			; CB1E  A5 2D          
+	ADC #$00		; CB20  69 00          
+	STA $2D			; CB22  85 2D          
+	JSR $F982		; CB24  20 82 F9       
+	LDA #$47		; CB27  A9 47          
+	STA $0300		; CB29  8D 00 03       
+	STA $0320		; CB2C  8D 20 03       
+	LDA #$48		; CB2F  A9 48          
+	STA $031F		; CB31  8D 1F 03       
+	STA $033F		; CB34  8D 3F 03       
+	RTS			; CB37  60             
 
 	LDX #$20		; CB38  A2 20          
 	LDY #$01                ; CB3A  A0 01          
@@ -610,11 +997,33 @@ BECC21:
 .byte $02,$b1,$14,$f0,$24,$a4,$00,$18,$79,$40,$cd,$9d,$00,$02,$a4,$01
 .byte $b1,$10,$f0,$15,$a4,$00,$18,$79,$44,$cd,$9d,$03,$02,$b9,$3c,$cd
 .byte $9d,$02,$02,$e8,$e8,$e8,$e8,$86,$88,$a4,$01,$60,$00,$c0,$41,$81
-.byte $08,$00,$08,$00,$00,$08,$08,$00,$ad,$c3,$d6,$8d,$c1,$03,$ad,$c4
-.byte $d6,$8d,$c5,$03,$ad,$c5,$d6,$8d,$c9,$03,$ad,$c6,$d6,$8d,$cd,$03
-.byte $a9,$30,$8d,$c3,$03,$8d,$c7,$03,$8d,$cb,$03,$8d,$cf,$03,$a9,$2a
-.byte $8d,$c2,$03,$8d,$c6,$03,$8d,$ca,$03,$8d,$ce,$03,$a9,$01,$85,$2f
-.byte $60,$aa,$a5,$62,$4a,$48,$20,$68,$f5,$e0,$29,$90,$02,$a2,$28,$bd
+.byte $08,$00,$08,$00,$00,$08,$08,$00
+
+; Name	:
+	LDA $D6C3		; CD48  AD C3 D6       
+	STA $03C1		; CD4B  8D C1 03       
+	LDA $D6C4		; CD4E  AD C4 D6       
+	STA $03C5		; CD51  8D C5 03       
+	LDA $D6C5		; CD54  AD C5 D6       
+	STA $03C9		; CD57  8D C9 03       
+	LDA $D6C6		; CD5A  AD C6 D6       
+	STA $03CD		; CD5D  8D CD 03       
+	LDA #$30		; CD60  A9 30          
+	STA $03C3		; CD62  8D C3 03       
+	STA $03C7		; CD65  8D C7 03       
+	STA $03CB		; CD68  8D CB 03       
+	STA $03CF		; CD6B  8D CF 03       
+	LDA #$2A		; CD6E  A9 2A          
+	STA $03C2		; CD70  8D C2 03       
+	STA $03C6		; CD73  8D C6 03       
+	STA $03CA		; CD76  8D CA 03       
+	STA $03CE		; CD79  8D CE 03       
+	LDA #$01		; CD7C  A9 01          
+	STA $2F			; CD7E  85 2F          
+	RTS			; CD80  60             
+
+;$CD81
+.byte $aa,$a5,$62,$4a,$48,$20,$68,$f5,$e0,$29,$90,$02,$a2,$28,$bd
 .byte $1e,$d6,$a8,$68,$4c,$70,$f5,$20,$5f,$f9,$a9,$ed,$a0,$cd,$20,$09
 .byte $fb,$ae,$13,$62,$bd,$22,$62,$85,$18,$bd,$26,$62,$85,$19,$bd,$2a
 .byte $62,$85,$00,$20,$c3,$f8,$a0,$05,$b9,$50,$04,$99,$14,$03,$88,$10
@@ -624,8 +1033,26 @@ BECC21:
 .byte $75,$10,$e8,$1a,$5c,$36,$5c,$2b,$8b,$2c,$96,$2d,$73,$ff,$48,$8a
 ;$CE00
 .byte $4a,$4a,$18,$69,$01,$cd,$13,$62,$f0,$03,$68,$18,$60,$68,$38,$60
-.byte $48,$8a,$29,$0c,$85,$00,$98,$29,$0c,$c5,$00,$f0,$03,$68,$18,$60
-.byte $68,$38,$60,$a6,$a6,$bd,$08,$05,$8d,$58,$04,$bd,$1e,$05,$8d,$59
+
+; Name	:
+	PHA			; CE10  48             
+	TXA			; CE11  8A             
+	AND #$0C		; CE12  29 0C          
+	STA $00			; CE14  85 00          
+	TYA			; CE16  98             
+	AND #$0C		; CE17  29 0C          
+	CMP $00			; CE19  C5 00          
+	BEQ BECE20		; CE1B  F0 03          
+	PLA			; CE1D  68             
+	CLC			; CE1E  18             
+	RTS			; CE1F  60             
+BECE20:
+	PLA			; CE20  68             
+	SEC			; CE21  38             
+	RTS			; CE22  60             
+
+;$CE23
+.byte $a6,$a6,$bd,$08,$05,$8d,$58,$04,$bd,$1e,$05,$8d,$59
 .byte $04,$bd,$34,$05,$8d,$5a,$04,$bd,$4a,$05,$8d,$5b,$04,$ae,$13,$62
 .byte $a9,$00,$9d,$57,$04,$60,$a5,$62,$4a,$48,$20,$65,$f5,$20,$27,$8c
 .byte $20,$6e,$f5,$20,$a1,$86,$68,$4c,$70,$f5,$a5,$62,$4a,$48,$ad,$64
@@ -637,24 +1064,118 @@ BECC21:
 .byte $48,$20,$68,$f5,$a9,$22,$85,$12,$a9,$03,$85,$13,$a0,$00,$a9,$03
 .byte $85,$00,$a2,$0c,$b1,$14,$91,$12,$c8,$ca,$d0,$f8,$18,$a5,$12,$69
 .byte $14,$85,$12,$a5,$13,$69,$00,$85,$13,$c6,$00,$d0,$e5,$68,$4c,$70
-.byte $f5,$a6,$94,$bd,$59,$63,$09,$80,$9d,$59,$63,$60,$a9,$0f,$85,$94
-.byte $4a,$4a,$85,$95,$a6,$95,$bd,$43,$62,$0a,$0a,$0a,$20,$f4,$c4,$a0
-;$CF00
-.byte $00,$20,$e5,$c4,$a5,$9b,$a6,$94,$9d,$79,$63,$9d,$78,$63,$9d,$77
-.byte $63,$9d,$76,$63,$20,$35,$c6,$a6,$94,$9d,$89,$63,$9d,$88,$63,$9d
-.byte $87,$63,$9d,$86,$63,$a6,$95,$bd,$43,$62,$0a,$0a,$0a,$69,$02,$20
-.byte $f4,$c4,$a0,$00,$20,$e5,$c4,$a5,$9b,$a6,$94,$9d,$99,$63,$9d,$98
-.byte $63,$9d,$97,$63,$9d,$96,$63,$a9,$28,$a6,$94,$9d,$a9,$63,$9d,$a8
-.byte $63,$9d,$a7,$63,$9d,$a6,$63,$a6,$95,$bd,$43,$62,$0a,$0a,$0a,$69
-.byte $04,$20,$f4,$c4,$a0,$00,$20,$e5,$c4,$a5,$9b,$a6,$94,$9d,$b9,$63
-.byte $9d,$b8,$63,$9d,$b7,$63,$9d,$b6,$63,$20,$35,$c6,$a6,$94,$9d,$c9
-.byte $63,$9d,$c8,$63,$9d,$c7,$63,$9d,$c6,$63,$a6,$95,$bd,$43,$62,$0a
-.byte $0a,$0a,$69,$06,$20,$f4,$c4,$a0,$00,$20,$e5,$c4,$a5,$9b,$a6,$94
-.byte $9d,$d9,$63,$9d,$d8,$63,$9d,$d7,$63,$9d,$d6,$63,$a9,$c8,$a6,$94
-.byte $9d,$e9,$63,$9d,$e8,$63,$9d,$e7,$63,$9d,$e6,$63,$a9,$00,$9d,$59
-.byte $63,$9d,$58,$63,$9d,$57,$63,$9d,$56,$63,$a4,$95,$b9,$c8,$d6,$9d
-.byte $69,$63,$9d,$68,$63,$9d,$67,$63,$9d,$66,$63,$a5,$94,$38,$e9,$04
-.byte $90,$03,$4c,$ee,$ce,$60,$a9,$c8,$85,$8a,$a9,$d0,$85,$8c,$a9,$bf
+.byte $f5,$a6,$94,$bd,$59,$63,$09,$80,$9d,$59,$63,$60
+
+; Name	:
+	LDA #$0F		; CEEC  A9 0F          
+	STA $94			; CEEE  85 94          
+	LSR A			; CEF0  4A             
+	LSR A			; CEF1  4A             
+	STA $95			; CEF2  85 95          
+	LDX $95			; CEF4  A6 95          
+	LDA $6243,X		; CEF6  BD 43 62       
+	ASL A			; CEF9  0A             
+	ASL A			; CEFA  0A             
+	ASL A			; CEFB  0A             
+	JSR $C4F4		; CEFC  20 F4 C4       
+	LDY #$00		; CEFF  A0 00          
+	JSR $C4E5		; CF01  20 E5 C4       
+	LDA $9B			; CF04  A5 9B          
+	LDX $94			; CF06  A6 94          
+	STA $6379,X		; CF08  9D 79 63       
+	STA $6378,X		; CF0B  9D 78 63       
+	STA $6377,X		; CF0E  9D 77 63       
+	STA $6376,X		; CF11  9D 76 63       
+	JSR $C635		; CF14  20 35 C6       
+	LDX $94			; CF17  A6 94          
+	STA $6389,X		; CF19  9D 89 63       
+	STA $6388,X		; CF1C  9D 88 63       
+	STA $6387,X		; CF1F  9D 87 63       
+	STA $6386,X		; CF22  9D 86 63       
+	LDX $95			; CF25  A6 95          
+	LDA $6243,X		; CF27  BD 43 62       
+	ASL A			; CF2A  0A             
+	ASL A			; CF2B  0A             
+	ASL A			; CF2C  0A             
+	ADC #$02		; CF2D  69 02          
+	JSR $C4F4		; CF2F  20 F4 C4       
+	LDY #$00		; CF32  A0 00          
+	JSR $C4E5		; CF34  20 E5 C4       
+	LDA $9B			; CF37  A5 9B          
+	LDX $94			; CF39  A6 94          
+	STA $6399,X		; CF3B  9D 99 63       
+	STA $6398,X		; CF3E  9D 98 63       
+	STA $6397,X		; CF41  9D 97 63       
+	STA $6396,X		; CF44  9D 96 63       
+	LDA #$28		; CF47  A9 28          
+	LDX $94			; CF49  A6 94          
+	STA $63A9,X		; CF4B  9D A9 63       
+	STA $63A8,X		; CF4E  9D A8 63       
+	STA $63A7,X		; CF51  9D A7 63       
+	STA $63A6,X		; CF54  9D A6 63       
+	LDX $95			; CF57  A6 95          
+	LDA $6243,X		; CF59  BD 43 62       
+	ASL A			; CF5C  0A             
+	ASL A			; CF5D  0A             
+	ASL A			; CF5E  0A             
+	ADC #$04		; CF5F  69 04          
+	JSR $C4F4		; CF61  20 F4 C4       
+	LDY #$00		; CF64  A0 00          
+	JSR $C4E5		; CF66  20 E5 C4       
+	LDA $9B			; CF69  A5 9B          
+	LDX $94			; CF6B  A6 94          
+	STA $63B9,X		; CF6D  9D B9 63       
+	STA $63B8,X		; CF70  9D B8 63       
+	STA $63B7,X		; CF73  9D B7 63       
+	STA $63B6,X		; CF76  9D B6 63       
+	JSR $C635		; CF79  20 35 C6       
+	LDX $94			; CF7C  A6 94          
+	STA $63C9,X		; CF7E  9D C9 63       
+	STA $63C8,X		; CF81  9D C8 63       
+	STA $63C7,X		; CF84  9D C7 63       
+	STA $63C6,X		; CF87  9D C6 63       
+	LDX $95			; CF8A  A6 95          
+	LDA $6243,X		; CF8C  BD 43 62       
+	ASL A			; CF8F  0A             
+	ASL A			; CF90  0A             
+	ASL A			; CF91  0A             
+	ADC #$06		; CF92  69 06          
+	JSR $C4F4		; CF94  20 F4 C4       
+	LDY #$00		; CF97  A0 00          
+	JSR $C4E5		; CF99  20 E5 C4       
+	LDA $9B			; CF9C  A5 9B          
+	LDX $94			; CF9E  A6 94          
+	STA $63D9,X		; CFA0  9D D9 63       
+	STA $63D8,X		; CFA3  9D D8 63       
+	STA $63D7,X		; CFA6  9D D7 63       
+	STA $63D6,X		; CFA9  9D D6 63       
+	LDA #$C8		; CFAC  A9 C8          
+	LDX $94			; CFAE  A6 94          
+	STA $63E9,X		; CFB0  9D E9 63       
+	STA $63E8,X		; CFB3  9D E8 63       
+	STA $63E7,X		; CFB6  9D E7 63       
+	STA $63E6,X		; CFB9  9D E6 63       
+	LDA #$00		; CFBC  A9 00          
+	STA $6359,X		; CFBE  9D 59 63       
+	STA $6358,X		; CFC1  9D 58 63       
+	STA $6357,X		; CFC4  9D 57 63       
+	STA $6356,X		; CFC7  9D 56 63       
+	LDY $95			; CFCA  A4 95          
+	LDA $D6C8,Y		; CFCC  B9 C8 D6       
+	STA $6369,X		; CFCF  9D 69 63       
+	STA $6368,X		; CFD2  9D 68 63       
+	STA $6367,X		; CFD5  9D 67 63       
+	STA $6366,X		; CFD8  9D 66 63       
+	LDA $94			; CFDB  A5 94          
+	SEC			; CFDD  38             
+	SBC #$04		; CFDE  E9 04          
+	BCC BECFE5		; CFE0  90 03          
+	JMP $CEEE		; CFE2  4C EE CE       
+BECFE5:
+	RTS			; CFE5  60             
+
+;$CFE6
+.byte $a9,$c8,$85,$8a,$a9,$d0,$85,$8c,$a9,$bf
 .byte $85,$89,$a9,$02,$85,$8b,$a9,$c0,$85,$88,$20,$4f,$fb,$a2,$02,$a0
 ;$D000
 .byte $18,$20,$01,$d4,$a9,$01,$85,$2f,$20,$d0,$f3,$60,$20,$6b,$f5,$20
@@ -693,8 +1214,24 @@ BECC21:
 ;$D200
 .byte $8a,$68,$4c,$70,$f5,$a5,$62,$4a,$48,$20,$6b,$f5,$a4,$95,$b9,$42
 .byte $62,$aa,$bd,$6a,$e0,$aa,$88,$98,$20,$2f,$98,$68,$4c,$70,$f5,$20
-.byte $6b,$f5,$20,$c8,$a0,$20,$1b,$f5,$4c,$25,$fe,$a2,$03,$a0,$00,$bd
-.byte $1a,$62,$f0,$03,$30,$01,$c8,$ca,$10,$f5,$c0,$02,$60,$20,$6e,$f5
+.byte $6b,$f5,$20,$c8,$a0,$20,$1b,$f5,$4c,$25,$fe
+
+; Name	:
+	LDX #$03		; D22B  A2 03          
+	LDY #$00		; D22D  A0 00          
+BED22F:
+	LDA $621A,X		; D22F  BD 1A 62       
+	BEQ BED237		; D232  F0 03          
+	BMI BED237		; D234  30 01          
+	INY			; D236  C8             
+BED237:
+	DEX			; D237  CA             
+	BPL BED22F		; D238  10 F5          
+	CPY #$02		; D23A  C0 02          
+	RTS			; D23C  60             
+
+;$D23D
+.byte $20,$6e,$f5
 .byte $20,$b3,$c9,$4c,$56,$8a,$20,$dd,$c4,$a9,$00,$85,$90,$20,$ef,$c2
 .byte $a9,$d8,$85,$10,$a9,$89,$85,$11,$20,$ed,$fa,$a9,$87,$85,$12,$a9
 .byte $d2,$85,$13,$a9,$0a,$85,$91,$a9,$04,$85,$8f,$20,$07,$80,$a5,$90
@@ -726,11 +1263,50 @@ BECC21:
 .byte $20,$46,$f3,$a9,$0f
 .byte $8d,$c0,$03,$8d,$c1,$03,$8d,$c2,$03,$a9,$30,$8d,$c3,$03,$a9,$01
 .byte $85,$2f,$20,$dc,$f4,$a9,$ff,$85,$9e,$20,$d4,$84,$20,$6b,$f5,$a9
-.byte $04,$8d,$42,$07,$60,$20,$68,$f5,$a2,$03,$86,$01,$bd,$1a,$62,$30
-.byte $32,$a8,$b9,$1a,$f9,$0a,$0a,$a8,$a6,$01,$bd,$1b,$f9,$aa,$a9,$05
-.byte $85,$00,$b9,$91,$97,$9d,$31,$63,$c8,$b9,$91,$97,$9d,$f5,$62,$c8
-.byte $b9,$91,$97,$9d,$1d,$63,$c8,$b9,$91,$97,$9d,$45,$63,$c8,$e8,$c6
-.byte $00,$d0,$df,$a6,$01,$ca,$10,$c2,$20,$6e,$f5,$60,$8a,$0a,$aa,$bd
+.byte $04,$8d,$42,$07,$60
+
+; Name	:
+	JSR $F568		; D3A5  20 68 F5       
+	LDX #$03		; D3A8  A2 03          
+BED3AA:
+	STX $01			; D3AA  86 01          
+	LDA $621A,X		; D3AC  BD 1A 62       
+	BMI BED3E3		; D3AF  30 32          
+	TAY			; D3B1  A8             
+	LDA $F91A,Y		; D3B2  B9 1A F9       
+	ASL A			; D3B5  0A             
+	ASL A			; D3B6  0A             
+	TAY			; D3B7  A8             
+	LDX $01			; D3B8  A6 01          
+	LDA $F91B,X		; D3BA  BD 1B F9       
+	TAX			; D3BD  AA             
+	LDA #$05		; D3BE  A9 05          
+	STA $00			; D3C0  85 00          
+BED3C2:
+	LDA $9791,Y		; D3C2  B9 91 97       
+	STA $6331,X		; D3C5  9D 31 63       
+	INY			; D3C8  C8             
+	LDA $9791,Y		; D3C9  B9 91 97       
+	STA $62F5,X		; D3CC  9D F5 62       
+	INY			; D3CF  C8             
+	LDA $9791,Y		; D3D0  B9 91 97       
+	STA $631D,X		; D3D3  9D 1D 63       
+	INY			; D3D6  C8             
+	LDA $9791,Y		; D3D7  B9 91 97       
+	STA $6345,X		; D3DA  9D 45 63       
+	INY			; D3DD  C8             
+	INX			; D3DE  E8             
+	DEC $00			; D3DF  C6 00          
+	BNE BED3C2		; D3E1  D0 DF          
+BED3E3:
+	LDX $01			; D3E3  A6 01          
+	DEX			; D3E5  CA             
+	BPL BED3AA		; D3E6  10 C2          
+	JSR $F56E		; D3E8  20 6E F5       
+	RTS			; D3EB  60             
+
+;$D3EC
+.byte $8a,$0a,$aa,$bd
 .byte $c8,$d7,$99,$c1,$03,$bd,$c9,$d7,$99,$c2,$03,$a9,$30,$99,$c3,$03
 ;$D400
 .byte $60,$8a,$0a,$aa,$bd,$1a,$d8,$99,$c1,$03,$bd,$1b,$d8,$99,$c2,$03
@@ -746,29 +1322,130 @@ BECC21:
 .byte $a6,$a7,$bd,$33,$e1,$8d,$a8,$05,$60,$18,$6d,$ac,$61,$85,$02,$20
 .byte $f4,$c4,$46,$02,$a4,$02,$b9,$22,$d8,$85,$02,$a0,$00,$20,$e5,$c4
 .byte $a5,$9b,$c5,$01,$f0,$09,$c8,$c4,$02,$90,$f2,$f0,$f0,$a0,$00,$60
-.byte $20,$d3,$f4,$a5,$62,$4a,$48,$20,$2b,$f3,$20,$71,$f3,$20,$aa,$f3
-.byte $20,$46,$f3,$a9,$00,$85,$3e,$85,$3f,$a9,$80,$85,$5a,$a9,$00,$85
-.byte $46,$85,$45,$20,$67,$d5,$a9,$ac,$85,$44,$a9,$01,$85,$26,$20,$68
-;$D500
-.byte $f5,$ad,$60,$05,$f0,$13,$a9,$1d,$85,$10,$a9,$a3,$85,$11,$a9,$aa
-.byte $85,$12,$a9,$d5,$85,$13,$4c,$29,$d5,$a9,$8e,$85,$10,$a9,$a0,$85
-.byte $11,$a9,$8a,$85,$12,$a9,$d5,$85,$13,$a0,$1f,$b1,$12,$99,$c0,$03
-.byte $88,$10,$f8,$ae,$13,$62,$bd,$c2,$d6,$8d,$c1,$03,$20,$f9,$d5,$a9
-.byte $01,$85,$2f,$ad,$02,$20,$a9,$20,$8d,$06,$20,$a9,$00,$8d,$06,$20
-.byte $20,$da,$f6,$68,$20,$70,$f5,$58,$20,$c8,$f3,$20,$4a,$f3,$20,$d4
-.byte $f3,$20,$dc,$f4,$4c,$46,$f3,$a2,$04,$a0,$01,$ad,$60,$05,$f0,$04
-.byte $a2,$08,$a0,$00,$84,$27,$86,$5d,$e8,$86,$5e,$e8,$86,$5f,$e8,$86
-.byte $60,$a2,$1a,$86,$5b,$e8,$e8,$86,$5c,$60,$0f,$02,$37,$30,$0f,$01
+
+; Name	:
+; Marks	: Draw map screen ??
+	JSR $F4D3		; D4D0  20 D3 F4       
+	LDA $62			; D4D3  A5 62          
+	LSR A			; D4D5  4A             
+	PHA			; D4D6  48             
+	JSR $F32B		; D4D7  20 2B F3       
+	JSR $F371		; D4DA  20 71 F3       
+	JSR $F3AA		; D4DD  20 AA F3       
+	JSR $F346		; D4E0  20 46 F3       
+	LDA #$00		; D4E3  A9 00          
+	STA $3E			; D4E5  85 3E          
+	STA $3F			; D4E7  85 3F          
+	LDA #$80		; D4E9  A9 80          
+	STA $5A			; D4EB  85 5A          
+	LDA #$00		; D4ED  A9 00          
+	STA $46			; D4EF  85 46          
+	STA $45			; D4F1  85 45          
+	JSR $D567		; D4F3  20 67 D5       
+	LDA #$AC		; D4F6  A9 AC          
+	STA $44			; D4F8  85 44          
+	LDA #$01		; D4FA  A9 01          
+	STA $26			; D4FC  85 26          
+	JSR $F568		; D4FE  20 68 F5       
+	LDA $0560		; D501  AD 60 05       
+	BEQ BED519		; D504  F0 13          
+	LDA #$1D		; D506  A9 1D          
+	STA $10			; D508  85 10          
+	LDA #$A3		; D50A  A9 A3          
+	STA $11			; D50C  85 11          
+	LDA #$AA		; D50E  A9 AA          
+	STA $12			; D510  85 12          
+	LDA #$D5		; D512  A9 D5          
+	STA $13			; D514  85 13          
+	JMP $D529		; D516  4C 29 D5       
+BED519:
+	LDA #$8E		; D519  A9 8E          
+	STA $10			; D51B  85 10          
+	LDA #$A0		; D51D  A9 A0          
+	STA $11			; D51F  85 11          
+	LDA #$8A		; D521  A9 8A          
+	STA $12			; D523  85 12          
+	LDA #$D5		; D525  A9 D5          
+	STA $13			; D527  85 13          
+	LDY #$1F		; D529  A0 1F          
+BED52B:
+	LDA ($12),Y		; D52B  B1 12          
+	STA $03C0,Y		; D52D  99 C0 03       
+	DEY			; D530  88             
+	BPL BED52B		; D531  10 F8          
+	LDX $6213		; D533  AE 13 62       
+	LDA $D6C2,X		; D536  BD C2 D6       
+	STA $03C1		; D539  8D C1 03       
+	JSR $D5F9		; D53C  20 F9 D5       
+	LDA #$01		; D53F  A9 01          
+	STA $2F			; D541  85 2F          
+	LDA PpuStatus_2002	; D543  AD 02 20       
+	LDA #$20		; D546  A9 20          
+	STA PpuAddr_2006	; D548  8D 06 20       
+	LDA #$00		; D54B  A9 00          
+	STA PpuAddr_2006	; D54D  8D 06 20       
+	JSR $F6DA		; D550  20 DA F6       
+	PLA			; D553  68             
+	JSR $F570		; D554  20 70 F5       
+	CLI			; D557  58             
+	JSR $F3C8		; D558  20 C8 F3       
+	JSR $F34A		; D55B  20 4A F3       
+	JSR $F3D4		; D55E  20 D4 F3       
+	JSR $F4DC		; D561  20 DC F4       
+	JMP $F346		; D564  4C 46 F3       
+
+; Name	:
+	LDX #$04		; D567  A2 04          
+	LDY #$01		; D569  A0 01          
+	LDA $0560		; D56B  AD 60 05       
+	BEQ BED574		; D56E  F0 04          
+	LDX #$08		; D570  A2 08          
+	LDY #$00		; D572  A0 00          
+BED574:
+	STY $27			; D574  84 27          
+	STX $5D			; D576  86 5D          
+	INX			; D578  E8             
+	STX $5E			; D579  86 5E          
+	INX			; D57B  E8             
+	STX $5F			; D57C  86 5F          
+	INX			; D57E  E8             
+	STX $60			; D57F  86 60          
+	LDX #$1A		; D581  A2 1A          
+	STX $5B			; D583  86 5B          
+	INX			; D585  E8             
+	INX			; D586  E8             
+	STX $5C			; D587  86 5C          
+	RTS			; D589  60             
+
+;$D58A - data block =
+.byte $0f,$02,$37,$30,$0f,$01
 .byte $10,$30,$0f,$08,$27,$30,$0f,$12,$32,$30,$0f,$12,$16,$30,$0f,$28
 .byte $2a,$30,$0f,$28,$37,$30,$0f,$2a,$3a,$30,$0f,$02,$37,$30,$0f,$01
 .byte $10,$30,$0f,$08,$27,$30,$0f,$0a,$21,$30,$0f,$12,$16,$30,$0f,$28
 .byte $2a,$30,$0f,$28,$37,$30,$0f,$2a,$3a,$30,$a2,$07,$bd,$9a,$d5,$9d
 .byte $d0,$03,$ca,$10,$f7,$20,$f9,$d5,$ae,$13,$62,$bd,$c2,$d6,$8d,$c1
 .byte $03,$a9,$30,$8d,$c3,$03,$8d,$c7,$03,$8d,$cb,$03,$8d,$cf,$03,$a9
-.byte $2a,$8d,$c2,$03,$a9,$01,$85,$2f,$60,$ad,$0f,$62,$29,$01,$8d,$0f
-;$D600
-.byte $62,$0a,$0a,$aa,$a0,$00,$bd,$13,$d6,$99,$dc,$03,$e8,$c8,$c0,$04
-.byte $90,$f4,$60,$0f,$2a,$3a,$30,$0f,$13,$23,$30,$90,$01,$60,$80,$84
+.byte $2a,$8d,$c2,$03,$a9,$01,$85,$2f,$60
+
+; Name	:
+	LDA $620F		; D5F9  AD 0F 62       
+	AND #$01		; D5FC  29 01          
+	STA $620F		; D5FE  8D 0F 62       
+	ASL A			; D601  0A             
+	ASL A			; D602  0A             
+	TAX			; D603  AA             
+	LDY #$00		; D604  A0 00          
+BED606:
+	LDA $D613,X		; D606  BD 13 D6       
+	STA $03DC,Y		; D609  99 DC 03       
+	INX			; D60C  E8             
+	INY			; D60D  C8             
+	CPY #$04		; D60E  C0 04          
+	BCC BED606		; D610  90 F4          
+	RTS			; D612  60             
+
+;$D613 - data block = Is range $D613-$EABD?
+.byte $0f,$2a,$3a,$30,$0f,$13,$23,$30,$90,$01,$60,$80,$84
 .byte $88,$8c,$c0,$80,$84,$88,$8c,$c4,$80,$84,$88,$8c,$c8,$80,$84,$88
 .byte $8c,$cc,$80,$84,$88,$8c,$c0,$80,$84,$88,$8c,$c4,$80,$84,$88,$8c
 .byte $c8,$80,$84,$88,$8c,$cc,$4c,$80,$84,$88,$8c,$80,$80,$84,$88,$8c

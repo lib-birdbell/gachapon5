@@ -1289,6 +1289,7 @@ BFF8C2:
 .byte $01,$01,$01,$01,$01,$02,$02,$02,$02,$02,$03,$03,$03,$03,$03
 
 ; Name	:
+; Marks	: Write tile buffer to upper textbox line
 	JSR $F96D		; F95F	$20 $6D $F9
 	LDX #$0D		; F962	$A2 $0D
 	LDA #$62		; F964	$A9 $62
@@ -1299,7 +1300,7 @@ BFF966:
 	RTS			; F96C	$60
 
 ; Name	:
-; Marks	: Write tile to buffer for initialization
+; Marks	: Write tile buffer to background color
 	LDX #$7F		; F96D	$a2 $7f
 	LDA #$20		; F96F	$a9 $20
 BFF971:
@@ -1393,7 +1394,7 @@ BFF9D6:
 	LDX $0563		; F9E9	$ae $63 $05
 	RTS			; F9EC	$60
 
-;$F9ED - data block =
+;$F9ED - data block = text table
 .byte $00,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$f0,$f1,$f2
 ;$FA00
@@ -1445,15 +1446,15 @@ BFF9D6:
 BFFB19:
 	LDA ($12),Y		; FB19  $B1 $12
 	CMP #$FF		; FB1B  $C9 $FF
-	BEQ BFFB4E		; FB1D  $F0 $2F
+	BEQ BFFB4E		; FB1D  $F0 $2F		branch if data is FFh(last)
 	TAX			; FB1F  $AA
 	INY			; FB20  $C8
 	LDA ($12),Y		; FB21  $B1 $12
 	JSR $F605		; FB23  $20 $05 $F6
 	CMP #$DE		; FB26  $C9 $DE
-	BEQ BFFB2E		; FB28  $F0 $04
+	BEQ BFFB2E		; FB28  $F0 $04		branch if data is DEh
 	CMP #$DF		; FB2A  $C9 $DF
-	BNE BFFB46		; FB2C  $D0 $18
+	BNE BFFB46		; FB2C  $D0 $18		branch if data is not DFh
 BFFB2E:
 	PHA			; FB2E  $48
 	LDA ($10),Y		; FB2F  $B1 $10
