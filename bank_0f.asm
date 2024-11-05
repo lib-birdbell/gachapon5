@@ -1394,25 +1394,27 @@ BFF9D6:
 	LDX $0563		; F9E9	$ae $63 $05
 	RTS			; F9EC	$60
 
-;$F9ED - data block = text table
-.byte $00,$ff,$ff
-.byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$f0,$f1,$f2
-;$FA00
-.byte $f3,$d4,$e4,$d5,$e5,$b0,$b1,$b2,$b3,$fc,$fd,$fe,$ff,$40,$af,$ff
-.byte $ff,$ff,$78,$ff,$ff,$c4,$c5,$4c,$c2,$4f,$32,$33,$4d,$41,$42,$43
-.byte $44,$45,$46,$47,$48,$49,$4a,$4b,$ff,$ff,$ff,$ff,$ae,$50,$56,$57
-.byte $51,$58,$59,$52,$76,$77,$5b,$75,$64,$65,$53,$6d,$36,$ff,$66,$67
-.byte $54,$68,$69,$ff,$ff,$ff,$ff,$55,$ff,$79,$ff,$62,$63,$c1,$70,$71
-.byte $72,$5f,$73,$74,$5a,$5c,$5d,$5e,$6a,$bc,$bd,$be,$bf,$ff,$81,$82
-.byte $83,$84,$85,$86,$87,$88,$89,$8a,$8b,$8c,$8d,$8e,$8f,$90,$91,$92
-.byte $93,$94,$95,$96,$97,$98,$99,$9a,$9b,$9c,$9d,$9e,$9f,$a0,$a1,$a2
-.byte $a3,$a4,$a5,$a6,$a7,$a8,$a9,$aa,$ab,$ac,$ad,$60,$61,$ff,$33,$ff
-.byte $ff,$4f,$4e,$b6,$37,$38,$39,$3a,$3b,$3c,$3d,$3e,$3f,$32,$01,$02
-.byte $03,$04,$05,$06,$07,$08,$09,$0a,$0b,$0c,$0d,$0e,$0f,$10,$11,$12
-.byte $13,$14,$15,$16,$17,$18,$19,$1a,$1b,$1c,$1d,$1e,$1f,$20,$21,$22
-.byte $23,$24,$25,$26,$27,$28,$29,$2a,$2b,$2c,$2d,$30,$31,$d0,$d1,$d2
-.byte $d3,$e0,$e1,$e2,$e3,$2f,$2e,$6b,$6c,$b4,$b5,$ba,$35,$b7,$b8,$b9
-.byte $bb,$6e,$6f,$7a,$7b,$7c,$7d,$7e,$7f,$34,$ff,$ff,$ff
+;$F9ED - data block ($F9ED-$FAEC) = text table 256 bytes
+.byte $00,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
+.byte $f0,$f1,$f2,$f3,$d4,$e4,$d5,$e5,$b0,$b1,$b2,$b3,$fc,$fd,$fe,$ff
+.byte $40,$af,$ff,$ff,$ff,$78,$ff,$ff,$c4,$c5,$4c,$c2,$4f,$32,$33,$4d
+.byte $41,$42,$43,$44,$45,$46,$47,$48,$49,$4a,$4b,$ff,$ff,$ff,$ff,$ae
+
+.byte $50,$56,$57,$51,$58,$59,$52,$76,$77,$5b,$75,$64,$65,$53,$6d,$36
+.byte $ff,$66,$67,$54,$68,$69,$ff,$ff,$ff,$ff,$55,$ff,$79,$ff,$62,$63
+.byte $c1,$70,$71,$72,$5f,$73,$74,$5a,$5c,$5d,$5e,$6a,$bc,$bd,$be,$bf
+.byte $ff,$81,$82,$83,$84,$85,$86,$87,$88,$89,$8a,$8b,$8c,$8d,$8e,$8f
+
+.byte $90,$91,$92,$93,$94,$95,$96,$97,$98,$99,$9a,$9b,$9c,$9d,$9e,$9f
+.byte $a0,$a1,$a2,$a3,$a4,$a5,$a6,$a7,$a8,$a9,$aa,$ab,$ac,$ad,$60,$61
+.byte $ff,$33,$ff,$ff,$4f,$4e,$b6,$37,$38,$39,$3a,$3b,$3c,$3d,$3e,$3f
+.byte $32,$01,$02,$03,$04,$05,$06,$07,$08,$09,$0a,$0b,$0c,$0d,$0e,$0f
+
+.byte $10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$1a,$1b,$1c,$1d,$1e,$1f
+.byte $20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$2a,$2b,$2c,$2d,$30,$31
+.byte $d0,$d1,$d2,$d3,$e0,$e1,$e2,$e3,$2f,$2e,$6b,$6c,$b4,$b5,$ba,$35
+.byte $b7,$b8,$b9,$bb,$6e,$6f,$7a,$7b,$7c,$7d,$7e,$7f,$34,$ff,$ff,$ff
+
 ; Name	:
 	JSR $F99F		; FAED	$20 $9f $f9
 ; Name	:
@@ -1579,11 +1581,12 @@ BFFBB6:
 	RTS			; FC9E  $60
 
 ; Name	:
-	LDA #$73		; FC9F  $A9 $73
+; Marks	: Draw textbox bottom line
+	LDA #$73		; FC9F  $A9 $73		LeftBottom textbox line
 	STA PpuData_2007	; FCA1  $8D $07 $20
-	LDA #$75		; FCA4  $A9 $75
+	LDA #$75		; FCA4  $A9 $75		Bottom textbox line
 	JSR $F22B		; FCA6  $20 $2B $F2
-	LDA #$74		; FCA9  $A9 $74
+	LDA #$74		; FCA9  $A9 $74		RightBottom textbox line
 	STA PpuData_2007	; FCAB  $8D $07 $20
 	RTS			; FCAE  $60
 

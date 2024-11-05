@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -5,11 +7,11 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <errno.h>
-#include <unistd.h>	// read/write/open
+//#include <unistd.h>	// read/write/open
 #include <time.h>
 
 
-#define VERSION	"V0.13 20241101\0"
+#define VERSION	"V0.14 20241105\0"
 const unsigned char bmp_header[54] = {0x42,0x4D,0x36,0x1A,0x04,0x00,0x00,0x00,0x00,0x00,	\
 							 		  0x36,0x00,0x00,0x00,0x28,0x00,0x00,0x00,0x40,0x01,	\
 							 		  0x00,0x00,0x18,0x01,0x00,0x00,0x01,0x00,0x18,0x00,	\
@@ -20,11 +22,11 @@ const unsigned char bmp_header[54] = {0x42,0x4D,0x36,0x1A,0x04,0x00,0x00,0x00,0x
 //									 0	   1	 2	   3	 4	   5	 6	   7	 8	   9	 A	   B	 C	   D	 E	   F
 const unsigned char table[256] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,	\
 								  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,	\
-								  0x40, 0xAF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x32, 0x4F, 0x4D,	\
+								  0x40, 0xAF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4C, 0x00, 0x00, 0x32, 0x4F, 0x4D,	\
 								  0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x00, 0x00, 0x00, 0x00, 0xAE,	\
-								  0x50, 0x00, 0x00, 0x51, 0x00, 0x00, 0x52, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x53, 0x6D, 0x36,	\
+								  0x50, 0x00, 0x00, 0x51, 0x00, 0x00, 0x52, 0x76, 0x77, 0x00, 0x00, 0x00, 0x00, 0x53, 0x6D, 0x36,	\
 								  0x00, 0x00, 0x00, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x55, 0x00, 0x79, 0x00, 0x60, 0x00,	\
-								  0x00, 0x70, 0x71, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xBC, 0xBD, 0xBE, 0xBF,	\
+								  0x00, 0x70, 0x71, 0x72, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xBC, 0xBD, 0xBE, 0xBF,	\
 								  0x00, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88, 0x89, 0x8A, 0x8B, 0x8C, 0x8D, 0x8E, 0x8F,	\
 								  0x90, 0x91, 0x92, 0x93, 0x94, 0x95, 0x96, 0x97, 0x98, 0x99, 0x9A, 0x9B, 0x9C, 0x9D, 0x9E, 0x9F,	\
 								  0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6, 0xA7, 0xA8, 0xA9, 0xAA, 0xAB, 0xAC, 0xAD, 0x00, 0x00,	\
@@ -40,14 +42,14 @@ const unsigned char table[256] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
 
 void Show_how_to_use(void);
-void Bmp_save(unsigned char *pBmp, int seed);
+void Bmp_save(unsigned char *pBmp, int addr);
 unsigned char* Get_bmp_p(unsigned char *bmp, int x, int y, int line);
 unsigned char Get_tile(unsigned char *tile_map, int tile_num, int tile_line, int even);
 void Swap_updown(unsigned char *bmp);
 void Convert_tile(unsigned char *bmp, unsigned char *tile_map, int tileX, int tileY, unsigned char *checkRom, int use);
 void Write_tile_to_bmp(unsigned char *bmp, unsigned char *tile_map, unsigned char tileNum, int x, int y);
 void Decompress_tile(unsigned char *bmp, unsigned char *tile_map, unsigned char *checkRom);
-void Decompress_side_tile(unsigned char *bmp, unsigned char *tile_map, unsigned char *checkRom, int useTable);
+void Decompress_side_tile(unsigned char *bmp, unsigned char *tile_map, int tileX, int tileY, unsigned char *checkRom, int useTable);
 
 
 
@@ -79,6 +81,7 @@ int main(int argc, char** argv){
 	tileX = -1;
 	tileY = -1;
 	tileA = -1;
+	checkA = -1;
 	useDecode2 = -1;
 	memset(fileName, 0, 256);
 	useTable = -1;
@@ -182,7 +185,7 @@ int main(int argc, char** argv){
 	// Convert tile map to BMP
 	memset(bmp, 0, (320*280*3));
 	if(useDecode2 == 1){
-		Decompress_side_tile(bmp, tile_map, rom, useTable);
+		Decompress_side_tile(bmp, tile_map, tileX, tileY, rom, useTable);
 	}else if(useTable == 2){
 		Decompress_tile(bmp, tile_map, rom);
 	}else{
@@ -219,15 +222,16 @@ void Show_how_to_use(void){
 
 
 
-void Bmp_save(unsigned char *pBmp, int seed){
+void Bmp_save(unsigned char *pBmp, int addr){
 	int fd;
 	struct tm *now;
 	time_t now_t;
 	char fileName[256];
 	int count = 0;
 	int fileExist;
+	int fileSeq = 0;
 	
-	srand(seed);
+	//srand(addr);
 
 RETRY:
 	// Get time
@@ -236,7 +240,8 @@ RETRY:
 
 	memset(fileName, 0, 256);
 	//sprintf(fileName, "%04d%02d%02d_%02d%02d%02d.bmp", now->tm_year+1900, now->tm_mon+1, now->tm_mday, now->tm_hour, now->tm_min, now->tm_sec);
-	sprintf(fileName, "%02d%02d%02d_%05d.bmp", now->tm_hour, now->tm_min, now->tm_sec, rand());
+	//sprintf(fileName, "%02d%02d%02d_%05d.bmp", now->tm_hour, now->tm_min, now->tm_sec, rand());
+	sprintf(fileName, "%05xh_%02d%02d%02d_%1d.bmp", addr, now->tm_hour, now->tm_min, now->tm_sec, fileSeq++);
 	
 	// Chekc file name(cannot be same)
 	fileExist = access(fileName, 00);
@@ -489,7 +494,7 @@ void Decompress_tile(unsigned char *bmp, unsigned char *tile_map, unsigned char 
 	}
 }
 
-void Decompress_side_tile(unsigned char *bmp, unsigned char *tile_map, unsigned char *checkRom, int useTable){
+void Decompress_side_tile(unsigned char *bmp, unsigned char *tile_map, int tileX, int tileY, unsigned char *checkRom, int useTable){
 	unsigned char r, g, b;
 	unsigned char lbyte, rbyte, tileNum, tileA, tileB;
 	int x, y, k, i;
@@ -503,7 +508,7 @@ void Decompress_side_tile(unsigned char *bmp, unsigned char *tile_map, unsigned 
 	for(i=0;i<0x100;i++){
 		temp[i] = 0x20;
 	}
-	for(i=0;i<14;i++){
+	for(i=0;i<tileX;i++){
 		temp[i] = 0x62;
 	}
 	
@@ -530,8 +535,8 @@ void Decompress_side_tile(unsigned char *bmp, unsigned char *tile_map, unsigned 
 	}
 	
 	text_count = 0;
-	for(y=0;y<7;y++){
-		for(x=0;x<14;x++){
+	for(y=0;y<tileY;y++){
+		for(x=0;x<tileX;x++){
 			Write_tile_to_bmp(bmp, tile_map, temp[text_count++], x, y);
 		}
 	}

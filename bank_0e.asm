@@ -805,10 +805,10 @@ BEC9BD:
 	ADC #$00		; CAE0  69 00          
 	STA $2D			; CAE2  85 2D          
 	JSR $F982		; CAE4  20 82 F9       
-	LDA #$47		; CAE7  A9 47          
+	LDA #$47		; CAE7  A9 47		Left textbox line
 	STA $0300		; CAE9  8D 00 03       
 	STA $0320		; CAEC  8D 20 03       
-	LDA #$48		; CAEF  A9 48          
+	LDA #$48		; CAEF  A9 48		Right textbox line
 	STA $031F		; CAF1  8D 1F 03       
 	STA $033F		; CAF4  8D 3F 03       
 	RTS			; CAF7  60             
