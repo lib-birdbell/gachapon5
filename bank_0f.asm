@@ -1006,46 +1006,55 @@ BFECB5:
 BFECF8:
 .byte $4c,$b1,$ed
 
+; Marks	: From IRQ ??
 BFECFB:
-	LDA #$00		; ECFB  A9 00          
-	STA $3E			; ECFD  85 3E          
-	STA $3F			; ECFF  85 3F          
-	LDX $25			; ED01  A6 25          
-	BNE BFECF8		; ED03  D0 F3          
-	LDA $3C			; ED05  A5 3C          
-	AND #$FE		; ED07  29 FE          
-	STA PpuControl_2000	; ED09  8D 00 20       
-	LDX $25			; ED0C  A6 25          
-	LDA PpuStatus_2002	; ED0E  AD 02 20       
-	LDA $3E			; ED11  A5 3E          
-	STA PpuScroll_2005	; ED13  8D 05 20       
-	LDA $3F			; ED16  A5 3F          
-	STA PpuScroll_2005	; ED18  8D 05 20       
-	LDY #$00		; ED1B  A0 00          
-	STY $8000		; ED1D  8C 00 80       
-	LDX #$00		; ED20  A2 00          
-	STX $8001		; ED22  8E 01 80       
-	INY			; ED25  C8             
-	STY $8000		; ED26  8C 00 80       
-	LDX #$02		; ED29  A2 02          
-	STX $8001		; ED2B  8E 01 80       
-	INY			; ED2E  C8             
-	STY $8000		; ED2F  8C 00 80       
-	LDX #$1A		; ED32  A2 1A          
-	STX $8001		; ED34  8E 01 80       
-	INY			; ED37  C8             
-	INY			; ED38  C8             
-	STY $8000		; ED39  8C 00 80       
-	LDX $59			; ED3C  A6 59          
-	STX $8001		; ED3E  8E 01 80       
-	INY			; ED41  C8             
-	STY $8000		; ED42  8C 00 80       
-	LDX #$0F		; ED45  A2 0F          
-	STX $8001		; ED47  8E 01 80       
-	LDA $61			; ED4A  A5 61          
-	AND #$7F		; ED4C  29 7F          
-	STA $8000		; ED4E  8D 00 80       
-	JMP $EDB1		; ED51  4C B1 ED       
+	LDA #$00		; ECFB  $A9 $00
+	STA $3E			; ECFD  $85 $3E
+	STA $3F			; ECFF  $85 $3F
+	LDX $25			; ED01  $A6 $25
+	BNE BFECF8		; ED03  $D0 $F3
+	LDA $3C			; ED05  $A5 $3C
+	AND #$FE		; ED07  $29 $FE
+	STA PpuControl_2000	; ED09  $8D $00 $20
+	LDX $25			; ED0C  $A6 $25
+	LDA PpuStatus_2002	; ED0E  $AD $02 $20
+	LDA $3E			; ED11  $A5 $3E
+	STA PpuScroll_2005	; ED13  $8D $05 $20
+	LDA $3F			; ED16  $A5 $3F
+	STA PpuScroll_2005	; ED18  $8D $05 $20
+	LDY #$00		; ED1B  $A0 $00
+	STY $8000		; ED1D  $8C $00 $80
+.if ORIGINAL
+	LDX #$00		; ED20  $A2 $00		BANK PRG
+.else
+	LDX #$80
+.endif
+	STX $8001		; ED22  $8E $01 $80
+	INY			; ED25  $C8
+	STY $8000		; ED26  $8C $00 $80
+.if ORIGINAL
+	LDX #$02		; ED29  $A2 $02		BANK PRG
+.else
+	LDX #$82
+.endif
+	STX $8001		; ED2B  $8E $01 $80
+	INY			; ED2E  $C8
+	STY $8000		; ED2F  $8C $00 $80
+	LDX #$1A		; ED32  $A2 $1A
+	STX $8001		; ED34  $8E $01 $80
+	INY			; ED37  $C8
+	INY			; ED38  $C8
+	STY $8000		; ED39  $8C $00 $80
+	LDX $59			; ED3C  $A6 $59
+	STX $8001		; ED3E  $8E $01 $80
+	INY			; ED41  $C8
+	STY $8000		; ED42  $8C $00 $80
+	LDX #$0F		; ED45  $A2 $0F
+	STX $8001		; ED47  $8E $01 $80
+	LDA $61			; ED4A  $A5 $61
+	AND #$7F		; ED4C  $29 $7F
+	STA $8000		; ED4E  $8D $00 $80
+	JMP $EDB1		; ED51  $4C $B1 $ED
 
 ; Name	: OnIRQ
 OnIRQ:
@@ -1309,239 +1318,239 @@ BFEF0B:
 .byte $07,$20,$60
 
 ; Name	:
-	LDA $0301		; F013  AD 01 03       
-	STA PpuAddr_2006        ; F016  8D 06 20       
-	LDA $0300               ; F019  AD 00 03       
-	STA PpuAddr_2006        ; F01C  8D 06 20       
-	LDA $0302               ; F01F  AD 02 03       
-	STA PpuData_2007        ; F022  8D 07 20       
-	LDA $0303               ; F025  AD 03 03       
-	STA PpuData_2007        ; F028  8D 07 20       
-	LDA $0304               ; F02B  AD 04 03       
-	STA PpuData_2007        ; F02E  8D 07 20       
-	LDA $0305               ; F031  AD 05 03       
-	STA PpuData_2007        ; F034  8D 07 20       
-	LDA $0306               ; F037  AD 06 03       
-	STA PpuData_2007        ; F03A  8D 07 20       
-	LDA $0307               ; F03D  AD 07 03       
-	STA PpuData_2007        ; F040  8D 07 20       
-	LDA $0308               ; F043  AD 08 03       
-	STA PpuData_2007        ; F046  8D 07 20       
-	LDA $0309               ; F049  AD 09 03       
-	STA PpuData_2007        ; F04C  8D 07 20       
-	LDA $030A               ; F04F  AD 0A 03       
-	STA PpuData_2007        ; F052  8D 07 20       
-	LDA $030B               ; F055  AD 0B 03       
-	STA PpuData_2007        ; F058  8D 07 20       
+	LDA $0301		; F013  $AD $01 $03
+	STA PpuAddr_2006	; F016  $8D $06 $20
+	LDA $0300		; F019  $AD $00 $03
+	STA PpuAddr_2006	; F01C  $8D $06 $20
+	LDA $0302		; F01F  $AD $02 $03
+	STA PpuData_2007	; F022  $8D $07 $20
+	LDA $0303		; F025  $AD $03 $03
+	STA PpuData_2007	; F028  $8D $07 $20
+	LDA $0304		; F02B  $AD $04 $03
+	STA PpuData_2007	; F02E  $8D $07 $20
+	LDA $0305		; F031  $AD $05 $03
+	STA PpuData_2007	; F034  $8D $07 $20
+	LDA $0306		; F037  $AD $06 $03
+	STA PpuData_2007	; F03A  $8D $07 $20
+	LDA $0307		; F03D  $AD $07 $03
+	STA PpuData_2007	; F040  $8D $07 $20
+	LDA $0308		; F043  $AD $08 $03
+	STA PpuData_2007	; F046  $8D $07 $20
+	LDA $0309		; F049  $AD $09 $03
+	STA PpuData_2007	; F04C  $8D $07 $20
+	LDA $030A		; F04F  $AD $0A $03
+	STA PpuData_2007	; F052  $8D $07 $20
+	LDA $030B		; F055  $AD $0B $03
+	STA PpuData_2007	; F058  $8D $07 $20
 
 ; Name	:
-	LDA $030D		; F05B  AD 0D 03       
-	STA PpuAddr_2006        ; F05E  8D 06 20       
-	LDA $030C               ; F061  AD 0C 03       
-	STA PpuAddr_2006        ; F064  8D 06 20       
-	LDA $030E               ; F067  AD 0E 03       
-	STA PpuData_2007        ; F06A  8D 07 20       
-	LDA $030F               ; F06D  AD 0F 03       
-	STA PpuData_2007        ; F070  8D 07 20       
-	LDA $0310               ; F073  AD 10 03       
-	STA PpuData_2007        ; F076  8D 07 20       
-	LDA $0311               ; F079  AD 11 03       
-	STA PpuData_2007        ; F07C  8D 07 20       
-	LDA $0312               ; F07F  AD 12 03       
-	STA PpuData_2007        ; F082  8D 07 20       
-	LDA $0313               ; F085  AD 13 03       
-	STA PpuData_2007        ; F088  8D 07 20       
-	LDA $0314               ; F08B  AD 14 03       
-	STA PpuData_2007        ; F08E  8D 07 20       
-	LDA $0315               ; F091  AD 15 03       
-	STA PpuData_2007        ; F094  8D 07 20       
-	LDA $0316               ; F097  AD 16 03       
-	STA PpuData_2007        ; F09A  8D 07 20       
-	LDA $0317               ; F09D  AD 17 03       
-	STA PpuData_2007        ; F0A0  8D 07 20       
-	RTS                     ; F0A3  60             
+	LDA $030D		; F05B  $AD $0D $03
+	STA PpuAddr_2006	; F05E  $8D $06 $20
+	LDA $030C		; F061  $AD $0C $03
+	STA PpuAddr_2006	; F064  $8D $06 $20
+	LDA $030E		; F067  $AD $0E $03
+	STA PpuData_2007	; F06A  $8D $07 $20
+	LDA $030F		; F06D  $AD $0F $03
+	STA PpuData_2007	; F070  $8D $07 $20
+	LDA $0310		; F073  $AD $10 $03
+	STA PpuData_2007	; F076  $8D $07 $20
+	LDA $0311		; F079  $AD $11 $03
+	STA PpuData_2007	; F07C  $8D $07 $20
+	LDA $0312		; F07F  $AD $12 $03
+	STA PpuData_2007	; F082  $8D $07 $20
+	LDA $0313		; F085  $AD $13 $03
+	STA PpuData_2007	; F088  $8D $07 $20
+	LDA $0314		; F08B  $AD $14 $03
+	STA PpuData_2007	; F08E  $8D $07 $20
+	LDA $0315		; F091  $AD $15 $03
+	STA PpuData_2007	; F094  $8D $07 $20
+	LDA $0316		; F097  $AD $16 $03
+	STA PpuData_2007	; F09A  $8D $07 $20
+	LDA $0317		; F09D  $AD $17 $03
+	STA PpuData_2007	; F0A0  $8D $07 $20
+	RTS			; F0A3  $60
 
 ; Name	:
-	LDA $0300,X		; F0A4  BD 00 03       
-	STA PpuData_2007	; F0A7  8D 07 20       
-	LDA $0301,X		; F0AA  BD 01 03       
-	STA PpuData_2007	; F0AD  8D 07 20       
-	LDA $0302,X		; F0B0  BD 02 03       
-	STA PpuData_2007	; F0B3  8D 07 20       
-	LDA $0303,X		; F0B6  BD 03 03       
-	STA PpuData_2007	; F0B9  8D 07 20       
-	LDA $0304,X		; F0BC  BD 04 03       
-	STA PpuData_2007	; F0BF  8D 07 20       
-	LDA $0305,X		; F0C2  BD 05 03       
-	STA PpuData_2007	; F0C5  8D 07 20       
-	LDA $0306,X		; F0C8  BD 06 03       
-	STA PpuData_2007	; F0CB  8D 07 20       
-	LDA $0307,X		; F0CE  BD 07 03       
-	STA PpuData_2007	; F0D1  8D 07 20       
-	LDA $0308,X		; F0D4  BD 08 03       
-	STA PpuData_2007	; F0D7  8D 07 20       
-	LDA $0309,X		; F0DA  BD 09 03       
-	STA PpuData_2007	; F0DD  8D 07 20       
-	LDA $030A,X		; F0E0  BD 0A 03       
-	STA PpuData_2007	; F0E3  8D 07 20       
-	LDA $030B,X		; F0E6  BD 0B 03       
-	STA PpuData_2007	; F0E9  8D 07 20       
-	LDA $030C,X		; F0EC  BD 0C 03       
-	STA PpuData_2007	; F0EF  8D 07 20       
-	LDA $030D,X		; F0F2  BD 0D 03       
-	STA PpuData_2007	; F0F5  8D 07 20       
-	LDA $030E,X		; F0F8  BD 0E 03       
-	STA PpuData_2007	; F0FB  8D 07 20       
-	LDA $030F,X		; F0FE  BD 0F 03       
-	STA PpuData_2007	; F101  8D 07 20       
-	LDA $0310,X		; F104  BD 10 03       
-	STA PpuData_2007	; F107  8D 07 20       
-	LDA $0311,X		; F10A  BD 11 03       
-	STA PpuData_2007	; F10D  8D 07 20       
-	LDA $0312,X		; F110  BD 12 03       
-	STA PpuData_2007	; F113  8D 07 20       
-	LDA $0313,X		; F116  BD 13 03       
-	STA PpuData_2007	; F119  8D 07 20       
-	LDA $0314,X		; F11C  BD 14 03       
-	STA PpuData_2007	; F11F  8D 07 20       
-	LDA $0315,X		; F122  BD 15 03       
-	STA PpuData_2007	; F125  8D 07 20       
-	LDA $0316,X		; F128  BD 16 03       
-	STA PpuData_2007	; F12B  8D 07 20       
-	LDA $0317,X		; F12E  BD 17 03       
-	STA PpuData_2007	; F131  8D 07 20       
-	LDA $0318,X		; F134  BD 18 03       
-	STA PpuData_2007	; F137  8D 07 20       
-	LDA $0319,X		; F13A  BD 19 03       
-	STA PpuData_2007	; F13D  8D 07 20       
-	LDA $031A,X		; F140  BD 1A 03       
-	STA PpuData_2007	; F143  8D 07 20       
-	LDA $031B,X		; F146  BD 1B 03       
-	STA PpuData_2007	; F149  8D 07 20       
-	LDA $031C,X		; F14C  BD 1C 03       
-	STA PpuData_2007	; F14F  8D 07 20       
-	LDA $031D,X		; F152  BD 1D 03       
-	STA PpuData_2007	; F155  8D 07 20       
-	LDA $031E,X		; F158  BD 1E 03       
-	STA PpuData_2007	; F15B  8D 07 20       
-	LDA $031F,X		; F15E  BD 1F 03       
-	STA PpuData_2007	; F161  8D 07 20       
+	LDA $0300,X		; F0A4  $BD $00 $03
+	STA PpuData_2007	; F0A7  $8D $07 $20
+	LDA $0301,X		; F0AA  $BD $01 $03
+	STA PpuData_2007	; F0AD  $8D $07 $20
+	LDA $0302,X		; F0B0  $BD $02 $03
+	STA PpuData_2007	; F0B3  $8D $07 $20
+	LDA $0303,X		; F0B6  $BD $03 $03
+	STA PpuData_2007	; F0B9  $8D $07 $20
+	LDA $0304,X		; F0BC  $BD $04 $03
+	STA PpuData_2007	; F0BF  $8D $07 $20
+	LDA $0305,X		; F0C2  $BD $05 $03
+	STA PpuData_2007	; F0C5  $8D $07 $20
+	LDA $0306,X		; F0C8  $BD $06 $03
+	STA PpuData_2007	; F0CB  $8D $07 $20
+	LDA $0307,X		; F0CE  $BD $07 $03
+	STA PpuData_2007	; F0D1  $8D $07 $20
+	LDA $0308,X		; F0D4  $BD $08 $03
+	STA PpuData_2007	; F0D7  $8D $07 $20
+	LDA $0309,X		; F0DA  $BD $09 $03
+	STA PpuData_2007	; F0DD  $8D $07 $20
+	LDA $030A,X		; F0E0  $BD $0A $03
+	STA PpuData_2007	; F0E3  $8D $07 $20
+	LDA $030B,X		; F0E6  $BD $0B $03
+	STA PpuData_2007	; F0E9  $8D $07 $20
+	LDA $030C,X		; F0EC  $BD $0C $03
+	STA PpuData_2007	; F0EF  $8D $07 $20
+	LDA $030D,X		; F0F2  $BD $0D $03
+	STA PpuData_2007	; F0F5  $8D $07 $20
+	LDA $030E,X		; F0F8  $BD $0E $03
+	STA PpuData_2007	; F0FB  $8D $07 $20
+	LDA $030F,X		; F0FE  $BD $0F $03
+	STA PpuData_2007	; F101  $8D $07 $20
+	LDA $0310,X		; F104  $BD $10 $03
+	STA PpuData_2007	; F107  $8D $07 $20
+	LDA $0311,X		; F10A  $BD $11 $03
+	STA PpuData_2007	; F10D  $8D $07 $20
+	LDA $0312,X		; F110  $BD $12 $03
+	STA PpuData_2007	; F113  $8D $07 $20
+	LDA $0313,X		; F116  $BD $13 $03
+	STA PpuData_2007	; F119  $8D $07 $20
+	LDA $0314,X		; F11C  $BD $14 $03
+	STA PpuData_2007	; F11F  $8D $07 $20
+	LDA $0315,X		; F122  $BD $15 $03
+	STA PpuData_2007	; F125  $8D $07 $20
+	LDA $0316,X		; F128  $BD $16 $03
+	STA PpuData_2007	; F12B  $8D $07 $20
+	LDA $0317,X		; F12E  $BD $17 $03
+	STA PpuData_2007	; F131  $8D $07 $20
+	LDA $0318,X		; F134  $BD $18 $03
+	STA PpuData_2007	; F137  $8D $07 $20
+	LDA $0319,X		; F13A  $BD $19 $03
+	STA PpuData_2007	; F13D  $8D $07 $20
+	LDA $031A,X		; F140  $BD $1A $03
+	STA PpuData_2007	; F143  $8D $07 $20
+	LDA $031B,X		; F146  $BD $1B $03
+	STA PpuData_2007	; F149  $8D $07 $20
+	LDA $031C,X		; F14C  $BD $1C $03
+	STA PpuData_2007	; F14F  $8D $07 $20
+	LDA $031D,X		; F152  $BD $1D $03
+	STA PpuData_2007	; F155  $8D $07 $20
+	LDA $031E,X		; F158  $BD $1E $03
+	STA PpuData_2007	; F15B  $8D $07 $20
+	LDA $031F,X		; F15E  $BD $1F $03
+	STA PpuData_2007	; F161  $8D $07 $20
 ; Name	:
-	LDA $0320,X		; F164  BD 20 03       
-	STA PpuData_2007	; F167  8D 07 20       
-	LDA $0321,X		; F16A  BD 21 03       
-	STA PpuData_2007	; F16D  8D 07 20       
-	LDA $0322,X		; F170  BD 22 03       
-	STA PpuData_2007	; F173  8D 07 20       
-	LDA $0323,X		; F176  BD 23 03       
-	STA PpuData_2007	; F179  8D 07 20       
-	LDA $0324,X		; F17C  BD 24 03       
-	STA PpuData_2007	; F17F  8D 07 20       
-	LDA $0325,X		; F182  BD 25 03       
-	STA PpuData_2007	; F185  8D 07 20       
-	LDA $0326,X		; F188  BD 26 03       
-	STA PpuData_2007	; F18B  8D 07 20       
-	LDA $0327,X		; F18E  BD 27 03       
-	STA PpuData_2007	; F191  8D 07 20       
-	LDA $0328,X		; F194  BD 28 03       
-	STA PpuData_2007	; F197  8D 07 20       
-	LDA $0329,X		; F19A  BD 29 03       
-	STA PpuData_2007	; F19D  8D 07 20       
-	LDA $032A,X		; F1A0  BD 2A 03       
-	STA PpuData_2007	; F1A3  8D 07 20       
-	LDA $032B,X		; F1A6  BD 2B 03       
-	STA PpuData_2007	; F1A9  8D 07 20       
-	LDA $032C,X		; F1AC  BD 2C 03       
-	STA PpuData_2007	; F1AF  8D 07 20       
-	LDA $032D,X		; F1B2  BD 2D 03       
-	STA PpuData_2007	; F1B5  8D 07 20       
-	LDA $032E,X		; F1B8  BD 2E 03       
-	STA PpuData_2007	; F1BB  8D 07 20       
-	LDA $032F,X		; F1BE  BD 2F 03       
-	STA PpuData_2007	; F1C1  8D 07 20       
-	LDA $0330,X		; F1C4  BD 30 03       
-	STA PpuData_2007	; F1C7  8D 07 20       
-	LDA $0331,X		; F1CA  BD 31 03       
-	STA PpuData_2007	; F1CD  8D 07 20       
-	LDA $0332,X		; F1D0  BD 32 03       
-	STA PpuData_2007	; F1D3  8D 07 20       
-	LDA $0333,X		; F1D6  BD 33 03       
-	STA PpuData_2007	; F1D9  8D 07 20       
-	LDA $0334,X		; F1DC  BD 34 03       
-	STA PpuData_2007	; F1DF  8D 07 20       
-	LDA $0335,X		; F1E2  BD 35 03       
-	STA PpuData_2007	; F1E5  8D 07 20       
-	LDA $0336,X		; F1E8  BD 36 03       
-	STA PpuData_2007	; F1EB  8D 07 20       
-	LDA $0337,X		; F1EE  BD 37 03       
-	STA PpuData_2007	; F1F1  8D 07 20       
-	LDA $0338,X		; F1F4  BD 38 03       
-	STA PpuData_2007	; F1F7  8D 07 20       
-	LDA $0339,X		; F1FA  BD 39 03       
-	STA PpuData_2007	; F1FD  8D 07 20       
-	LDA $033A,X		; F200  BD 3A 03       
-	STA PpuData_2007	; F203  8D 07 20       
-	LDA $033B,X		; F206  BD 3B 03       
-	STA PpuData_2007	; F209  8D 07 20       
-	LDA $033C,X		; F20C  BD 3C 03       
-	STA PpuData_2007	; F20F  8D 07 20       
-	LDA $033D,X		; F212  BD 3D 03       
-	STA PpuData_2007	; F215  8D 07 20       
-	LDA $033E,X		; F218  BD 3E 03       
-	STA PpuData_2007	; F21B  8D 07 20       
-	LDA $033F,X		; F21E  BD 3F 03       
-	STA PpuData_2007	; F221  8D 07 20       
-	RTS			; F224  60             
+	LDA $0320,X		; F164  $BD $20 $03
+	STA PpuData_2007	; F167  $8D $07 $20
+	LDA $0321,X		; F16A  $BD $21 $03
+	STA PpuData_2007	; F16D  $8D $07 $20
+	LDA $0322,X		; F170  $BD $22 $03
+	STA PpuData_2007	; F173  $8D $07 $20
+	LDA $0323,X		; F176  $BD $23 $03
+	STA PpuData_2007	; F179  $8D $07 $20
+	LDA $0324,X		; F17C  $BD $24 $03
+	STA PpuData_2007	; F17F  $8D $07 $20
+	LDA $0325,X		; F182  $BD $25 $03
+	STA PpuData_2007	; F185  $8D $07 $20
+	LDA $0326,X		; F188  $BD $26 $03
+	STA PpuData_2007	; F18B  $8D $07 $20
+	LDA $0327,X		; F18E  $BD $27 $03
+	STA PpuData_2007	; F191  $8D $07 $20
+	LDA $0328,X		; F194  $BD $28 $03
+	STA PpuData_2007	; F197  $8D $07 $20
+	LDA $0329,X		; F19A  $BD $29 $03
+	STA PpuData_2007	; F19D  $8D $07 $20
+	LDA $032A,X		; F1A0  $BD $2A $03
+	STA PpuData_2007	; F1A3  $8D $07 $20
+	LDA $032B,X		; F1A6  $BD $2B $03
+	STA PpuData_2007	; F1A9  $8D $07 $20
+	LDA $032C,X		; F1AC  $BD $2C $03
+	STA PpuData_2007	; F1AF  $8D $07 $20
+	LDA $032D,X		; F1B2  $BD $2D $03
+	STA PpuData_2007	; F1B5  $8D $07 $20
+	LDA $032E,X		; F1B8  $BD $2E $03
+	STA PpuData_2007	; F1BB  $8D $07 $20
+	LDA $032F,X		; F1BE  $BD $2F $03
+	STA PpuData_2007	; F1C1  $8D $07 $20
+	LDA $0330,X		; F1C4  $BD $30 $03
+	STA PpuData_2007	; F1C7  $8D $07 $20
+	LDA $0331,X		; F1CA  $BD $31 $03
+	STA PpuData_2007	; F1CD  $8D $07 $20
+	LDA $0332,X		; F1D0  $BD $32 $03
+	STA PpuData_2007	; F1D3  $8D $07 $20
+	LDA $0333,X		; F1D6  $BD $33 $03
+	STA PpuData_2007	; F1D9  $8D $07 $20
+	LDA $0334,X		; F1DC  $BD $34 $03
+	STA PpuData_2007	; F1DF  $8D $07 $20
+	LDA $0335,X		; F1E2  $BD $35 $03
+	STA PpuData_2007	; F1E5  $8D $07 $20
+	LDA $0336,X		; F1E8  $BD $36 $03
+	STA PpuData_2007	; F1EB  $8D $07 $20
+	LDA $0337,X		; F1EE  $BD $37 $03
+	STA PpuData_2007	; F1F1  $8D $07 $20
+	LDA $0338,X		; F1F4  $BD $38 $03
+	STA PpuData_2007	; F1F7  $8D $07 $20
+	LDA $0339,X		; F1FA  $BD $39 $03
+	STA PpuData_2007	; F1FD  $8D $07 $20
+	LDA $033A,X		; F200  $BD $3A $03
+	STA PpuData_2007	; F203  $8D $07 $20
+	LDA $033B,X		; F206  $BD $3B $03
+	STA PpuData_2007	; F209  $8D $07 $20
+	LDA $033C,X		; F20C  $BD $3C $03
+	STA PpuData_2007	; F20F  $8D $07 $20
+	LDA $033D,X		; F212  $BD $3D $03
+	STA PpuData_2007	; F215  $8D $07 $20
+	LDA $033E,X		; F218  $BD $3E $03
+	STA PpuData_2007	; F21B  $8D $07 $20
+	LDA $033F,X		; F21E  $BD $3F $03
+	STA PpuData_2007	; F221  $8D $07 $20
+	RTS			; F224  $60
 
 ; Name	:
-	STA PpuData_2007	; F225  8D 07 20       
-	STA PpuData_2007	; F228  8D 07 20       
+	STA PpuData_2007	; F225  $8D $07 $20
+	STA PpuData_2007	; F228  $8D $07 $20
 ; Name	:
-	STA PpuData_2007	; F22B  8D 07 20       
-	STA PpuData_2007	; F22E  8D 07 20       
-	STA PpuData_2007	; F231  8D 07 20       
-	STA PpuData_2007	; F234  8D 07 20       
-	STA PpuData_2007	; F237  8D 07 20       
-	STA PpuData_2007	; F23A  8D 07 20       
-	STA PpuData_2007	; F23D  8D 07 20       
-	STA PpuData_2007	; F240  8D 07 20       
-	STA PpuData_2007	; F243  8D 07 20       
-	STA PpuData_2007	; F246  8D 07 20       
-	STA PpuData_2007	; F249  8D 07 20       
-	STA PpuData_2007	; F24C  8D 07 20       
-	STA PpuData_2007	; F24F  8D 07 20       
-	STA PpuData_2007	; F252  8D 07 20       
-	STA PpuData_2007	; F255  8D 07 20       
-	STA PpuData_2007	; F258  8D 07 20       
+	STA PpuData_2007	; F22B  $8D $07 $20
+	STA PpuData_2007	; F22E  $8D $07 $20
+	STA PpuData_2007	; F231  $8D $07 $20
+	STA PpuData_2007	; F234  $8D $07 $20
+	STA PpuData_2007	; F237  $8D $07 $20
+	STA PpuData_2007	; F23A  $8D $07 $20
+	STA PpuData_2007	; F23D  $8D $07 $20
+	STA PpuData_2007	; F240  $8D $07 $20
+	STA PpuData_2007	; F243  $8D $07 $20
+	STA PpuData_2007	; F246  $8D $07 $20
+	STA PpuData_2007	; F249  $8D $07 $20
+	STA PpuData_2007	; F24C  $8D $07 $20
+	STA PpuData_2007	; F24F  $8D $07 $20
+	STA PpuData_2007	; F252  $8D $07 $20
+	STA PpuData_2007	; F255  $8D $07 $20
+	STA PpuData_2007	; F258  $8D $07 $20
 ; Name	:
-	STA PpuData_2007	; F25B  8D 07 20       
-	STA PpuData_2007	; F25E  8D 07 20       
-	STA PpuData_2007	; F261  8D 07 20       
-	STA PpuData_2007	; F264  8D 07 20       
-	STA PpuData_2007	; F267  8D 07 20       
-	STA PpuData_2007	; F26A  8D 07 20       
-	STA PpuData_2007	; F26D  8D 07 20       
+	STA PpuData_2007	; F25B  $8D $07 $20
+	STA PpuData_2007	; F25E  $8D $07 $20
+	STA PpuData_2007	; F261  $8D $07 $20
+	STA PpuData_2007	; F264  $8D $07 $20
+	STA PpuData_2007	; F267  $8D $07 $20
+	STA PpuData_2007	; F26A  $8D $07 $20
+	STA PpuData_2007	; F26D  $8D $07 $20
 ; Name	:
-	STA PpuData_2007	; F270  8D 07 20       
+	STA PpuData_2007	; F270  $8D $07 $20
 ; Name	:
-	STA PpuData_2007	; F273  8D 07 20       
-	STA PpuData_2007	; F276  8D 07 20       
-	STA PpuData_2007	; F279  8D 07 20       
-	STA PpuData_2007	; F27C  8D 07 20       
-	STA PpuData_2007	; F27F  8D 07 20       
-	STA PpuData_2007	; F282  8D 07 20       
-	RTS			; F285  60             
+	STA PpuData_2007	; F273  $8D $07 $20
+	STA PpuData_2007	; F276  $8D $07 $20
+	STA PpuData_2007	; F279  $8D $07 $20
+	STA PpuData_2007	; F27C  $8D $07 $20
+	STA PpuData_2007	; F27F  $8D $07 $20
+	STA PpuData_2007	; F282  $8D $07 $20
+	RTS			; F285  $60
 
 ; Name	:
-	STA $0743		; F286  8D 43 07       
-	LDX #$01		; F289  A2 01          
-	LDA $6211		; F28B  AD 11 62       
-	AND #$08		; F28E  29 08          
-	BNE BFF294		; F290  D0 02          
-	LDX #$04		; F292  A2 04          
+	STA $0743		; F286  $8D $43 $07
+	LDX #$01		; F289  $A2 $01
+	LDA $6211		; F28B  $AD $11 $62
+	AND #$08		; F28E  $29 $08
+	BNE BFF294		; F290  $D0 $02
+	LDX #$04		; F292  $A2 $04
 BFF294:
-	STX $0742		; F294  8E 42 07       
-	JMP $F4D3		; F297  4C D3 F4       
+	STX $0742		; F294  $8E $42 $07
+	JMP $F4D3		; F297  $4C $D3 $F4
 
 ;$F29A
 .byte $a9,$04,$8d,$42,$07,$4c
@@ -1550,205 +1559,198 @@ BFF294:
 .byte $07,$cd,$42,$07,$f0,$fb,$ad,$42,$07,$29,$40,$d0,$f9,$60
 
 ; Name	:
-	PHA			; F2CE  48             
-	LDA #$0F                ; F2CF  A9 0F          
-	JSR $F2EE               ; F2D1  20 EE F2       
-	PLA                     ; F2D4  68             
-	RTS                     ; F2D5  60             
+	PHA			; F2CE  $48
+	LDA #$0F		; F2CF  $A9 $0F
+	JSR $F2EE		; F2D1  $20 $EE $F2
+	PLA			; F2D4  $68
+	RTS			; F2D5  $60
 
 ; Name	:
-	PHA                     ; F2D6  48             
-	LDA #$0D                ; F2D7  A9 0D          
-	JSR $F2EE               ; F2D9  20 EE F2       
-	PLA                     ; F2DC  68             
-	RTS                     ; F2DD  60             
+	PHA			; F2D6  $48
+	LDA #$0D		; F2D7  $A9 $0D
+	JSR $F2EE		; F2D9  $20 $EE $F2
+	PLA			; F2DC  $68
+	RTS			; F2DD  $60
 
 ; Name	:
-	PHA                     ; F2DE  48             
-	LDA #$0E                ; F2DF  A9 0E          
-	JSR $F2EE               ; F2E1  20 EE F2       
-	PLA                     ; F2E4  68             
-	RTS                     ; F2E5  60             
+	PHA			; F2DE  $48
+	LDA #$0E		; F2DF  $A9 $0E
+	JSR $F2EE		; F2E1  $20 $EE $F2
+	PLA			; F2E4  $68
+	RTS			; F2E5  $60
 
 ; Name	:
-	PHA                     ; F2E6  48             
-	LDA #$10                ; F2E7  A9 10          
-	JSR $F2EE               ; F2E9  20 EE F2       
-	PLA                     ; F2EC  68             
-	RTS                     ; F2ED  60             
+	PHA			; F2E6  $48
+	LDA #$10		; F2E7  $A9 $10
+	JSR $F2EE		; F2E9  $20 $EE $F2
+	PLA			; F2EC  $68
+	RTS			; F2ED  $60
 
 ; Name	:
-	CMP #$4E                ; F2EE  C9 4E          
-	BCS BFF2F7               ; F2F0  B0 05          
-	ORA #$80                ; F2F2  09 80          
-	STA $0744               ; F2F4  8D 44 07       
+	CMP #$4E		; F2EE  $C9 $4E
+	BCS BFF2F7		; F2F0  $B0 $05
+	ORA #$80		; F2F2  $09 $80
+	STA $0744		; F2F4  $8D $44 $07
 BFF2F7:
-	RTS                     ; F2F7  60             
+	RTS			; F2F7  $60
 
 ; Name	:
-	PHA                     ; F2F8  48             
-	LDA #$FF                ; F2F9  A9 FF          
-	STA $0744               ; F2FB  8D 44 07       
-	PLA                     ; F2FE  68             
-	RTS                     ; F2FF  60             
-
-.if 0
-                   --------sub start--------
-F306  A2 02          LDX #$02
-F308  2C 02 20       BIT PpuStatus_2002
-F30B  10 FB          BPL $F308
-F30D  2C 02 20       BIT PpuStatus_2002
-F310  30 FB          BMI $F30D
-F312  CA             DEX
-F313  D0 F3          BNE $F308
-F315  60             RTS
-                   ----------------
-                   --------sub start--------
-F316  A9 88          LDA #$88
-F318  05 3C          ORA $3C
-F31A  85 3C          STA $3C
-F31C  8D 00 20       STA PpuControl_2000
-F31F  8D 00 20       STA PpuControl_2000
-F322  60             RTS
-                   ----------------
-                   --------sub start--------
-F323  A9 0C          LDA #$0C
-F325  D0 F1          BNE $F318
-F327  A9 09          LDA #$09
-F329  D0 ED          BNE $F318
-                   --------sub start--------
-F32B  A9 00          LDA #$00
-F32D  8D 01 20       STA PpuMask_2001
-F330  8D 01 20       STA PpuMask_2001
-F333  85 3D          STA $3D
-F335  A9 0F          LDA #$0F
-F337  25 3C          AND $3C
-F339  85 3C          STA $3C
-F33B  8D 00 20       STA PpuControl_2000
-F33E  8D 00 20       STA PpuControl_2000
-F341  60             RTS
-                   ----------------
-                   --------sub start--------
-F342  A9 8B          LDA #$8B
-F344  D0 F1          BNE $F337
-                   --------sub start--------
-F346  A9 8E          LDA #$8E
-F348  D0 ED          BNE $F337
-                   --------sub start--------
-F34A  A9 01          LDA #$01
-F34C  85 2E          STA $2E
-F34E  20 16 F3       JSR $F316
-F351  A9 1E          LDA #$1E
-F353  85 3D          STA $3D
-F355  60             RTS
-                   ----------------
-F356               --------unidentified--------
-F35F               ----------------
-                   --------sub start--------
-F360  A9 01          LDA #$01
-F362  85 2E          STA $2E
-F364  20 06 F3       JSR $F306
-F367  20 16 F3       JSR $F316
-F36A  A9 14          LDA #$14
-F36C  05 3D          ORA $3D
-F36E  85 3D          STA $3D
-F370  60             RTS
-                   ----------------
-                   --------sub start--------
-F371  20 42 F3       JSR $F342
-F374  AD 02 20       LDA PpuStatus_2002
-F377  A9 20          LDA #$20
-F379  8D 06 20       STA PpuAddr_2006
-F37C  A9 00          LDA #$00
-F37E  8D 06 20       STA PpuAddr_2006
-F381  A2 F0          LDX #$F0
-F383  A9 00          LDA #$00
-F385  8D 07 20       STA PpuData_2007
-F388  8D 07 20       STA PpuData_2007
-F38B  8D 07 20       STA PpuData_2007
-F38E  8D 07 20       STA PpuData_2007
-F391  CA             DEX
-F392  D0 F1          BNE $F385
-F394  A2 3F          LDX #$3F
-F396  A9 00          LDA #$00
-F398  8D 07 20       STA PpuData_2007
-F39B  9D 80 03       STA $0380,X
-F39E  CA             DEX
-F39F  10 F7          BPL $F398
-F3A1  85 32          STA $32
-F3A3  85 33          STA $33
-F3A5  85 34          STA $34
-F3A7  85 5A          STA $5A
-F3A9  60             RTS
-                   ----------------
-                   --------sub start--------
-F3AA  20 42 F3       JSR $F342
-F3AD  AD 02 20       LDA PpuStatus_2002
-F3B0  A9 2C          LDA #$2C
-F3B2  8D 06 20       STA PpuAddr_2006
-F3B5  A9 00          LDA #$00
-F3B7  8D 06 20       STA PpuAddr_2006
-F3BA  4C 81 F3       JMP $F381
-                   --------sub start--------
-F3BD  A2 00          LDX #$00
-F3BF  A9 F0          LDA #$F0
-F3C1  9D 00 02       STA $0200,X
-F3C4  E8             INX
-F3C5  D0 F8          BNE $F3BF
-F3C7  60             RTS
-                   ----------------
-                   --------sub start--------
-F3C8  20 BD F3       JSR $F3BD
-F3CB  A9 FF          LDA #$FF
-F3CD  85 2E          STA $2E
-F3CF  60             RTS
-                   ----------------
-                   --------sub start--------
-F3D0  A9 01          LDA #$01
-F3D2  85 2E          STA $2E
-                   --------sub start--------
-F3D4  A5 2E          LDA $2E
-F3D6  D0 FC          BNE $F3D4
-F3D8  60             RTS
-                   ----------------
-                   --------sub start--------
-F3D9  BD FE F3       LDA $F3FE,X
-F3DC  85 12          STA $12
-F3DE  BD 03 F4       LDA $F403,X
-F3E1  85 13          STA $13
-                   --------sub start--------
-F3E3  A9 D1          LDA #$D1
-F3E5  85 10          STA $10
-F3E7  A9 00          LDA #$00
-F3E9  85 11          STA $11
-F3EB  20 59 F4       JSR $F459
-F3EE  18             CLC
-F3EF  A5 12          LDA $12
-F3F1  69 0E          ADC #$0E
-F3F3  85 12          STA $12
-F3F5  A5 13          LDA $13
-F3F7  69 00          ADC #$00
-F3F9  85 13          STA $13
-F3FB  4C 20 F4       JMP $F420
-.endif
+	PHA			; F2F8  $48
+	LDA #$FF		; F2F9  $A9 $FF
+	STA $0744		; F2FB  $8D $44 $07
+	PLA			; F2FE  $68
+	RTS			; F2FF  $60
 
 ;$F300
-.byte $ad,$44,$07,$d0,$fb,$60,$a2,$02,$2c,$02,$20,$10,$fb,$2c,$02,$20
-.byte $30,$fb,$ca,$d0,$f3,$60,$a9,$88,$05,$3c,$85,$3c,$8d,$00,$20,$8d
-.byte $00,$20,$60,$a9,$0c,$d0,$f1,$a9,$09,$d0,$ed,$a9,$00,$8d,$01,$20
-.byte $8d,$01,$20,$85,$3d,$a9,$0f,$25,$3c,$85,$3c,$8d,$00,$20,$8d,$00
-.byte $20,$60,$a9,$8b,$d0,$f1,$a9,$8e,$d0,$ed,$a9,$01,$85,$2e,$20,$16
-.byte $f3,$a9,$1e,$85,$3d,$60,$20,$16,$f3,$a9,$0a,$05,$3d,$85,$3d,$60
-.byte $a9,$01,$85,$2e,$20,$06,$f3,$20,$16,$f3,$a9,$14,$05,$3d,$85,$3d
-.byte $60,$20,$42,$f3,$ad,$02,$20,$a9,$20,$8d,$06,$20,$a9,$00,$8d,$06
-.byte $20,$a2,$f0,$a9,$00,$8d,$07,$20,$8d,$07,$20,$8d,$07,$20,$8d,$07
-.byte $20,$ca,$d0,$f1,$a2,$3f,$a9,$00,$8d,$07,$20,$9d,$80,$03,$ca,$10
-.byte $f7,$85,$32,$85,$33,$85,$34,$85,$5a,$60,$20,$42,$f3,$ad,$02,$20
-.byte $a9,$2c,$8d,$06,$20,$a9,$00,$8d,$06,$20,$4c,$81,$f3,$a2,$00,$a9
-.byte $f0,$9d,$00,$02,$e8,$d0,$f8,$60,$20,$bd,$f3,$a9,$ff,$85,$2e,$60
-.byte $a9,$01,$85,$2e,$a5,$2e,$d0,$fc,$60,$bd,$fe,$f3,$85,$12,$bd,$03
-.byte $f4,$85,$13,$a9,$d1,$85,$10,$a9,$00,$85,$11,$20,$59,$f4,$18,$a5
-.byte $12,$69,$0e,$85,$12,$a5,$13,$69,$00,$85,$13,$4c,$20,$f4
+.byte $ad,$44,$07,$d0,$fb,$60
+
+; Name	:
+	LDX #$02		; F306  $A2 $02
+BFF308:
+	BIT PpuStatus_2002	; F308  $2C $02 $20
+	BPL BFF308		; F30B  $10 $FB
+BFF30D:
+	BIT PpuStatus_2002	; F30D  $2C $02 $20
+	BMI BFF30D		; F310  $30 $FB
+	DEX			; F312  $CA
+	BNE BFF308		; F313  $D0 $F3
+	RTS			; F315  $60
+
+; Name	:
+	LDA #$88		; F316  $A9 $88
+BFF318:
+	ORA $3C			; F318  $05 $3C
+	STA $3C			; F31A  $85 $3C
+	STA PpuControl_2000	; F31C  $8D $00 $20
+	STA PpuControl_2000	; F31F  $8D $00 $20
+	RTS			; F322  $60
+
+; Name	:
+	LDA #$0C		; F323  $A9 $0C
+	BNE BFF318		; F325  $D0 $F1
+	LDA #$09		; F327  $A9 $09
+	BNE BFF318		; F329  $D0 $ED
+; Name	:
+	LDA #$00		; F32B  $A9 $00
+	STA PpuMask_2001	; F32D  $8D $01 $20
+	STA PpuMask_2001	; F330  $8D $01 $20
+	STA $3D			; F333  $85 $3D
+	LDA #$0F		; F335  $A9 $0F
+BFF337:
+	AND $3C			; F337  $25 $3C
+	STA $3C			; F339  $85 $3C
+	STA PpuControl_2000	; F33B  $8D $00 $20
+	STA PpuControl_2000	; F33E  $8D $00 $20
+	RTS			; F341  $60
+
+; Name	:
+	LDA #$8B		; F342  $A9 $8B
+	BNE BFF337		; F344  $D0 $F1
+; Name	:
+	LDA #$8E		; F346  $A9 $8E
+	BNE BFF337		; F348  $D0 $ED
+; Name	:
+	LDA #$01		; F34A  $A9 $01
+	STA $2E			; F34C  $85 $2E
+	JSR $F316		; F34E  $20 $16 F3       
+	LDA #$1E		; F351  $A9 $1E
+	STA $3D			; F353  $85 $3D
+	RTS			; F355  $60
+
+;$F356
+.byte $20,$16,$f3,$a9,$0a,$05,$3d,$85,$3d,$60
+
+; Name	:
+	LDA #$01		; F360  $A9 $01
+	STA $2E                 ; F362  $85 $2E
+	JSR $F306               ; F364  $20 $06 $F3
+	JSR $F316               ; F367  $20 $16 $F3
+	LDA #$14                ; F36A  $A9 $14
+	ORA $3D                 ; F36C  $05 $3D
+	STA $3D                 ; F36E  $85 $3D
+	RTS                     ; F370  $60
+
+; Name	:
+	JSR $F342		; F371  $20 $42 $F3
+	LDA PpuStatus_2002	; F374  $AD $02 $20
+	LDA #$20		; F377  $A9 $20
+	STA PpuAddr_2006	; F379  $8D $06 $20
+	LDA #$00		; F37C  $A9 $00
+	STA PpuAddr_2006	; F37E  $8D $06 $20
+	LDX #$F0		; F381  $A2 $F0
+	LDA #$00		; F383  $A9 $00
+BFF385:
+	STA PpuData_2007	; F385  $8D $07 $20
+	STA PpuData_2007	; F388  $8D $07 $20
+	STA PpuData_2007	; F38B  $8D $07 $20
+	STA PpuData_2007	; F38E  $8D $07 $20
+	DEX			; F391  $CA
+	BNE BFF385		; F392  $D0 $F1
+	LDX #$3F		; F394  $A2 $3F
+	LDA #$00		; F396  $A9 $00
+BFF398:
+	STA PpuData_2007	; F398  $8D $07 $20
+	STA $0380,X		; F39B  $9D $80 $03
+	DEX			; F39E  $CA
+	BPL BFF398		; F39F  $10 $F7
+	STA $32			; F3A1  $85 $32
+	STA $33			; F3A3  $85 $33
+	STA $34			; F3A5  $85 $34
+	STA $5A			; F3A7  $85 $5A
+	RTS			; F3A9  $60
+
+; Name	:
+	JSR $F342		; F3AA  $20 $42 $F3
+	LDA PpuStatus_2002	; F3AD  $AD $02 $20
+	LDA #$2C		; F3B0  $A9 $2C
+	STA PpuAddr_2006	; F3B2  $8D $06 $20
+	LDA #$00		; F3B5  $A9 $00
+	STA PpuAddr_2006	; F3B7  $8D $06 $20
+	JMP $F381		; F3BA  $4C $81 $F3
+
+; Name	:
+	LDX #$00		; F3BD  $A2 $00
+BFF3BF:
+	LDA #$F0		; F3BF  $A9 $F0
+	STA $0200,X		; F3C1  $9D $00 $02
+	INX			; F3C4  $E8
+	BNE BFF3BF		; F3C5  $D0 $F8
+	RTS			; F3C7  $60
+
+; Name	:
+	JSR $F3BD		; F3C8  $20 $BD $F3
+	LDA #$FF		; F3CB  $A9 $FF
+	STA $2E			; F3CD  $85 $2E
+	RTS			; F3CF  $60
+
+; Name	:
+	LDA #$01		; F3D0  $A9 $01
+	STA $2E			; F3D2  $85 $2E
+; Name	:
+BFF3D4:
+	LDA $2E			; F3D4  $A5 $2E
+	BNE BFF3D4		; F3D6  $D0 $FC
+	RTS			; F3D8  $60
+
+; Name	:
+	LDA $F3FE,X		; F3D9  $BD $FE $F3
+	STA $12			; F3DC  $85 $12
+	LDA $F403,X		; F3DE  $BD $03 $F4
+	STA $13			; F3E1  $85 $13
+; Name	:
+	LDA #$D1		; F3E3  $A9 $D1
+	STA $10			; F3E5  $85 $10
+	LDA #$00		; F3E7  $A9 $00
+	STA $11			; F3E9  $85 $11
+	JSR $F459		; F3EB  $20 $59 $F4
+	CLC			; F3EE  $18
+	LDA $12			; F3EF  $A5 $12
+	ADC #$0E		; F3F1  $69 $0E
+	STA $12			; F3F3  $85 $12
+	LDA $13			; F3F5  $A5 $13
+	ADC #$00		; F3F7  $69 $00
+	STA $13			; F3F9  $85 $13
+	JMP $F420		; F3FB  $4C $20 $F4
 
 ;$F3FE - data block = ($F3FE-$F407)
 .byte $1d,$39
@@ -1958,52 +1960,52 @@ BFF523:
 
 ; Name	:
 ; Marks	: BANK SWAP
-	LDA #$00		; F55C  A9 00          
-	BIT $01A9               ; F55E  2C A9 01       
-	BIT $02A9               ; F561  2C A9 02       
-	;BIT $03A9               ; F564  2C A9 03       
+	LDA #$00		; F55C  $A9 $00
+	BIT $01A9		; F55E  $2C $A9 $01
+	BIT $02A9		; F561  $2C $A9 $02
+	;BIT $03A9		; F564  $2C $A9 $03
 .byte $2C
 
 ; Name	:
-	LDA #$03		; F565  A9 03          
-	;BIT $04A9               ; F567  2C A9 04       
+	LDA #$03		; F565  $A9 $03
+	;BIT $04A9		; F567  $2C $A9 $04
 .byte $2C
 
 ; Name	:
-	LDA #$04		; F568  A9 04          
-	;BIT $05A9               ; F56A  2C A9 05       
+	LDA #$04		; F568  $A9 $04
+	;BIT $05A9		; F56A  $2C $A9 $05
 .byte $2C
 
 ; Name	:
-	LDA #$05		; F56B  A9 05          
-	;BIT $06A9               ; F56D  2C A9 06       
+	LDA #$05		; F56B  $A9 $05
+	;BIT $06A9		; F56D  $2C $A9 $06
 .byte $2C
 
 ; Name	:
-	LDA #$06		; F56E  A9 06          
+	LDA #$06		; F56E  $A9 $06
 
 ; Name	:
 ; Marks	:
-	STX $64			; F570  86 64          
-	STY $65                 ; F572  84 65          
-	ASL A                   ; F574  0A             
-	TAY                     ; F575  A8             
-	LDA #$06                ; F576  A9 06          
-	ORA $5A                 ; F578  05 5A          
-	TAX                     ; F57A  AA             
-	STX $61                 ; F57B  86 61          
-	STX $8000               ; F57D  8E 00 80       
-	STY $62                 ; F580  84 62          
-	STY $8001               ; F582  8C 01 80       
-	INX                     ; F585  E8             
-	INY                     ; F586  C8             
-	STX $61                 ; F587  86 61          
-	STX $8000               ; F589  8E 00 80       
-	STY $63                 ; F58C  84 63          
-	STY $8001               ; F58E  8C 01 80       
-	LDX $64                 ; F591  A6 64          
-	LDY $65                 ; F593  A4 65          
-	RTS                     ; F595  60             
+	STX $64			; F570  $86 $64
+	STY $65			; F572  $84 $65
+	ASL A			; F574  $0A
+	TAY			; F575  $A8
+	LDA #$06		; F576  $A9 $06
+	ORA $5A			; F578  $05 $5A
+	TAX			; F57A  $AA
+	STX $61			; F57B  $86 $61
+	STX $8000		; F57D  $8E $00 $80
+	STY $62			; F580  $84 $62
+	STY $8001		; F582  $8C $01 $80
+	INX			; F585  $E8
+	INY			; F586  $C8
+	STX $61			; F587  $86 $61
+	STX $8000		; F589  $8E $00 $80
+	STY $63			; F58C  $84 $63
+	STY $8001		; F58E  $8C $01 $80
+	LDX $64			; F591  $A6 $64
+	LDY $65			; F593  $A4 $65
+	RTS			; F595  $60
 
 ; Name	:
 	JMP ($0066)		; F596	$6c $66 $00
@@ -2032,97 +2034,93 @@ BFF523:
 	PLP			; F60E  $28
 	RTS			; F60F  $60
 
-.if 0
-                   --------sub start--------
-F610  20 CC F6       JSR $F6CC
-F613  A2 03          LDX #$03
-F615  BD 69 F6       LDA $F669,X
-F618  DD 02 70       CMP $7002,X
-F61B  D0 18          BNE $F635
-F61D  CA             DEX
-F61E  10 F5          BPL $F615
-F620  20 80 F6       JSR $F680
-F623  A2 03          LDX #$03
-F625  20 CC F6       JSR $F6CC
-F628  B5 00          LDA $00,X
-F62A  DD 06 70       CMP $7006,X
-F62D  D0 06          BNE $F635
-F62F  CA             DEX
-F630  10 F6          BPL $F628
-F632  4C D4 F6       JMP $F6D4
-F635               --------unidentified--------
-F66C               ----------------
-                   --------sub start--------
-F66D  20 80 F6       JSR $F680
-F670  20 D0 F6       JSR $F6D0
-F673  A2 03          LDX #$03
-F675  B5 00          LDA $00,X
-F677  9D 06 70       STA $7006,X
-F67A  CA             DEX
-F67B  10 F8          BPL $F675
-F67D  4C D4 F6       JMP $F6D4
-                   --------sub start--------
-F680  20 D0 F6       JSR $F6D0
-F683  A9 FF          LDA #$FF
-F685  8D 00 60       STA $6000
-F688  8D 01 60       STA $6001
-F68B  8D 00 70       STA $7000
-F68E  8D 01 70       STA $7001
-F691  20 CC F6       JSR $F6CC
-F694  A9 00          LDA #$00
-F696  85 00          STA $00
-F698  85 01          STA $01
-F69A  85 02          STA $02
-F69C  85 03          STA $03
-F69E  A9 0A          LDA #$0A
-F6A0  85 04          STA $04
-F6A2  A9 70          LDA #$70
-F6A4  85 05          STA $05
-F6A6  A0 00          LDY #$00
-F6A8  B1 04          LDA ($04),Y
-F6AA  45 00          EOR $00
-F6AC  85 00          STA $00
-F6AE  A5 03          LDA $03
-F6B0  0A             ASL A
-F6B1  26 00          ROL $00
-F6B3  26 01          ROL $01
-F6B5  26 02          ROL $02
-F6B7  26 03          ROL $03
-F6B9  E6 04          INC $04
-F6BB  D0 02          BNE $F6BF
-F6BD  E6 05          INC $05
-F6BF  A5 04          LDA $04
-F6C1  C9 5A          CMP #$5A
-F6C3  A5 05          LDA $05
-F6C5  E9 78          SBC #$78
-F6C7  D0 DD          BNE $F6A6
-F6C9  4C D4 F6       JMP $F6D4
-                   --------sub start--------
-F6CC  A9 C0          LDA #$C0
-F6CE  D0 06          BNE $F6D6
-                   --------sub start--------
-F6D0  A9 80          LDA #$80
-F6D2  D0 02          BNE $F6D6
-                   --------sub start--------
-F6D4  A9 40          LDA #$40
-F6D6  8D 01 A0       STA $A001
-F6D9  60             RTS
-                   ----------------
-.endif
-;$F610
-.byte $20,$cc,$f6,$a2,$03,$bd,$69,$f6,$dd,$02,$70,$d0,$18,$ca,$10,$f5
-.byte $20,$80,$f6,$a2,$03,$20,$cc,$f6,$b5,$00,$dd,$06,$70,$d0,$06,$ca
-.byte $10,$f6,$4c,$d4,$f6,$20,$d0,$f6,$a9,$60,$85,$01,$a2,$20,$a0,$00
+; Name	:
+	JSR $F6CC		; F610  $20 $CC $F6
+	LDX #$03		; F613  $A2 $03
+BFF615:
+	LDA $F669,X		; F615  $BD $69 $F6
+	CMP $7002,X		; F618  $DD $02 $70
+	BNE BFF635		; F61B  $D0 $18
+	DEX			; F61D  $CA
+	BPL BFF615		; F61E  $10 $F5
+	JSR $F680		; F620  $20 $80 $F6
+	LDX #$03		; F623  $A2 $03
+	JSR $F6CC		; F625  $20 $CC $F6
+BFF628:
+	LDA $00,X		; F628  $B5 $00
+	CMP $7006,X		; F62A  $DD $06 $70
+	BNE BFF635		; F62D  $D0 $06
+	DEX			; F62F  $CA
+	BPL BFF628		; F630  $10 $F6
+	JMP $F6D4		; F632  $4C $D4 $F6
+
+BFF635:
+.byte $20,$d0,$f6,$a9,$60,$85,$01,$a2,$20,$a0,$00
 .byte $84,$00,$98,$91,$00,$c8,$d0,$fb,$e6,$01,$ca,$d0,$f6,$a2,$03,$bd
 .byte $69,$f6,$9d,$02,$70,$ca,$10,$f7,$a9,$0d,$8d,$11,$62,$a9,$00,$8d
-.byte $0f,$62,$20,$6d,$f6,$20,$56,$f3,$60,$53,$44,$47,$35,$20,$80,$f6
-.byte $20,$d0,$f6,$a2,$03,$b5,$00,$9d,$06,$70,$ca,$10,$f8,$4c,$d4,$f6
-.byte $20,$d0,$f6,$a9,$ff,$8d,$00,$60,$8d,$01,$60,$8d,$00,$70,$8d,$01
-.byte $70,$20,$cc,$f6,$a9,$00,$85,$00,$85,$01,$85,$02,$85,$03,$a9,$0a
-.byte $85,$04,$a9,$70,$85,$05,$a0,$00,$b1,$04,$45,$00,$85,$00,$a5,$03
-.byte $0a,$26,$00,$26,$01,$26,$02,$26,$03,$e6,$04,$d0,$02,$e6,$05,$a5
-.byte $04,$c9,$5a,$a5,$05,$e9,$78,$d0,$dd,$4c,$d4,$f6,$a9,$c0,$d0,$06
-.byte $a9,$80,$d0,$02,$a9,$40,$8d,$01,$a0,$60
+.byte $0f,$62,$20,$6d,$f6,$20,$56,$f3,$60,$53,$44,$47,$35
+
+; Name	:
+	JSR $F680		; F66D  $20 $80 $F6
+	JSR $F6D0		; F670  $20 $D0 $F6
+	LDX #$03		; F673  $A2 $03
+BFF675:
+	LDA $00,X		; F675  $B5 $00
+	STA $7006,X		; F677  $9D $06 $70
+	DEX			; F67A  $CA
+	BPL BFF675		; F67B  $10 $F8
+	JMP $F6D4		; F67D  $4C $D4 $F6
+
+; Name	:
+	JSR $F6D0		; F680  $20 $D0 $F6
+	LDA #$FF		; F683  $A9 $FF
+	STA $6000		; F685  $8D $00 $60
+	STA $6001		; F688  $8D $01 $60
+	STA $7000		; F68B  $8D $00 $70
+	STA $7001		; F68E  $8D $01 $70
+	JSR $F6CC		; F691  $20 $CC $F6
+	LDA #$00		; F694  $A9 $00
+	STA $00			; F696  $85 $00
+	STA $01			; F698  $85 $01
+	STA $02			; F69A  $85 $02
+	STA $03			; F69C  $85 $03
+	LDA #$0A		; F69E  $A9 $0A
+	STA $04			; F6A0  $85 $04
+	LDA #$70		; F6A2  $A9 $70
+	STA $05			; F6A4  $85 $05
+BFF6A6:
+	LDY #$00		; F6A6  $A0 $00
+	LDA ($04),Y		; F6A8  $B1 $04
+	EOR $00			; F6AA  $45 $00
+	STA $00			; F6AC  $85 $00
+	LDA $03			; F6AE  $A5 $03
+	ASL A			; F6B0  $0A
+	ROL $00			; F6B1  $26 $00
+	ROL $01			; F6B3  $26 $01
+	ROL $02			; F6B5  $26 $02
+	ROL $03			; F6B7  $26 $03
+	INC $04			; F6B9  $E6 $04
+	BNE BFF6BF		; F6BB  $D0 $02
+	INC $05			; F6BD  $E6 $05
+BFF6BF:
+	LDA $04			; F6BF  $A5 $04
+	CMP #$5A		; F6C1  $C9 $5A
+	LDA $05			; F6C3  $A5 $05
+	SBC #$78		; F6C5  $E9 $78
+	BNE BFF6A6		; F6C7  $D0 $DD
+	JMP $F6D4		; F6C9  $4C $D4 $F6
+
+; Name	:
+	LDA #$C0		; F6CC  $A9 $C0
+	BNE BFF6D6		; F6CE  $D0 $06
+; Name	:
+	LDA #$80		; F6D0  $A9 $80
+	BNE BFF6D6		; F6D2  $D0 $02
+; Name	:
+	LDA #$40		; F6D4  $A9 $40
+BFF6D6:
+	STA $A001		; F6D6  $8D $01 $A0
+	RTS			; F6D9  $60
 
 ; Name	:
 ; Marks	: Decode and set screen tile map, until read data is FFh
@@ -2412,6 +2410,7 @@ BFF9AA:
 	LDX $00			; F9D2	$a6 $00
 	LDY #$00		; F9D4	$a0,$00
 BFF9D6:
+.if ORIGINAL
 	LDA ($10),Y		; F9D6	$b1 $10
 	JSR $F9E2		; F9D8	$20 $e2 $f9
 	STA ($10),Y		; F9DB	$91 $10
@@ -2427,6 +2426,15 @@ BFF9D6:
 	LDA $F9ED,X		; F9E6	$bd $ed $f9
 	LDX $0563		; F9E9	$ae $63 $05
 	RTS			; F9EC	$60
+.else
+	RTS
+;$F9D7
+.byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
+.byte $ff,$ff
+;$F9E2
+.byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
+.endif
+
 
 ;$F9ED - data block ($F9ED-$FAEC) = text table 256 bytes
 .byte $00,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff

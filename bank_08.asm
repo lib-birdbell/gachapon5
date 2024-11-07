@@ -363,7 +363,11 @@
 .byte $c8,$c8,$00,$00,$c8,$c8,$00,$00,$c8,$c8,$00,$00,$c8,$c8,$00,$00
 .byte $90,$01,$60
 ;$9513 - data block = pilot first name
+.if ORIGINAL
 .byte $b1,$d1,$db,$20,$00,$cc,$de,$d7,$b2,$c4,$20,$00,$be
+.else
+.byte $36,$21,$18,$20,$00,$cc,$de,$d7,$b2,$c4,$20,$00,$be
+.endif
 .byte $b2,$d7,$20,$00,$d0,$d7,$b2,$20,$00,$b6,$b2,$20,$00,$bc,$ac,$b1
 .byte $20,$00,$d7,$d7,$b1,$20,$00,$c4,$de,$bd,$de,$d9,$20,$00,$cf,$b8
 .byte $cd,$de,$20,$00,$bc,$ac,$d8,$b1,$cc,$de,$d9,$20,$00,$ca,$cf,$b0

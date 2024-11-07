@@ -5,7 +5,7 @@
 
 
 
-#define VERSION "font_table V0.01 20241106"
+#define VERSION "font_table V0.01 20241106\0"
 
 #define	FILE_NAME_SIZE	256
 #define	FILE_LINE_SIZE	256
@@ -126,7 +126,7 @@ int main(int argc, char **argv){
 
 		memset(charOutputText, 0, FILE_LINE_SIZE);
 		//strcat(charOutputText, "$00,$00,$00,$00,$00,$00,$00,$00,");
-		sprintf(charOutputText, "$00,$00,$00,$00,$00,$00,$00,$00,");
+		sprintf(charOutputText, "$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,");
 		strcat(charOutputText, charInFile);
 		strcat(charOutputText, ";");
 		strcat(charOutputText, compareChar);

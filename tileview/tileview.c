@@ -11,7 +11,7 @@
 #include <time.h>
 
 
-#define VERSION	"V0.14 20241105\0"
+#define VERSION	"V0.15 20241106\0"
 const unsigned char bmp_header[54] = {0x42,0x4D,0x36,0x1A,0x04,0x00,0x00,0x00,0x00,0x00,	\
 							 		  0x36,0x00,0x00,0x00,0x28,0x00,0x00,0x00,0x40,0x01,	\
 							 		  0x00,0x00,0x18,0x01,0x00,0x00,0x01,0x00,0x18,0x00,	\
@@ -50,6 +50,7 @@ void Convert_tile(unsigned char *bmp, unsigned char *tile_map, int tileX, int ti
 void Write_tile_to_bmp(unsigned char *bmp, unsigned char *tile_map, unsigned char tileNum, int x, int y);
 void Decompress_tile(unsigned char *bmp, unsigned char *tile_map, unsigned char *checkRom);
 void Decompress_side_tile(unsigned char *bmp, unsigned char *tile_map, int tileX, int tileY, unsigned char *checkRom, int useTable);
+void ShowTilemap(unsigned char *bmp, unsigned char *tile_map);
 
 
 
@@ -68,6 +69,7 @@ int main(int argc, char** argv){
 	unsigned char rom[8*2*256*8];
 	int useTable;
 	int useDecode2;
+	int showOriginalTilemap;
 
 	printf("%s %s\n", argv[0], VERSION);
 
@@ -85,6 +87,7 @@ int main(int argc, char** argv){
 	useDecode2 = -1;
 	memset(fileName, 0, 256);
 	useTable = -1;
+	showOriginalTilemap = -1;
 	
 	// Check mode
 	for(i=1;i<argc;i++){
@@ -128,6 +131,9 @@ int main(int argc, char** argv){
 		}
 		if(strcmp(argv[i], "-e") == 0){
 			useDecode2 = 1;
+		}
+		if(strcmp(argv[i], "-o") == 0){
+			showOriginalTilemap = 1;
 		}
 	}
 	
@@ -182,9 +188,13 @@ int main(int argc, char** argv){
 	
 	close(fd);
 	
+	
+
 	// Convert tile map to BMP
 	memset(bmp, 0, (320*280*3));
-	if(useDecode2 == 1){
+	if(showOriginalTilemap){
+		ShowTilemap(bmp, tile_map);
+	}else if(useDecode2 == 1){
 		Decompress_side_tile(bmp, tile_map, tileX, tileY, rom, useTable);
 	}else if(useTable == 2){
 		Decompress_tile(bmp, tile_map, rom);
@@ -216,7 +226,8 @@ void Show_how_to_use(void){
 		printf(" -t : use table(option)\n");
 		printf(" -d : decompress(option))\n");
 		printf(" -e : decompress side screen(option))\n");
-		printf("Output file name is [time+minute+second_random(5digit).bmp]\n");
+		printf(" -o : show original tilemap(option)");
+		printf("Output file name is [addr+time+seq.bmp]\n");
 		printf(" 320x280 size\n");
 }
 
@@ -594,4 +605,17 @@ void Decompress_side_tile(unsigned char *bmp, unsigned char *tile_map, int tileX
 			}
 		}
 		#endif
+}
+
+
+
+void ShowTilemap(unsigned char *bmp, unsigned char *tile_map){
+	int x, y;
+	int tileNum = 0;
+
+	for(y=0;y<16;y++){
+		for(x=0;x<16;x++){
+			Write_tile_to_bmp(bmp, tile_map, tileNum++, x, y);
+		}
+	}
 }

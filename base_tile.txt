@@ -1,0 +1,96 @@
+000 = 1/1
+00000000: 0000 0000 0000 0000 0000 0000 0000 0000  NULL
+
+400-4F0 = 16/17
+00000000: ffff ffff ffff ffff 0000 0000 0000 0000  empty
+00000000: ffff ffff ffff ffff 0018 2442 4242 2418  0
+00000000: ffff ffff ffff ffff 0018 0808 0808 0808  1
+00000000: ffff ffff ffff ffff 003c 4202 1c20 407e  2
+00000000: ffff ffff ffff ffff 003c 4202 1c02 423c  3
+00000000: ffff ffff ffff ffff 000c 1424 4444 7e04  4
+00000000: ffff ffff ffff ffff 007e 407c 0202 423c  5
+00000000: ffff ffff ffff ffff 003c 407c 4242 423c  6
+00000000: ffff ffff ffff ffff 007e 0204 0808 0808  7
+00000000: ffff ffff ffff ffff 003c 4242 3c42 423c  8
+00000000: ffff ffff ffff ffff 003c 4242 3e04 0808  9
+00000000: ffff ffff ffff ffff 0000 1010 0010 1000  :
+00000000: ffff ffff ffff ffff 0000 0044 2810 2844  x
+00000000: ffff ffff ffff ffff 0002 0408 1020 4080  /
+00000000: ffff ffff ffff ffff 0000 0000 1010 0000  *(center point)
+00000000: ffff ffff ffff ffff 0000 0000 0000 4040  .
+
+500-5F0 = 16/33
+00000000: ffff ffff ffff ffff 0002 3a44 8488 8876  alpha
+00000000: ffff ffff ffff ffff 003c 4240 4040 423c  C
+00000000: ffff ffff ffff ffff 007e 4040 7c40 4040  F
+00000000: ffff ffff ffff ffff 0042 665a 4242 4242  M
+00000000: ffff ffff ffff ffff 003c 4240 3c02 423c  S
+00000000: ffff ffff ffff ffff 007e 0204 1820 407e  Z
+00000000: 7f7f 7f7f 7f7f 7fff 6060 6040 1030 70f0  L arrow with line(upper)
+00000000: fefe fefe fefe feff 0606 0602 080c 0e0f  R arrow with line(upper)
+00000000: feff ffff ffff ffff 0607 0707 0707 0707  R big arrow type A
+00000000: 0080 e0f8 fef8 e080 0080 e0f8 fef8 e080  R big arrow type B
+00000000: 7f7f 7f7f 7f7f 7f7f 6060 607f 7f60 6060  L textbox line with h middle line
+00000000: ffff ffff ffff ffff 0000 00ff ff00 0000  H middle textbox line
+00000000: fefe fefe fefe fefe 0606 06fe fe06 0606  R textbox line with h middle line
+00000000: 00ff ffff ffff ffff 00ff ff18 1818 1818  T textbox line with v middle line
+00000000: ffff ffff ffff ff00 1818 1818 18ff ff00  B textbox line with v middle line
+00000000: ffff ffff ffff ffff 1818 1818 1818 1818  V middle textbox line
+
+640-6A0 = 7/40
+00000000: ffff ffff ffff ffff 0020 3038 3c38 3020  R small arrow
+00000000: ffff ffff ffff ffff 0004 0c1c 3c1c 0c04  L samll arrow
+00000000: ff7f 7f7f 7f7f 7f7f f070 3010 4060 6060  L arrow with line(lower)
+00000000: fffe fefe fefe fefe 0f0e 0c08 0206 0606  R arrow with line(lower)
+00000000: 0001 071f 7f1f 0701 0001 071f 7f1f 0701  L big arrow type A
+00000000: 7fff ffff ffff ffff 60e0 e0e0 e0e0 e0e0  L big arrow type B
+00000000: ffff ffff ffff ffff 1818 18ff ff18 1818  Cross textbox line(V,H)
+
+6D0-6F0 = 3/43
+00000000: ffff ffff ffff ffff 0000 c444 4888 90e0  V
+00000000: ffff ffff ffff ffff 00fe 4444 4444 44fe  II
+00000000: ffff ffff ffff ffff 00fe 5454 5454 54fe  III
+
+700-7D0 = 14/57
+00000000: 003f 7f7f 7f7f 7f7f 003f 7f60 6060 6060  LT textbox line
+00000000: 00ff ffff ffff ffff 00ff ff00 0000 0000  T textbox line
+00000000: 00fc fefe fefe fefe 00fc fe06 0606 0606  RT textbox line
+00000000: 7f7f 7f7f 7f7f 3f00 6060 6060 607f 3f00  LB textbox line
+00000000: fefe fefe fefe fc00 0606 0606 06fe fc00  RB textbox line
+00000000: ffff ffff ffff ff00 0000 0000 00ff ff00  B textbox line
+00000000: 7f7f 7f7f 7f7f 7f7f 6060 6060 6060 6060  L textbox line
+00000000: fefe fefe fefe fefe 0606 0606 0606 0606  R textbox line
+00000000: ffff ffff ffff ffff 0000 7254 781e 2a4e  %
+00000000: ffff ffff ffff ffff 00fe 9292 fe82 8286  엔 -> 081C 2A18 0C2A 1C08
+00000000: ffff ffff ffff ffff 0000 0202 d2ab aaaa  MK(pair with II)
+00000000: ffff ffff ffff ffff 001f 0a4a 8a0a 8a5f  II(pair with MK)
+00000000: ffff ffff ffff ffff 0067 9484 b497 9474  GP(pair with 0)
+00000000: ffff ffff ffff ffff 000c 92a1 a121 120c  0(pair with GP)
+
+AE0-AF0 = 2/59
+00000000: ffff ffff ffff ffff 003c 4242 0c18 0018  ?
+00000000: ffff ffff ffff ffff 0018 2424 2830 0060  !
+
+B00-B50 = 6/65
+00000000: 0000 0000 0000 0000 0040 4040 4040 4000  I(Guage)
+00000000: 0000 0000 0000 0000 0050 5050 5050 5000  II(Guage)
+00000000: 0000 0000 0000 0000 0054 5454 5454 5400  III(Guage)
+00000000: 0000 0000 0000 0000 0055 5555 5555 5500  IIII(Guage)
+00000000: ffff ffff ffff ffff 0000 00ce a4a4 a4a4  NT
+00000000: ffff ffff ffff ffff 0000 00e8 a8e8 888e  PL
+
+B70-BB0 = 5/70
+00000000: ffff ffff ffff ffff 0000 00ae aaee a8a8  HP
+00000000: ffff ffff ffff ffff 0000 004e a4a4 e4a4  AT
+00000000: ffff ffff ffff ffff 0000 00ce a8ae a8c8  DF
+00000000: ffff ffff ffff ffff 0000 00e8 8888 88ee  CL
+00000000: ffff ffff ffff ffff 0000 00ea 8ae4 8aea  EX
+
+F00-F60 = 7/77
+00000000: ffff ffff ffff ffff 007c ceee eeee c67c  1(with round)
+00000000: ffff ffff ffff ffff 007c c6f6 c6de c67c  2(with round)
+00000000: ffff ffff ffff ffff 007c c6f6 c6f6 c67c  3(with round)
+00000000: ffff ffff ffff ffff 007c d6d6 d6c6 f67c  4(with round)
+00000000: ffff ffff ffff ffff 0018 2442 427e 4242  A
+00000000: ffff ffff ffff ffff 007c 4242 7c42 427c  B
+00000000: ffff ffff ffff ffff 003c 4240 4040 423c  C

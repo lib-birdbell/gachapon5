@@ -1343,7 +1343,7 @@ BED3E3:
 	LDA #$00		; D4ED  A9 00          
 	STA $46			; D4EF  85 46          
 	STA $45			; D4F1  85 45          
-	JSR $D567		; D4F3  20 67 D5       
+	JSR $D567		; D4F3  20 67 D5	From New game ??
 	LDA #$AC		; D4F6  A9 AC          
 	STA $44			; D4F8  85 44          
 	LDA #$01		; D4FA  A9 01          
