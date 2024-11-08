@@ -1027,7 +1027,7 @@ BFECFB:
 .if ORIGINAL
 	LDX #$00		; ED20  $A2 $00		BANK PRG
 .else
-	LDX #$80
+	LDX #$00
 .endif
 	STX $8001		; ED22  $8E $01 $80
 	INY			; ED25  $C8
@@ -1035,7 +1035,7 @@ BFECFB:
 .if ORIGINAL
 	LDX #$02		; ED29  $A2 $02		BANK PRG
 .else
-	LDX #$82
+	LDX #$02
 .endif
 	STX $8001		; ED2B  $8E $01 $80
 	INY			; ED2E  $C8
@@ -1942,6 +1942,7 @@ BFF523:
 
 ; Name	:
 ; Marks	: 21 bytes
+;	  Save CHR ROM BANK variable
 	LDA #$00		; F536	$a9 $00
 	STA $44			; F538	$85 $44
 	STA $5A			; F53A	$85 $5a
@@ -2410,7 +2411,11 @@ BFF8C2:
 ; Marks	: Write tile buffer to upper textbox line
 	JSR $F96D		; F95F	$20 $6D $F9
 	LDX #$0D		; F962	$A2 $0D
+.if ORIGINAL
 	LDA #$62		; F964	$A9 $62
+.else
+	LDA #$71
+.endif
 BFF966:
 	STA $0300,X		; F966	$9D $00 $03
 	DEX			; F969	$CA
@@ -2420,7 +2425,11 @@ BFF966:
 ; Name	:
 ; Marks	: Write tile buffer to background color
 	LDX #$7F		; F96D	$a2 $7f
+.if ORIGINAL
 	LDA #$20		; F96F	$a9 $20
+.else
+	LDA #$40
+.endif
 BFF971:
 	STA $0300,X		; F971	$9d $00 $03
 	DEX			; F974	$ca
@@ -2821,15 +2830,28 @@ BFFC81:
 	RTS			; FCBE  $60
 
 ; Name	:
+; Marks	: Top textbox line (Large)
+.if ORIGINAL
 	LDA #$61		; FCBF  $A9 $61
+.else
+	LDA #$70
+.endif
 	STA $0300		; FCC1  $8D $00 $03
+.if ORIGINAL
 	LDA #$62		; FCC4  $A9 $62
+.else
+	LDA #$71
+.endif
 	LDY #$1D		; FCC6  $A0 $1D
 BFFCC8:
 	STA $0301,Y		; FCC8  $99 $01 $03
 	DEY			; FCCB  $88
 	BPL BFFCC8		; FCCC  $10 $FA
+.if ORIGINAL
 	LDA #$63		; FCCE  $A9 $63
+.else
+	LDA #$72
+.endif
 	STA $031F		; FCD0  $8D $1F $03
 	RTS			; FCD3  $60
 

@@ -192,7 +192,7 @@ int main(int argc, char** argv){
 
 	// Convert tile map to BMP
 	memset(bmp, 0, (320*280*3));
-	if(showOriginalTilemap){
+	if(showOriginalTilemap == 1){
 		ShowTilemap(bmp, tile_map);
 	}else if(useDecode2 == 1){
 		Decompress_side_tile(bmp, tile_map, tileX, tileY, rom, useTable);
