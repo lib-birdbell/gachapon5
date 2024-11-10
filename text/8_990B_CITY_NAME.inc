@@ -1,0 +1,10 @@
+.byte T_SA,T_EE,T_DE,T_1,$31
+.byte $00,$bb,$b2,$c4,$de,$32,$00,$bb,$b2,$c4,$de,$33,$00,$bb,$b2,$c4
+.byte $de,$34,$00,$bb,$b2,$c4,$de,$35,$00,$bb,$b2,$c4,$de,$36,$00,$bb
+.byte $b2,$c4,$de,$37,$00,$d9,$c5,$c2,$b0,$00,$bf,$db,$d3,$dd,$00,$b1
+.byte $ca,$de,$b5,$b1,$b8,$b0,$00,$b1,$b8,$bc,$bd,$de,$00,$cc,$a8,$cc
+.byte $bd,$d9,$c5,$00,$b8,$de,$d7,$c5,$c0,$de,$00,$cb,$de,$b8,$c4,$d8
+.byte $b1,$00,$c0,$de,$b6,$b0,$d9,$00,$b5,$c3,$de,$af,$bb,$00,$cd,$de
+.byte $d9,$cc,$a7,$bd,$c4,$00,$ce,$dd,$ba,$dd,$00,$cb,$af,$ba,$d8,$b0
+.byte $00,$c6,$ad,$b0,$b7,$de,$c6,$b1,$00,$bc,$de,$ac,$cc,$de,$db,$b0
+.byte $00

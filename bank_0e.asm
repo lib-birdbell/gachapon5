@@ -1,4 +1,8 @@
 .include "Constants.inc"
+.if ORIGINAL
+.else
+.include "text/text_list.inc"
+.endif
 
 .segment "BANK_0E"
 
@@ -789,14 +793,14 @@ BEC9BD:
 	STA $11			; CABC  85 11          
 	LDA #$40		; CABE  A9 40          
 	STA $00			; CAC0  85 00          
-	JSR $F9D2		; CAC2  20 D2 F9       
+	JSR $F9D2		; CAC2  20 D2 F9	Convert table
 	LDA PpuStatus_2002	; CAC5  AD 02 20       
 	LDA $2D			; CAC8  A5 2D          
 	STA PpuAddr_2006	; CACA  8D 06 20       
 	LDA $2C			; CACD  A5 2C          
 	STA PpuAddr_2006	; CACF  8D 06 20       
 	LDX #$00		; CAD2  A2 00          
-	JSR $F0A4		; CAD4  20 A4 F0       
+	JSR $F0A4		; CAD4  20 A4 F0	Apply
 	CLC			; CAD7  18             
 	LDA $2C			; CAD8  A5 2C          
 	ADC #$40		; CADA  69 40          
@@ -804,11 +808,19 @@ BEC9BD:
 	LDA $2D			; CADE  A5 2D          
 	ADC #$00		; CAE0  69 00          
 	STA $2D			; CAE2  85 2D          
-	JSR $F982		; CAE4  20 82 F9       
+	JSR $F982		; CAE4  20 82 F9	Reset 2-line tile
+.if ORIGINAL
 	LDA #$47		; CAE7  A9 47		Left textbox line
+.else
+	LDA #T_LTL
+.endif
 	STA $0300		; CAE9  8D 00 03       
 	STA $0320		; CAEC  8D 20 03       
+.if ORIGINAL
 	LDA #$48		; CAEF  A9 48		Right textbox line
+.else
+	LDA #T_RTL
+.endif
 	STA $031F		; CAF1  8D 1F 03       
 	STA $033F		; CAF4  8D 3F 03       
 	RTS			; CAF7  60             

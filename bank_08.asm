@@ -1,4 +1,8 @@
 .include "Constants.inc"
+.if ORIGINAL
+.else
+.include "text/text_list.inc"
+.endif
 
 .segment "BANK_08"
 
@@ -459,7 +463,10 @@
 .byte $cd,$de,$d9,$cc,$a7,$bd,$c4,$00,$c6,$ad,$b0,$ce,$dd,$ba,$dd,$00
 .byte $cb,$af,$ba,$d8,$b0,$00,$c6,$ad,$b0,$b7,$de,$c6,$b1,$00,$bc,$de
 ;$9900
-.byte $ac,$cc,$de,$db,$b0,$00,$81,$77,$6d,$73,$00,$bb,$b2,$c4,$de,$31
+.byte $ac,$cc,$de,$db,$b0,$00,$81,$77,$6d,$73,$00
+;$990B - data block = CITY NAME
+.if ORIGINAL
+.byte $bb,$b2,$c4,$de,$31
 .byte $00,$bb,$b2,$c4,$de,$32,$00,$bb,$b2,$c4,$de,$33,$00,$bb,$b2,$c4
 .byte $de,$34,$00,$bb,$b2,$c4,$de,$35,$00,$bb,$b2,$c4,$de,$36,$00,$bb
 .byte $b2,$c4,$de,$37,$00,$d9,$c5,$c2,$b0,$00,$bf,$db,$d3,$dd,$00,$b1
@@ -469,6 +476,9 @@
 .byte $d9,$cc,$a7,$bd,$c4,$00,$ce,$dd,$ba,$dd,$00,$cb,$af,$ba,$d8,$b0
 .byte $00,$c6,$ad,$b0,$b7,$de,$c6,$b1,$00,$bc,$de,$ac,$cc,$de,$db,$b0
 .byte $00
+.else
+.include "text/8_990B_CITY_NAME.inc"
+.endif
 ;$9991 - data block = 
 .byte $2d,$2d,$2d,$2d,$2d,$2d,$2d,$00,$b7,$de,$ac,$dd,$00,$71,$76
 .byte $bb,$de,$b8,$00,$b6,$de,$dd,$c0,$de,$d1,$00,$b1,$da,$af,$b8,$bd

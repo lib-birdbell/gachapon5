@@ -1,4 +1,8 @@
 .include "Constants.inc"
+.if ORIGINAL
+.else
+.include "text/text_list.inc"
+.endif
 
 .segment "BANK_0F"
 
@@ -1371,6 +1375,7 @@ BFEF0B:
 	RTS			; F0A3  $60
 
 ; Name	:
+; Marks	: Apply tile to PPU
 	LDA $0300,X		; F0A4  $BD $00 $03
 	STA PpuData_2007	; F0A7  $8D $07 $20
 	LDA $0301,X		; F0AA  $BD $01 $03
@@ -2441,9 +2446,13 @@ BFF971:
 .byte $fb,$60
 
 ; Name	:
-; Marks	: Reset tile buffer ??
+; Marks	: Reset 2-line tile buffer as EMPTY tile
 	LDX #$3F		; F982  A2 3F          
+.if ORIGINAL
 	LDA #$20		; F984  A9 20          
+.else
+	LDA #T_EMPTY
+.endif
 BFF986:
 	STA $0300,X		; F986  9D 00 03       
 	DEX			; F989  CA             
@@ -2834,13 +2843,13 @@ BFFC81:
 .if ORIGINAL
 	LDA #$61		; FCBF  $A9 $61
 .else
-	LDA #$70
+	LDA #T_LUTL
 .endif
 	STA $0300		; FCC1  $8D $00 $03
 .if ORIGINAL
 	LDA #$62		; FCC4  $A9 $62
 .else
-	LDA #$71
+	LDA #T_MUTL
 .endif
 	LDY #$1D		; FCC6  $A0 $1D
 BFFCC8:
@@ -2850,7 +2859,7 @@ BFFCC8:
 .if ORIGINAL
 	LDA #$63		; FCCE  $A9 $63
 .else
-	LDA #$72
+	LDA #T_RUTL
 .endif
 	STA $031F		; FCD0  $8D $1F $03
 	RTS			; FCD3  $60
