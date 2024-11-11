@@ -1943,7 +1943,7 @@ BC91C8:
 .if ORIGINAL
 	LDA #$0C		; 923C  A9 0C          
 .else
-	LDA #$82
+	LDA #$8C
 .endif
 	STA $5C			; 923E  85 5C          
 	LDA #$1A		; 9240  A9 1A          

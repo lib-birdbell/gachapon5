@@ -5,8 +5,9 @@ T_GI	= $07
 
 T_DE	= $12
 
-T_SA	= $2E
+T_SA	= $2D
 
+T_EE	= $39
 
 T_EMPTY	= $40
 T_0	= $41
@@ -20,7 +21,6 @@ T_7	= $48
 T_8	= $49
 T_9	= $4A
 
-T_EE	= $6B
 
 T_LUTL	= $70
 T_MUTL	= $71
@@ -31,7 +31,7 @@ T_MDTL	= $75
 T_LTL	= $76
 T_RTL	= $77
 
-T_JI	= $85
-T_JIN	= $86
+T_JI	= $8D
+T_JIN	= $8E
 
-T_HAAM	= $9B
+T_HAAM	= $9A
