@@ -3,7 +3,8 @@ T_GA	= $01
 
 T_GI	= $07
 
-T_DE	= $12
+T_DE	= $11
+T_DI	= $12
 
 T_SA	= $2D
 
@@ -35,3 +36,15 @@ T_JI	= $8D
 T_JIN	= $8E
 
 T_HAAM	= $9A
+
+;----------
+
+P_RAE	= $13
+P_RO	= $15
+
+P_MU	= $20
+
+P_A	= $35
+P_EE	= $3E
+
+P_MDOT	= $4E

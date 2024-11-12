@@ -6,3 +6,9 @@ $5F	= BANK CHR $1800-$1BFF
 $60	= BANK CHR $1C00-$1FFF
 
 $63	= BANK PRG
+
+$D1-	= NAME temp buffer
+
+$300-	= PPU temp buffer
+
+$450-	= Guard Gauge temp buffer

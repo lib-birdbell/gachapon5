@@ -3027,6 +3027,7 @@ BFFDC6:
 	RTS			; FDCC  $60
 
 ; Name	:
+; Marks	: City panel guard gauge
 	LDA $18			; FDCD  $A5 $18
 	STA $9B			; FDCF  $85 $9B
 	LDA #$00		; FDD1  $A9 $00
@@ -3067,13 +3068,21 @@ BFFE07:
 	TAY			; FE11  $A8
 	BEQ BFFE1A		; FE12  $F0 $06
 	TAX			; FE14  $AA
+.if ORIGINAL
 	LDA #$1F		; FE15  $A9 $1F
+.else
+	LDA #$FF		; City Panel Guard Gauge
+.endif
 	JSR $FDC6		; FE17  $20 $C6 $FD
 BFFE1A:
 	LDA $16			; FE1A  $A5 $16
 	BEQ BFFE24		; FE1C  $F0 $06
 	CLC			; FE1E  $18
+.if ORIGINAL
 	ADC #$1B		; FE1F  $69 $1B
+.else
+	ADC #$FB		; City Panel Guard Gauge
+.endif
 	STA $0450,Y		; FE21  $99 $50 $04
 BFFE24:
 	RTS			; FE24  $60

@@ -2016,7 +2016,11 @@ BC928E:
 ; Name	:
 ; Marks	: Make city panel
 	LDX #$1F		; 92EA  A2 1F          
+.if ORIGINAL
 	LDA #$20		; 92EC  A9 20          
+.else
+	LDA #$40		; Empty
+.endif
 BC92EE:
 	STA $0300,X		; 92EE  9D 00 03       
 	DEX			; 92F1  CA             
@@ -2326,11 +2330,11 @@ BC94B5:
 	LDA #$02		; 959D  A9 02          
 	STA $5F			; 959F  85 5F          
 .else
-	LDA #$80		; 9595  A9 00          
+	LDA #$84		; 9595  A9 00          
 	STA $5D			; 9597  85 5D          
-	LDA #$81		; 9599  A9 01          
+	LDA #$85		; 9599  A9 01          
 	STA $5E			; 959B  85 5E          
-	LDA #$82		; 959D  A9 02          
+	LDA #$86		; 959D  A9 02          
 	STA $5F			; 959F  85 5F          
 .endif
 	LDX $95			; 95A1  A6 95          
@@ -2361,10 +2365,18 @@ BC94B5:
 	LDA #$60		; 95D7  A9 60          
 	STA $2C			; 95D9  85 2C          
 	JSR $F96D               ; 95DB  20 6D F9       
+.if ORIGINAL
 	LDA #$47		; 95DE  A9 47          
+.else
+	LDA #T_LTL		; Human Panel Top Textbox
+.endif
 	STA $0300		; 95E0  8D 00 03       
 	STA $0320		; 95E3  8D 20 03       
+.if ORIGINAL
 	LDA #$48		; 95E6  A9 48          
+.else
+	LDA #T_RTL
+.endif
 	STA $031F		; 95E8  8D 1F 03       
 	STA $033F		; 95EB  8D 3F 03       
 	LDA $03			; 95EE  A5 03          
