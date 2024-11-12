@@ -37,14 +37,32 @@ T_JIN	= $8E
 
 T_HAAM	= $9A
 
-;----------
+;---------- pilot full name tile
+P_GI	= $05
+P_DAE	= $0E
 
 P_RAE	= $13
 P_RO	= $15
 
 P_MU	= $20
+P_SA	= $2D
 
 P_A	= $35
 P_EE	= $3E
 
 P_MDOT	= $4E
+
+P_JANG	= $62
+P_JAE	= $6B
+P_JO	= $6C
+
+P_JONG	= $7E
+P_JOONG	= $7F
+
+P_HAAM	= $98
+
+P_NT	= $B4
+P_PL	= $B5
+P_CL	= $BA
+P_EX	= $BB
+

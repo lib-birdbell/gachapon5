@@ -13,7 +13,7 @@ ca65 bank_09.asm -g
 ca65 bank_0A.asm -g
 ca65 -D ORIGINAL=1 bank_0B.asm -g
 ca65 -D ORIGINAL=1 bank_0C.asm -g
-ca65 bank_0D.asm -g
+ca65 -D ORIGINAL=1 bank_0D.asm -g
 ca65 -D ORIGINAL=1 bank_0E.asm -g
 ca65 -D ORIGINAL=1 bank_0F.asm -g
 

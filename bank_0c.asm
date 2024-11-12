@@ -1937,13 +1937,13 @@ BC91C8:
 .if ORIGINAL
 	LDA #$00		; 9238  A9 00          
 .else
-	LDA #$80
+	LDA #$80		; CHR ROM BANK
 .endif
 	STA $5B			; 923A  85 5B          
 .if ORIGINAL
 	LDA #$0C		; 923C  A9 0C          
 .else
-	LDA #$8C
+	LDA #$8C		; CHR ROM BANK
 .endif
 	STA $5C			; 923E  85 5C          
 	LDA #$1A		; 9240  A9 1A          
@@ -2393,7 +2393,11 @@ BC94B5:
 	PHA			; 9607  48             
 	AND #$03		; 9608  29 03          
 	CLC			; 960A  18             
+.if ORIGINAL
 	ADC #$31		; 960B  69 31          
+.else
+	ADC #$42		; Fleet Number on Human screen
+.endif
 	STA $0334		; 960D  8D 34 03       
 	LDA #$10		; 9610  A9 10          
 	LDY #$98		; 9612  A0 98          
@@ -2610,15 +2614,34 @@ BC97CA:
 .byte $c0,$c1,$c2,$c3,$d0
 .byte $d1,$d2,$d3,$e0,$e1,$e2,$e3,$f0,$f1,$f2,$f3,$44,$11,$00,$00,$00
 .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$80,$20,$00,$00,$00
-.byte $00,$00,$00,$08,$02,$80,$84,$88,$8c,$c0,$c4,$c8,$cc,$00,$03,$02
+.byte $00,$00,$00,$08,$02,$80,$84,$88,$8c,$c0,$c4,$c8,$cc
+;$97FD-$986B = Human screen text
+;$97FD - data block = Pilot FACE Blank
+.if ORIGINAL
+.byte $00,$03,$02
 ;$9800
 .byte $00,$03,$00,$04,$00,$05,$00,$22,$00,$23,$00,$24,$00,$25,$00,$ff
+;$9810 - data block = 1st,2nd,3rd,4th fleet
 .byte $00,$03,$32,$80,$33,$72,$35,$76,$36,$9d,$37,$80,$38,$72,$12,$de
-.byte $ff,$00,$03,$3a,$ca,$3b,$b2,$3c,$db,$3d,$af,$3e,$c4,$1a,$df,$ff
-.byte $00,$03,$3a,$7c,$3b,$9a,$3c,$72,$3d,$76,$3e,$9d,$ff,$00,$03,$32
-.byte $80,$33,$72,$34,$77,$35,$4f,$ff,$00,$03,$32,$86,$33,$6d,$34,$73
-.byte $35,$72,$36,$9d,$37,$4f,$3a,$71,$3b,$84,$3d,$ef,$3e,$e9,$ff,$00
-.byte $03,$28,$ec,$2d,$ed,$31,$f3,$36,$ee,$3a,$f3,$ff,$90,$01,$60
+.byte $ff
+;$9821 - data block = Pilot(Pilot/Captain)
+.byte $00,$03,$3a,$ca,$3b,$b2,$3c,$db,$3d,$af,$3e,$c4,$1a,$df,$ff
+;$9830 - data block = Captain(Pilot/Captain)
+.byte $00,$03,$3a,$7c,$3b,$9a,$3c,$72,$3d,$76,$3e,$9d,$ff
+;$983D - data block = wating
+.byte $00,$03,$32
+.byte $80,$33,$72,$34,$77,$35,$4f,$ff
+;$9848 - data block = ??
+.byte $00,$03,$32,$86,$33,$6d,$34,$73
+.byte $35,$72,$36,$9d,$37,$4f,$3a,$71,$3b,$84,$3d,$ef,$3e,$e9,$ff
+;$985F - data block = NT PL EX CL EX
+.byte $00
+.byte $03,$28,$ec,$2d,$ed,$31,$f3,$36,$ee,$3a,$f3,$ff
+.else
+.include "text/C_97FD.inc"
+.endif
+;$986C
+.byte $90,$01,$60
 
 ; Name	:
 	JSR $87FB		; 986F  20 FB 87       

@@ -12,3 +12,9 @@ $D1-	= NAME temp buffer
 $300-	= PPU temp buffer
 
 $450-	= Guard Gauge temp buffer
+
+$6331-	= NT
+$62F5-	= PL
+$62E1-	= EX
+$631D-	= CL
+$6309-	= EX

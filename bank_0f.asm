@@ -1991,6 +1991,7 @@ BFF523:
 	LDA #$06		; F56E  $A9 $06
 
 ; Name	:
+; A	:
 ; Marks	:
 	STX $64			; F570  $86 $64
 	STY $65			; F572  $84 $65
@@ -2345,6 +2346,8 @@ BFF845:
 .byte $02,$c6,$19,$60
 
 ; Name	:
+; Marks	: Decimal to ASCII
+; Ret	: $0450-$0454??
 	JSR $F88A		; F884  $20 $8A $F8
 	JMP $F8AF		; F887  $4C $AF $F8
 ; Name	:
@@ -2360,7 +2363,11 @@ BFF891:
 	JSR $F80C		; F899  $20 $0C $F8
 	LDA $16			; F89C  $A5 $16
 	CLC			; F89E  $18
+.if ORIGINAL
 	ADC #$30		; F89F  $69 $30
+.else
+	ADC #$41		; ASCII 0 to 9
+.endif
 	LDX $05			; F8A1  $A6 $05
 	STA $0450,X		; F8A3  $9D $50 $04
 	DEX			; F8A6  $CA
@@ -2372,9 +2379,17 @@ BFF891:
 	LDX #$00		; F8AF  $A2 $00
 BFF8B1:
 	LDA $0450,X		; F8B1  $BD $50 $04
+.if ORIGINAL
 	CMP #$30		; F8B4  $C9 $30
+.else
+	CMP #$41
+.endif
 	BNE BFF8C2		; F8B6  $D0 $0A
+.if ORIGINAL
 	LDA #$20		; F8B8  $A9 $20
+.else
+	LDA #$40
+.endif
 	STA $0450,X		; F8BA  $9D $50 $04
 	INX			; F8BD  $E8
 	CPX #$04		; F8BE  $E0 $04
@@ -2392,6 +2407,9 @@ BFF8C2:
 	JMP $F8AF		; F8D1  $4C $AF $F8
 
 ; Name	:
+; A	:
+; Marks	: Set decimal to ascii ??
+; Ret	: X =, Y =
 	STA $18			; F8D4  $85 $18
 	LDA #$00		; F8D6  $A9 $00
 	STA $19			; F8D8  $85 $19
@@ -3199,6 +3217,10 @@ BFFEEB:
 ;$FF27
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
+;$FF3C- about 7 left (164 bytes) - no more
+.byte $ff,$ff,$ff,$ff
+.byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
+.byte $ff
 .else
 ; Name	:
 ; Marks	: To menu / To choose the scenario
@@ -3213,11 +3235,22 @@ BFFEEB:
 	LDA #$1A		; FF37	$a9 $1a
 	STA $5D			; FF39	$85 $5d		R2 CHR ROM $1000-$13FF
 	RTS			; FF3B	$60
+; Name	:
+; Marks	: To assignment
+	LDA #$00		; FF3C	$a9 $00
+	STA $44			; FF3E	$85 $44
+	STA $5A			; FF40	$85 $5a
+	STA $27			; FF42	$85 $27
+	LDA #$84		; FF44	$a9 $00
+	STA $5B			; FF46	$85 $5b		R0 CHR ROM $0000-$07FF
+	LDA #$86		; FF48	$a9 $02
+	STA $5C			; FF4A	$85 $5c		R1 CHR ROM $0800-$0FFF
+	LDA #$1A		; FF4C	$a9 $1a
+	STA $5D			; FF4E	$85 $5d		R2 CHR ROM $1000-$13FF
+	RTS			; FF50	$60
 .endif
-;$FF3C- about 7 left (164 bytes)
-.byte $ff,$ff,$ff,$ff
-.byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
-.byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
+;$FF51 - about 6 left (143 bytes)
+.byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff

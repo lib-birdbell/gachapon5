@@ -1,4 +1,8 @@
 .include "Constants.inc"
+.if ORIGINAL
+.else
+.include "text/text_list.inc"
+.endif
 
 .segment "BANK_0D"
 
@@ -26,10 +30,15 @@
 .byte $5f,$48,$7f,$48,$31,$ec,$36,$ed,$76,$ee,$3a,$f3,$7a,$f3,$ff
 
 ; Name	:
+; Marks	: To assignment ??
 	JSR $F3C8		; A06F  20 C8 F3       
 	JSR $F32B		; A072  20 2B F3       
 	JSR $F371		; A075  20 71 F3       
+.if ORIGINAL
 	JSR $F536		; A078  20 36 F5       
+.else
+	JSR $FF3C		; CHR ROM - PILOT FULL NAME
+.endif
 	LDA #$0F		; A07B  A9 0F          
 	STA $5E			; A07D  85 5E          
 	LDX $6213		; A07F  AE 13 62       
