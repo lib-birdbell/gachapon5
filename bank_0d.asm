@@ -81,10 +81,11 @@ BDA0A1:
 	CLC			; A0B7  18             
 .if ORIGINAL
 	ADC #$31		; A0B8  69 31          
-.else
-	ADC #$42		; Number
-.endif
 	STA $0326		; A0BA  8D 26 03       
+.else
+	ADC #$42		; Fleet Number
+	STA $0324		; A0BA  8D 26 03       
+.endif
 	JSR $CAB6		; A0BD  20 B6 CA       
 	LDA #$4E		; A0C0  A9 4E          
 	LDY #$A3		; A0C2  A0 A3          
@@ -188,14 +189,16 @@ BDA0A1:
 	STA $13			; A194  85 13          
 	JSR $F408		; A196  20 08 F4       
 .if ORIGINAL
-.else
-.endif
 	LDA #$48		; A199  A9 48          
+.else
+	LDA #T_RTL
+.endif
 	STA $032F		; A19B  8D 2F 03       
 .if ORIGINAL
-.else
-.endif
 	LDA #$47		; A19E  A9 47          
+.else
+	LDA #T_LTL
+.endif
 	STA $0330		; A1A0  8D 30 03       
 	JSR $CAB6		; A1A3  20 B6 CA       
 	LDX $04			; A1A6  A6 04          
@@ -356,7 +359,7 @@ BDA2BE:
 .if ORIGINAL
 	LDA #$49		; A2D7  A9 49          
 .else
-	LDA #T_MDTL		; assignment screen Pilot panel textbox down line
+	LDA #T_MMTL		; assignment screen Pilot panel textbox mid mid line
 .endif
 	LDY #$1D		; A2D9  A0 1D          
 BDA2DB:
@@ -366,14 +369,14 @@ BDA2DB:
 .if ORIGINAL
 	LDA #$67		; A2E1  A9 67          
 .else
-	LDA #T_LDTL
+	LDA #T_MLTL
 .endif
 	STA $0300		; A2E3  8D 00 03       
 	STA $0310		; A2E6  8D 10 03       
 .if ORIGINAL
 	LDA #$68		; A2E9  A9 68          
 .else
-	LDA #T_RDTL
+	LDA #T_MRTL
 .endif
 	STA $030F		; A2EB  8D 0F 03       
 	STA $031F		; A2EE  8D 1F 03       
@@ -391,13 +394,13 @@ BDA2DB:
 	STA PpuData_2007	; A301  8D 07 20       
 	RTS			; A304  60             
 
-;$A305 - data block = ($A305-$A410) - assignment flagship ??
+;$A305 - data block = ($A305-$A410) - assignment Fleet
 .if ORIGINAL
 .byte $00,$03,$20,$61,$21,$20,$22,$76,$23,$9d,$24
 .byte $80,$25,$72,$27,$20,$3f,$63,$ff
 .else
-.byte $00,$03,$20,T_LUTL,$21,$20,$22,$76,$23,$9d,$24
-.byte $80,$25,$72,$27,$20,$3f,T_RUTL,$ff
+.byte $00,$03,$20,T_LUTL,$21,T_EMPTY,$22,T_HAAM,$23,P_DAE,$25
+.byte T_EMPTY,$3f,T_RUTL,$ff,$25,$72,$27,$20
 .endif
 ;$A318 - data block = Pilot FACE Blank ??
 .byte $00,$03,$01,$00,$02,$00,$03,$00
@@ -406,12 +409,22 @@ BDA2DB:
 .byte $00,$03,$01,$00,$02
 .byte $00,$03,$00,$04,$00,$21,$00,$22,$00,$23,$00,$24,$00,$41,$00,$42
 .byte $00,$43,$00,$44,$00,$61,$00,$62,$00,$63,$00,$64,$00,$ff
-;$A34E - data block = assignment prototype MS ??
+;$A34E - data block = assignment flagship :
+.if ORIGINAL
 .byte $00,$03
 .byte $22,$77,$23,$76,$24,$9d,$27,$3a,$ff
+.else
+.byte $00,$03
+.byte $22,T_GI,$23,T_HAAM,$27,T_COLON,$ff,$24,$9d
+.endif
 ;$A359 - data block = assignment ??
+.if ORIGINAL
 .byte $00,$03,$22,$7c,$23,$7b,$24
 .byte $78,$25,$4d,$26,$53,$27,$3a,$ff
+.else
+.byte $00,$03,$22,T_SI,$23,P_JAK,$24
+.byte T_M,$25,T_S,$27,T_COLON,$ff,$27,$3a
+.endif
 ;$A368 - data block = assignment ?? 16 x 4 textbox L/R side
 .if ORIGINAL
 .byte $00,$03,$0f,$48,$2f,$48,$10,$47
@@ -420,12 +433,34 @@ BDA2DB:
 .byte $00,$03,$0f,T_RTL,$2f,T_RTL,$10,T_LTL
 .byte $30,T_LTL,$ff
 .endif
-;$A373 - data block = 
+;$A373 - data block = ?? Fleet Number Captain
+.if ORIGINAL
 .byte $00,$03,$22,$80,$23,$72,$25,$8c,$26,$80,$27,$72,$02
-.byte $de,$05,$de,$ff,$00,$03,$29,$ca,$2a,$b2,$2b,$db,$2c,$af,$2d,$c4
-.byte $09,$df,$ff,$00,$03,$29,$7c,$2a,$9a,$2b,$72,$2c,$76,$2d,$9d,$ff
-;$A3A0 - data block = assignment ??
+.byte $de,$05,$de,$ff
+.else
+.byte $00,$03,$22,P_JAE,$23,$72,$25,T_HAAM,$26,P_DAE,$27,$72,$02
+.byte $de,$05,$de,$ff
+.endif
+;$A384 - data block = pilot ??
+.if ORIGINAL
+.byte $00,$03,$29,$ca,$2a,$b2,$2b,$db,$2c,$af,$2d,$c4
+.byte $09,$df,$ff
+.else
+.byte $00,$03,$29,T_PA,$2a,P_JONG,$2b,T_SA,$2c,$af,$2d,$c4
+.byte $09,$df,$ff
+.endif
+;$A393 - data block =
+.if ORIGINAL
+.byte $00,$03,$29,$7c,$2a,$9a,$2b,$72,$2c,$76,$2d,$9d,$ff
+.else
+.byte $00,$03,$29,P_DAE,$2a,T_GI,$2b,P_JOONG,$2c,$76,$2d,$9d,$ff
+.endif
+;$A3A0 - data block = assignment Waiting(Left)
+.if ORIGINAL
 .byte $00,$03,$26,$80,$27,$72,$28,$77,$29,$4f,$ff
+.else
+.byte $00,$03,$26,P_DAE,$27,T_GI,$28,P_JOONG,$29,$4f,$ff
+.endif
 ;$A3AB - data block = assignment ??
 .byte $00,$03,$22,$86,$23
 .byte $6d,$24,$73,$25,$72,$26,$9d,$27,$4f,$29,$71,$2a,$84,$2c,$ef,$2d
@@ -434,9 +469,13 @@ BDA2DB:
 .byte $10,$03,$22,$80,$23,$72,$25,$8c,$26,$80,$27,$72,$02,$de
 .byte $05,$de,$ff,$10,$03,$29,$ca,$2a,$b2,$2b,$db,$2c,$af,$2d,$c4,$09
 .byte $df,$ff,$10,$03,$29,$7c,$2a,$9a,$2b,$72,$2c,$76,$2d,$9d,$ff
-;$A3EF - data block = assignment ??
+;$A3EF - data block = assignment Waiting(Right)
+.if ORIGINAL
 .byte $10
 .byte $03,$26,$80,$27,$72,$28,$77,$29,$4f,$ff
+.else
+.byte $10,$03,$26,P_DAE,$27,T_GI,$28,P_JOONG,$29,$4f,$ff
+.endif
 ;$A3FA - data block =
 .byte $10,$03,$22,$86,$23,$6d
 ;$A400
@@ -512,8 +551,13 @@ BDA474:
 	STY $037C		; A4A8  8C 7C 03       
 	LDA $93			; A4AB  A5 93          
 	CLC			; A4AD  18             
+.if ORIGINAL
 	ADC #$31		; A4AE  69 31          
 	STA $0368		; A4B0  8D 68 03       
+.else
+	ADC #$42		; Fleet Number in assigment Pilot status
+	STA $0367		; A4B0  8D 68 03       
+.endif
 	LDA $01			; A4B3  A5 01          
 	BEQ BDA4BD		; A4B5  F0 06          
 	LDA #$E0		; A4B7  A9 E0          
@@ -540,8 +584,15 @@ BDA4C1:
 	RTS			; A4DF  60             
 
 ;$A4E0 - data block = ($A4E0-$A529)
-.byte $40,$03,$2e,$ca,$0e,$df,$2f,$b2,$30,$db,$31,$af,$32,$c4,$ff,$40
+.if ORIGINAL
+.byte $40,$03,$2e,$ca,$0e,$df,$2f,$b2,$30,$db,$31,$af,$32,$c4,$ff
+.byte $40
 .byte $03,$2e,$7c,$2f,$9a,$30,$72,$31,$76,$32,$9d,$ff
+.else
+.byte $40,$03,$2e,T_JO,$0e,$df,$2f,P_JONG,$30,T_SA,$31,$af,$32,$c4,$ff
+.byte $40
+.byte $03,$2e,T_HAAM,$2f,P_JANG,$30,$72,$31,$76,$32,$9d,$ff
+.endif
 ;$A4FC - data block = assignment ??
 .if ORIGINAL
 .byte $00,$03,$00,$47
@@ -551,10 +602,10 @@ BDA4C1:
 .byte $6a,$9d,$6b,$80,$6c,$72,$ff
 .else
 .byte $00,$03,$00,T_LTL
-;$A500
-.byte $20,T_LTL,$40,T_LTL,$60,T_LTL,$1f,T_RTL,$3f,T_RTL,$5f,T_RTL,$7f,T_RTL,$31,$ec
-.byte $36,$ed,$76,$ee,$3a,$f3,$7a,$f3,$66,$80,$46,$de,$67,$72,$69,$76
-.byte $6a,$9d,$6b,$80,$6c,$72,$ff
+;$A500 - data block = assignment Pilot status
+.byte $20,T_LTL,$40,T_LTL,$60,T_LTL,$1f,T_RTL,$3f,T_RTL,$5f,T_RTL,$7f,T_RTL,$31,T_NT
+.byte $36,T_PL,$76,T_CL,$3a,T_EX,$7a,T_EX,$66,P_JAE,$46,$de,$67,$72,$69,T_HAAM
+.byte $6a,P_DAE,$6b,$80,$6c,$72,$ff
 .endif
 ;$A527
 .byte $90,$01,$60

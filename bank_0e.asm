@@ -581,7 +581,7 @@ BEC54C:
 .byte $48,$a9,$31,$85,$10,$a9,$9c,$85,$11,$4c,$d5,$c5
 
 ; Name	:
-; Marks	:
+; Marks	: Load UNIT NAME ??
 	TAX			; C57C  AA             
 	LDA $62			; C57D  A5 62          
 	LSR A			; C57F  4A             

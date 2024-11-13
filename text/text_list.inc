@@ -43,8 +43,8 @@ T_BEN	= $27
 T_BOOK	= $28
 T_BUL	= $29
 T_B_UE	= $2A
-T_BIG	= $2B
-T_BI	= $2C
+T_BI	= $2B
+T_BIG	= $2C
 T_SA	= $2D
 T_SHA	= $2E
 T_SAE	= $2F
@@ -89,6 +89,10 @@ T_F	= $52
 T_M	= $53
 T_S	= $54
 T_Z	= $55
+
+T_MLTL	= $5A
+T_MMTL	= $5B
+T_MRTL	= $5C
 
 T_TWO	= $60
 T_T_E	= $61

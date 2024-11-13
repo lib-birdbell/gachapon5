@@ -458,8 +458,10 @@
 ;$986D 9> ªµªóª«ª·ªÆª¤ªÞª»ªó
 .byte $7b,$9d,$76
 .byte $7c,$83,$72,$8f,$7e,$9d,$00
-;$9877 - data block =
-.byte $81,$77,$6d,$73,$00,$bb,$b2,$c4,$de
+;$9877 - data block = CITY NAME A
+;$9877 - Earth
+.byte $81,$77,$6d,$73,$00
+.byte $bb,$b2,$c4,$de
 .byte $31,$00,$bb,$b2,$c4,$de,$32,$00,$bb,$b2,$c4,$de,$33,$00,$bb,$b2
 .byte $c4,$de,$34,$00,$bb,$b2,$c4,$de,$35,$00,$bb,$b2,$c4,$de,$36,$00
 .byte $bb,$b2,$c4,$de,$37,$00,$d9,$c5,$c2,$b0,$00,$bf,$db,$d3,$dd,$00
@@ -469,8 +471,10 @@
 .byte $cd,$de,$d9,$cc,$a7,$bd,$c4,$00,$c6,$ad,$b0,$ce,$dd,$ba,$dd,$00
 .byte $cb,$af,$ba,$d8,$b0,$00,$c6,$ad,$b0,$b7,$de,$c6,$b1,$00,$bc,$de
 ;$9900
-.byte $ac,$cc,$de,$db,$b0,$00,$81,$77,$6d,$73,$00
-;$990B - data block = CITY NAME
+.byte $ac,$cc,$de,$db,$b0,$00
+;$9906 - Earth
+.byte $81,$77,$6d,$73,$00
+;$990B - data block = CITY NAME B
 .if ORIGINAL
 .byte $bb,$b2,$c4,$de,$31
 .byte $00,$bb,$b2,$c4,$de,$32,$00,$bb,$b2,$c4,$de,$33,$00,$bb,$b2,$c4
@@ -485,7 +489,8 @@
 .else
 .include "text/8_990B_CITY_NAME.inc"
 .endif
-;$9991 - data block = 
+;$9991 - data block = UNIT NAME ($9991-$9B0D)
+.if ORIGINAL
 .byte $2d,$2d,$2d,$2d,$2d,$2d,$2d,$00,$b7,$de,$ac,$dd,$00,$71,$76
 .byte $bb,$de,$b8,$00,$b6,$de,$dd,$c0,$de,$d1,$00,$b1,$da,$af,$b8,$bd
 .byte $00,$cc,$de,$d7,$b3,$cc,$de,$db,$00,$b4,$d9,$d2,$bd,$00,$bc,$de
@@ -511,7 +516,11 @@
 .byte $ba,$de,$bd,$b7,$de,$b1,$00,$da,$b3,$d9,$b0,$d7,$00,$bb,$d7,$d0
 .byte $bd,$00,$d1,$bb,$b2,$00,$b1,$b2,$d8,$af,$bc,$ad,$00,$b4,$dd,$c4
 ;$9B00
-.byte $de,$d7,$00,$d7,$b0,$c1,$ac,$c0,$b0,$00,$d1,$bb,$b6,$00,$00,$56
+.byte $de,$d7,$00,$d7,$b0,$c1,$ac,$c0,$b0,$00,$d1,$bb,$b6,$00
+.else
+.include "text/8_9991_UNIT_NAME.inc"
+.endif
+.byte $00,$56
 .byte $5b,$55,$50,$4a,$4b,$5b,$59,$55,$49,$54,$54,$56,$50,$51,$51,$57
 .byte $5a,$52,$58,$53,$58,$5a,$4c,$53,$47,$59,$57,$4d,$4e,$48,$52,$4f
 .byte $41,$41,$42,$42,$43,$43,$44,$44,$35,$36,$37,$38,$39,$3a,$3b,$3c
