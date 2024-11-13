@@ -2330,11 +2330,11 @@ BC94B5:
 	LDA #$02		; 959D  A9 02          
 	STA $5F			; 959F  85 5F          
 .else
-	LDA #$84		; 9595  A9 00          
+	LDA #$80		; 9595  A9 00		CHR ROM BANK $20000
 	STA $5D			; 9597  85 5D          
-	LDA #$85		; 9599  A9 01          
+	LDA #$81		; 9599  A9 01		CHR ROM BANK $20400
 	STA $5E			; 959B  85 5E          
-	LDA #$86		; 959D  A9 02          
+	LDA #$8E		; 959D  A9 02		CHR ROM BANK $23800
 	STA $5F			; 959F  85 5F          
 .endif
 	LDX $95			; 95A1  A6 95          

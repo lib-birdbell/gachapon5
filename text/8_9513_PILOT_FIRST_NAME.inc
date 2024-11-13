@@ -1,4 +1,46 @@
-;$9609 - data block = pilot full name ($9609-$9791) Must maintain 393 bytes - 110 bytes left
+;$9513 - data block = pilot first name ($9513-$9608) Must maintain 246 bytes - 110 bytes left
+.byte $36,$21,$18,$20,$00
+.byte $cc,$de,$d7,$b2,$c4,$20,$00
+.byte $be,$b2,$d7,$20,$00
+.byte $d0,$d7,$b2,$20,$00
+.byte $b6,$b2,$20,$00
+.byte $bc,$ac,$b1,$20,$00
+.byte $d7,$d7,$b1,$20,$00
+.byte $c4,$de,$bd,$de,$d9,$20,$00
+.byte $cf,$b8,$cd,$de,$20,$00
+.byte $bc,$ac,$d8,$b1,$cc,$de,$d9,$20,$00
+.byte $ca,$cf,$b0,$dd,$20,$00
+.byte $cc,$df,$d9,$c2,$b0,$20,$00
+.byte $cf,$bc,$ad,$cf,$b0,$20,$00
+.byte $b8,$de,$da,$d0,$b0,$20,$00
+.byte $b7,$ac,$d7,$20,$00
+.byte $bc,$db,$af,$ba,$20,$00
+.byte $db,$bb,$de,$d0,$b1,$20,$00
+.byte $cc,$ab,$b3,$20,$00
+.byte $ca,$de,$bd,$b8,$20,$00
+.byte $d7,$b2,$d7,$20,$00
+.byte $b6,$d0,$b0,$d5,$20,$00
+.byte $cd,$dd,$b9,$dd,$20,$00
+.byte $b8,$dc,$c4,$db,$20,$00
+.byte $b4,$cf,$20,$00
+.byte $d9,$b0,$20,$00
+.byte $ba,$b3,$20,$00
+.byte $b7,$b0,$bd,$20,$00
+.byte $bc,$c5,$cc,$df,$bd,$20,$00
+.byte $ca,$de,$c6,$dd,$b8,$de,$20,$00
+.byte $d3,$dd,$bc,$b1,$20,$00
+.byte $bc,$de,$ad,$c4,$de,$b0,$20,$00
+.byte $cc,$df,$d9,$20,$00
+.byte $b8,$d8,$bd,$20,$00
+.byte $bc,$b0,$cc,$de,$af,$b8,$20,$00
+.byte $ca,$de,$b0,$c6,$a8,$20,$00
+.byte $b7,$de,$da,$dd,$20,$00
+.byte $b7,$bc,$d8,$b1,$20,$00
+.byte $83,$6f,$76,$92,$9d,$20,$00
+.byte $b6,$de,$c4,$b0,$20,$00
+.byte $d4,$bb,$de,$dd,$20,$00
+.byte T_AE,T_EE,T_A,T_EE,$72,$20,$00
+.if 0
 .byte T_A,T_MU,T_RO,T_MDOT,T_RAE,T_EE,$00
 .byte T_B_UE,T_RA,T_EE,T_T_E,T_MDOT,P_NO,T_A,$00
 .byte T_SAE,T_EE,T_RA,T_MDOT,T_MA,T_S_E,$00
@@ -46,13 +88,4 @@
 .byte T_CA,T_RO,T_JO,T_MDOT,T_RO,T_NA,$00
 .byte T_A,T_NA,P_BELL,T_MDOT,T_GA,T_TO,$00
 .byte T_YA,T_JAN,T_MDOT,T_GAE,T_BUEL,$00
-
-.byte T_AE,T_EE,T_A,T_EE,$00
-
-.byte $b1,$de,$dd,$c5,$cc,$de,$d9,$dd,$a5,$bb,$de,$cb,$de,$de,$cc,$de
-.byte $d9,$a5,$b6,$b0,$dd,$d9,$c2,$b0,$be,$db,$c4,$c4,$bd,$b0,$dd,$bc
-.byte $db,$af,$ba,$de,$c0,$de,$d1,$d2,$b5,$d1,$de,$c0,$de,$dd,$de,$af
-.byte $b9,$c5,$b0,$de,$b0,$c5,$b0,$dd,$b6,$a5,$b7,$b0,$bd,$c5,$cc,$df
-.byte $bd,$c6,$dd,$b8,$de,$dd,$bc,$b1,$a5,$b1,$b0,$bc,$c0,$b0,$a5,$cc
-.byte $df,$d9,$dd,$bc,$de,$b0,$b8,$a5,$b1,$c9,$b0,$bd,$de,$cf,$dd,$bb
-.byte $de,$cb,$de,$b6,$de,$c4,$b0,$b9,$de,$b0,$cc,$de,$d9,$72
+.endif

@@ -369,9 +369,6 @@
 ;$9513 - data block = pilot first name
 .if ORIGINAL
 .byte $b1,$d1,$db,$20,$00,$cc,$de,$d7,$b2,$c4,$20,$00,$be
-.else
-.byte $36,$21,$18,$20,$00,$cc,$de,$d7,$b2,$c4,$20,$00,$be
-.endif
 .byte $b2,$d7,$20,$00,$d0,$d7,$b2,$20,$00,$b6,$b2,$20,$00,$bc,$ac,$b1
 .byte $20,$00,$d7,$d7,$b1,$20,$00,$c4,$de,$bd,$de,$d9,$20,$00,$cf,$b8
 .byte $cd,$de,$20,$00,$bc,$ac,$d8,$b1,$cc,$de,$d9,$20,$00,$ca,$cf,$b0
@@ -388,6 +385,9 @@
 .byte $6f,$76,$92,$9d,$20,$00,$b6,$de,$c4,$b0,$20,$00,$d4,$bb,$de,$dd
 ;$9600
 .byte $20,$00,$7e,$72,$77,$8d,$72,$20,$00
+.else
+.include "text/8_9513_PILOT_FIRST_NAME.inc"
+.endif
 ;$9609 - data block = pilot full name ($9609-$9791)
 .if ORIGINAL
 .byte $b1,$d1,$db,$a5,$da,$b2,$00
