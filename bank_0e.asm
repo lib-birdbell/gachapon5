@@ -363,8 +363,13 @@ BEC291:
 
 ;$C2D0 - data block = compressed data : 우주세기 월 페이즈
 ; $00,$03 is address
+.if ORIGINAL
 .byte $00,$03,$01,$e0,$02,$e1,$03,$e2,$04,$e3,$0f,$e4,$10,$e5,$11,$e6
 .byte $12,$e7,$1a,$e9,$33,$cc,$34,$aa,$35,$b2,$36,$bd,$28,$de,$ff
+.else
+.byte $00,$03,$01,T_4,$02,T_3,$03,T_2,$04,T_1,$0f,$e4,$10,$e5,$11,$e6
+.byte $12,$e7,$1a,T_9,$33,T_5,$34,T_6,$35,T_7,$36,T_8,$28,T_0,$ff
+.endif
 
 ; Name	:
 ; Marks	: $0314-$0319 is Money??

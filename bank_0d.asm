@@ -21,13 +21,39 @@
 	STA $33			; A016  85 33          
 	RTS			; A018  60             
 
+; assignment - Middle panel
 ;$A019 - data block = ($A019-$A06E)
+.if ORIGINAL
 .byte $40,$03,$26,$8a,$27,$72,$28
 .byte $7f,$08,$de,$29,$78,$2a,$83,$0a,$de,$2b,$77,$2c,$8f,$2d,$7d,$ff
-.byte $40,$03,$26,$86,$27,$6d,$28,$73,$29,$72,$2a,$9d,$2b,$4f,$ff,$40
+.else
+.byte $40,$03,$26,P_BAE,$27,P_CHI,$28
+.byte T_GA,$29,P_NUENG,$ff,$2a,$83,$0a,$de,$2b,$77,$2c,$8f,$2d,$7d,$08,$de
+.endif
+;$A030 - data block = Hospitalization
+.if ORIGINAL
+.byte $40,$03,$26,$86,$27,$6d,$28,$73,$29,$72,$2a,$9d,$2b,$4f,$ff
+.else
+.byte $40,$03,$26,P_HAENG,$27,P_DONG,$28,P_CHI,$29,P_RYO,$2a,$9d,$2b,$4f,$ff
+.endif
+;$A03F - data block = Move done
+.if ORIGINAL
+.byte $40
 .byte $03,$26,$7a,$27,$73,$28,$84,$08,$de,$29,$73,$2a,$7d,$0a,$de,$2b
-.byte $90,$ff,$00,$03,$00,$47,$20,$47,$40,$47,$60,$47,$1f,$48,$3f,$48
+.byte $90,$ff
+.else
+.byte $40
+.byte $03,$26,P_HAENG,$27,P_DONG,$28,P_JONG,$29,P_RYO
+.byte $ff,$08,$de,$2a,$7d,$0a,$de,$2b,$90
+.endif
+;$A052 - data bloc = assignment - Pilot status
+.if ORIGINAL
+.byte $00,$03,$00,$47,$20,$47,$40,$47,$60,$47,$1f,$48,$3f,$48
 .byte $5f,$48,$7f,$48,$31,$ec,$36,$ed,$76,$ee,$3a,$f3,$7a,$f3,$ff
+.else
+.byte $00,$03,$00,T_LTL,$20,T_LTL,$40,T_LTL,$60,T_LTL,$1f,T_RTL,$3f,T_RTL
+.byte $5f,T_RTL,$7f,T_RTL,$31,T_NT,$36,T_PL,$76,T_CL,$3a,T_EX,$7a,T_EX,$ff
+.endif
 
 ; Name	:
 ; Marks	: To assignment ??
@@ -88,7 +114,7 @@ BDA0A1:
 .endif
 	JSR $CAB6		; A0BD  20 B6 CA       
 	LDA #$4E		; A0C0  A9 4E          
-	LDY #$A3		; A0C2  A0 A3          
+	LDY #$A3		; A0C2  A0 A3		0D/A34E
 	JSR $FB09		; A0C4  20 09 FB       
 	LDX $94			; A0C7  A6 94          
 	LDA $6379,X		; A0C9  BD 79 63       
@@ -108,7 +134,7 @@ BDA0A1:
 	JSR $F408		; A0EA  20 08 F4       
 	JSR $CAB6		; A0ED  20 B6 CA       
 	LDA #$59		; A0F0  A9 59          
-	LDY #$A3		; A0F2  A0 A3          
+	LDY #$A3		; A0F2  A0 A3		0D/A359
 	JSR $FB09		; A0F4  20 09 FB       
 	LDX $94			; A0F7  A6 94          
 	LDA $63B9,X		; A0F9  BD B9 63       
@@ -136,11 +162,11 @@ BDA0A1:
 	ADC #$00		; A12C  69 00          
 	STA $2D			; A12E  85 2D          
 	LDA #$18		; A130  A9 18          
-	LDY #$A3		; A132  A0 A3          
+	LDY #$A3		; A132  A0 A3		0D/A318
 	JSR $FB09		; A134  20 09 FB       
 	JSR $CAB6		; A137  20 B6 CA       
 	LDA #$18		; A13A  A9 18          
-	LDY #$A3		; A13C  A0 A3          
+	LDY #$A3		; A13C  A0 A3		0D/A318
 	JSR $FB09		; A13E  20 09 FB       
 	JSR $CAB6		; A141  20 B6 CA       
 	JSR $FC9F		; A144  20 9F FC       
@@ -211,7 +237,7 @@ BDA0A1:
 	ADC #$31		; A1B3  69 31          
 	STA $0324		; A1B5  8D 24 03       
 	LDA #$73		; A1B8  A9 73          
-	LDY #$A3		; A1BA  A0 A3          
+	LDY #$A3		; A1BA  A0 A3		0D/A373
 	JSR $FB09		; A1BC  20 09 FB       
 	PLA			; A1BF  68             
 	AND #$04		; A1C0  29 04          
@@ -287,8 +313,13 @@ BDA1DE:
 	PHA			; A248  48             
 	AND #$03		; A249  29 03          
 	CLC			; A24B  18             
+.if ORIGINAL
 	ADC #$31		; A24C  69 31          
 	STA $0324		; A24E  8D 24 03       
+.else
+	ADC #$42		; A24C  69 31		Military camp number in assignment to Pilot small left panel
+	STA $0323		; A24E  8D 24 03       
+.endif
 	LDA #$73		; A251  A9 73          
 	LDY #$A3		; A253  A0 A3          
 	JSR $FB09		; A255  20 09 FB       
@@ -324,8 +355,13 @@ BDA277:
 	PHA			; A28F  48             
 	AND #$03		; A290  29 03          
 	CLC			; A292  18             
+.if ORIGINAL
 	ADC #$31		; A293  69 31          
 	STA $0334		; A295  8D 34 03       
+.else
+	ADC #$42		; Military camp number in assignment to Pilot small right panel
+	STA $0333
+.endif
 	LDA #$C2		; A298  A9 C2          
 	LDY #$A3		; A29A  A0 A3          
 	JSR $FB09		; A29C  20 09 FB       
@@ -394,14 +430,10 @@ BDA2DB:
 	STA PpuData_2007	; A301  8D 07 20       
 	RTS			; A304  60             
 
-;$A305 - data block = ($A305-$A410) - assignment Fleet
+;$A305 - data block = ($A305-$A410) - assignment Fleet on Top left
 .if ORIGINAL
 .byte $00,$03,$20,$61,$21,$20,$22,$76,$23,$9d,$24
 .byte $80,$25,$72,$27,$20,$3f,$63,$ff
-.else
-.byte $00,$03,$20,T_LUTL,$21,T_EMPTY,$22,T_HAAM,$23,P_DAE,$25
-.byte T_EMPTY,$3f,T_RUTL,$ff,$25,$72,$27,$20
-.endif
 ;$A318 - data block = Pilot FACE Blank ??
 .byte $00,$03,$01,$00,$02,$00,$03,$00
 .byte $04,$00,$21,$00,$22,$00,$23,$00,$24,$00,$ff
@@ -410,77 +442,48 @@ BDA2DB:
 .byte $00,$03,$00,$04,$00,$21,$00,$22,$00,$23,$00,$24,$00,$41,$00,$42
 .byte $00,$43,$00,$44,$00,$61,$00,$62,$00,$63,$00,$64,$00,$ff
 ;$A34E - data block = assignment flagship :
-.if ORIGINAL
 .byte $00,$03
 .byte $22,$77,$23,$76,$24,$9d,$27,$3a,$ff
-.else
-.byte $00,$03
-.byte $22,T_GI,$23,T_HAAM,$27,T_COLON,$ff,$24,$9d
-.endif
-;$A359 - data block = assignment ??
-.if ORIGINAL
+;$A359 - data block = assignment Prototype MS :
 .byte $00,$03,$22,$7c,$23,$7b,$24
 .byte $78,$25,$4d,$26,$53,$27,$3a,$ff
-.else
-.byte $00,$03,$22,T_SI,$23,P_JAK,$24
-.byte T_M,$25,T_S,$27,T_COLON,$ff,$27,$3a
-.endif
+;Down part panels
 ;$A368 - data block = assignment ?? 16 x 4 textbox L/R side
-.if ORIGINAL
 .byte $00,$03,$0f,$48,$2f,$48,$10,$47
 .byte $30,$47,$ff
-.else
-.byte $00,$03,$0f,T_RTL,$2f,T_RTL,$10,T_LTL
-.byte $30,T_LTL,$ff
-.endif
-;$A373 - data block = ?? Fleet Number Captain
-.if ORIGINAL
+;$A373 - data block = ?? Fleet Number Military camp (Left)
 .byte $00,$03,$22,$80,$23,$72,$25,$8c,$26,$80,$27,$72,$02
 .byte $de,$05,$de,$ff
-.else
-.byte $00,$03,$22,P_JAE,$23,$72,$25,T_HAAM,$26,P_DAE,$27,$72,$02
-.byte $de,$05,$de,$ff
-.endif
-;$A384 - data block = pilot ??
-.if ORIGINAL
+;$A384 - data block = Pilot (Left)
 .byte $00,$03,$29,$ca,$2a,$b2,$2b,$db,$2c,$af,$2d,$c4
 .byte $09,$df,$ff
-.else
-.byte $00,$03,$29,T_PA,$2a,P_JONG,$2b,T_SA,$2c,$af,$2d,$c4
-.byte $09,$df,$ff
-.endif
-;$A393 - data block =
-.if ORIGINAL
+;$A393 - data block = Captain (Left)
 .byte $00,$03,$29,$7c,$2a,$9a,$2b,$72,$2c,$76,$2d,$9d,$ff
-.else
-.byte $00,$03,$29,P_DAE,$2a,T_GI,$2b,P_JOONG,$2c,$76,$2d,$9d,$ff
-.endif
 ;$A3A0 - data block = assignment Waiting(Left)
-.if ORIGINAL
 .byte $00,$03,$26,$80,$27,$72,$28,$77,$29,$4f,$ff
-.else
-.byte $00,$03,$26,P_DAE,$27,T_GI,$28,P_JOONG,$29,$4f,$ff
-.endif
-;$A3AB - data block = assignment ??
+;$A3AB - data block = assignment - hospitalization ??
 .byte $00,$03,$22,$86,$23
 .byte $6d,$24,$73,$25,$72,$26,$9d,$27,$4f,$29,$71,$2a,$84,$2c,$ef,$2d
 .byte $e9,$ff
-;$A3C2 - data block =
+;$A3C2 - data block = ?? Fleet Number Military camp (Right) ??
 .byte $10,$03,$22,$80,$23,$72,$25,$8c,$26,$80,$27,$72,$02,$de
-.byte $05,$de,$ff,$10,$03,$29,$ca,$2a,$b2,$2b,$db,$2c,$af,$2d,$c4,$09
-.byte $df,$ff,$10,$03,$29,$7c,$2a,$9a,$2b,$72,$2c,$76,$2d,$9d,$ff
+.byte $05,$de,$ff
+;$A3D3 - data block =
+.byte $10,$03,$29,$ca,$2a,$b2,$2b,$db,$2c,$af,$2d,$c4,$09
+.byte $df,$ff
+;$A3E2 - data block = Captain (Right) ??
+.byte $10,$03,$29,$7c,$2a,$9a,$2b,$72,$2c,$76,$2d,$9d,$ff
 ;$A3EF - data block = assignment Waiting(Right)
-.if ORIGINAL
 .byte $10
 .byte $03,$26,$80,$27,$72,$28,$77,$29,$4f,$ff
-.else
-.byte $10,$03,$26,P_DAE,$27,T_GI,$28,P_JOONG,$29,$4f,$ff
-.endif
-;$A3FA - data block =
+;$A3FA - data block = assignment - hospitalization (Left)
 .byte $10,$03,$22,$86,$23,$6d
 ;$A400
 .byte $24,$73,$25,$72,$26,$9d,$27,$4f,$29,$71,$2a,$84,$2c,$ef,$2d,$e9
 .byte $ff
+.else
+.include "text/D_A305_ASSIGNMENT_PANEL.inc"
+.endif
 
 ; Name	:
 	JSR $F96D		; A411  20 6D F9       
@@ -583,15 +586,15 @@ BDA4C1:
 	STA $33			; A4DD  85 33          
 	RTS			; A4DF  60             
 
-;$A4E0 - data block = ($A4E0-$A529)
+;$A4E0 - data block = ($A4E0-$A529) - Pilot/Captain
 .if ORIGINAL
 .byte $40,$03,$2e,$ca,$0e,$df,$2f,$b2,$30,$db,$31,$af,$32,$c4,$ff
 .byte $40
 .byte $03,$2e,$7c,$2f,$9a,$30,$72,$31,$76,$32,$9d,$ff
 .else
-.byte $40,$03,$2e,T_JO,$0e,$df,$2f,P_JONG,$30,T_SA,$31,$af,$32,$c4,$ff
+.byte $40,$03,$2e,T_JO,$2f,P_JONG,$30,T_SA,$ff,$0e,$df,$31,$af,$32,$c4
 .byte $40
-.byte $03,$2e,T_HAAM,$2f,P_JANG,$30,$72,$31,$76,$32,$9d,$ff
+.byte $03,$2e,T_HAAM,$2f,P_JANG,$ff,$30,$72,$31,$76,$32,$9d
 .endif
 ;$A4FC - data block = assignment ??
 .if ORIGINAL
@@ -602,10 +605,10 @@ BDA4C1:
 .byte $6a,$9d,$6b,$80,$6c,$72,$ff
 .else
 .byte $00,$03,$00,T_LTL
-;$A500 - data block = assignment Pilot status
+;$A500 - data block = assignment Pilot status - Fleet
 .byte $20,T_LTL,$40,T_LTL,$60,T_LTL,$1f,T_RTL,$3f,T_RTL,$5f,T_RTL,$7f,T_RTL,$31,T_NT
-.byte $36,T_PL,$76,T_CL,$3a,T_EX,$7a,T_EX,$66,P_JAE,$46,$de,$67,$72,$69,T_HAAM
-.byte $6a,P_DAE,$6b,$80,$6c,$72,$ff
+.byte $36,T_PL,$76,T_CL,$3a,T_EX,$7a,T_EX,$66,P_JAE,$67,T_EMPTY,$68,T_HAAM
+.byte $69,P_DAE,$ff,$46,$de,$6b,$80,$6c,$72
 .endif
 ;$A527
 .byte $90,$01,$60

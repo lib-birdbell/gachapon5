@@ -1013,7 +1013,7 @@ BBB3BB:
 	STA PpuAddr_2006	; B4F4  8D 06 20       
 	LDY #$00		; B4F7  A0 00          
 	LDX #$0E		; B4F9  A2 0E          
-	JSR $B6B7		; B4FB  20 B7 B6       
+	JSR $B6B7		; B4FB  20 B7 B6	Draw Left Bottom Panel(With Universe Century text)
 	LDA #$05		; B4FE  A9 05          
 	STA $21			; B500  85 21          
 BBB502:
@@ -1030,7 +1030,7 @@ BBB502:
 	LDA $2C			; B517  A5 2C          
 	STA PpuAddr_2006	; B519  8D 06 20       
 	LDX #$0E		; B51C  A2 0E          
-	JSR $B6CB		; B51E  20 CB B6       
+	JSR $B6CB		; B51E  20 CB B6	Draw Left Bottom Panel(Middle)
 	DEC $21			; B521  C6 21          
 	BNE BBB502		; B523  D0 DD          
 	LDA PpuStatus_2002	; B525  AD 02 20       
@@ -1130,6 +1130,7 @@ BBB664:
 	JMP $EC2E		; B6B4  4C 2E EC       
 
 ; Name	:
+; Marks	: Write to PPU 1-line (upper textbox line)
 	LDA #$70		; B6B7  A9 70          
 	STA PpuData_2007	; B6B9  8D 07 20       
 BBB6BC:
@@ -1143,7 +1144,7 @@ BBB6BC:
 	RTS			; B6CA  60             
 
 ; Name	:
-; Marks	: Tile write to PPU tilemap
+; Marks	: Tile write to PPU tilemap 1-line (with Left/Right textbox line)
 	LDA #$76		; B6CB  A9 76          
 	STA PpuData_2007	; B6CD  8D 07 20       
 BBB6D0:
