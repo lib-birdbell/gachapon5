@@ -81,23 +81,27 @@
 .byte $90,$f1,$60,$18,$60,$90,$01,$60
 
 ; Name	:
-	JSR $E48C		; E438  $20 $8C $E4
+; Marks	: Write string to buffer
+;	  +$12 = output string buffer
+;	  +$14 = input string table(compressed)
+;	  Called on BANK 6, 7, C
+	JSR $E48C		; E438  $20 $8C $E4	Reset buffer
 	LDA #$E0		; E43B  $A9 $E0
 	STA $12			; E43D  $85 $12
 	LDA #$03		; E43F  $A9 $03
-	STA $13			; E441  $85 $13
+	STA $13			; E441  $85 $13		$12+ = $03E0
 	LDY #$00		; E443  $A0 $00
 	STY $01			; E445  $84 $01
 BFE447:
 	STY $02			; E447  $84 $02
 	LDA ($14),Y		; E449  $B1 $14
-	BPL BFE46B		; E44B  $10 $1E
+	BPL BFE46B		; E44B  $10 $1E		branch if data is 00h-7Fh
 	TAX			; E44D  $AA
 	INX			; E44E  $E8
-	BEQ BFE485		; E44F  $F0 $34
+	BEQ BFE485		; E44F  $F0 $34		branch if data is FFh - end of string
 	INX			; E451  $E8
-	BEQ BFE45A		; E452  $F0 $06
-	JSR $E49D		; E454  $20 $9D $E4
+	BEQ BFE45A		; E452  $F0 $06		branch if data is FEh - next line
+	JSR $E49D		; E454  $20 $9D $E4	Load text
 	JMP $E46E		; E457  $4C $6E $E4
 BFE45A:
 	CLC			; E45A  $18
@@ -111,19 +115,19 @@ BFE45A:
 	BEQ BFE47E		; E469  $F0 $13
 BFE46B:
 	JSR $C536		; E46B  $20 $36 $C5
-	LDY $01			; E46E  $A4 $01
+	LDY $01			; E46E  $A4 $01		String position temp
 	LDX #$00		; E470  $A2 $00
 BFE472:
 	LDA $D1,X		; E472  $B5 $D1
 	BEQ BFE47E		; E474  $F0 $08
-	STA ($12),Y		; E476  $91 $12
+	STA ($12),Y		; E476  $91 $12		String copy from D1,X to +$12(String temp)
 	INY			; E478  $C8
 	INX			; E479  $E8
 	CPX #$1E		; E47A  $E0 $1E
 	BCC BFE472		; E47C  $90 $F4
 BFE47E:
-	STY $01			; E47E  $84 $01
-	LDY $02			; E480  $A4 $02
+	STY $01			; E47E  $84 $01		String position temp update
+	LDY $02			; E480  $A4 $02		Word count ??
 	INY			; E482  $C8
 	BPL BFE447		; E483  $10 $C2
 BFE485:
@@ -133,6 +137,7 @@ BFE485:
 	RTS			; E48B  $60
 
 ; Name	:
+; Marks	: Reset buffer to NULL(24 bytes) $03E0-, $0404-, $0428-
 	LDA #$00		; E48C  $A9 $00
 	LDY #$23		; E48E  $A0 $23
 BFE490:
@@ -144,31 +149,32 @@ BFE490:
 	RTS			; E49C  $60
 
 ; Name	:
-	INX			; E49D  E8             
-	BEQ BFE4C7		; E49E  F0 27          
-	INX			; E4A0  E8             
-	BEQ BFE4D1		; E4A1  F0 2E          
-	INX			; E4A3  E8             
-	BEQ BFE4DD		; E4A4  F0 37          
-	INX			; E4A6  E8             
-	BEQ BFE4C3		; E4A7  F0 1A          
-	INX			; E4A9  E8             
-	BEQ BFE4CD		; E4AA  F0 21          
-	INX			; E4AC  E8             
-	BEQ BFE4E2		; E4AD  F0 33          
-	INX			; E4AF  E8             
-	BEQ BFE4FF		; E4B0  F0 4D          
-	INX			; E4B2  E8             
-	BEQ BFE50E		; E4B3  F0 59          
-	INX			; E4B5  E8             
-	BEQ BFE516		; E4B6  F0 5E          
-	INX			; E4B8  E8             
-	BEQ BFE51B		; E4B9  F0 60          
-	INX			; E4BB  E8             
-	BEQ BFE527		; E4BC  F0 69          
-	LDA #$00		; E4BE  A9 00          
-	STA $D1			; E4C0  85 D1          
-	RTS			; E4C2  60             
+; X	: Kind of string type
+	INX			; E49D  $E8
+	BEQ BFE4C7		; E49E  $F0 $27		branch if data is FDh
+	INX			; E4A0  $E8
+	BEQ BFE4D1		; E4A1  $F0 $2E		branch if data is FCh
+	INX			; E4A3  $E8
+	BEQ BFE4DD		; E4A4  $F0 $37		branch if data is FBh
+	INX			; E4A6  $E8
+	BEQ BFE4C3		; E4A7  $F0 $1A		branch if data is FAh
+	INX			; E4A9  $E8
+	BEQ BFE4CD		; E4AA  $F0 $21		branch if data is F9h
+	INX			; E4AC  $E8
+	BEQ BFE4E2		; E4AD  $F0 $33		F8h
+	INX			; E4AF  $E8
+	BEQ BFE4FF		; E4B0  $F0 $4D		F7h
+	INX			; E4B2  $E8
+	BEQ BFE50E		; E4B3  $F0 $59		F6h
+	INX			; E4B5  $E8
+	BEQ BFE516		; E4B6  $F0 $5E		branch if data is F5h
+	INX			; E4B8  $E8
+	BEQ BFE51B		; E4B9  $F0 $60		F4h
+	INX			; E4BB  $E8
+	BEQ BFE527		; E4BC  $F0 $69		F3h
+	LDA #$00		; E4BE  $A9 $00		End of string is NULL
+	STA $D1			; E4C0  $85 $D1
+	RTS			; E4C2  $60
 
 BFE4C3:
 .byte $a5,$af,$10,$03
@@ -194,9 +200,11 @@ BFE50E:
 	CLC			; E510  $18
 	ADC #$01		; E511  $69 $01
 	JMP $C55C		; E513  $4C $5C $C5
+
 BFE516:
 	LDA $96			; E516  $A5 $96
 	JMP $C5C2		; E518  $4C $C2 $C5
+
 BFE51B:
 	LDA $99			; E51B  $A5 $99
 	CLC			; E51D  $18
@@ -215,7 +223,7 @@ BFE527:
 	BNE BFE537		; E534  $D0 $01
 	RTS			; E536  $60
 BFE537:
-	JSR $E569		; E537  $20 $69 $E5
+	JSR $E569		; E537  $20 $69 $E5	Draw 32 x 7 message box
 	LDA #$78		; E53A  $A9 $78
 	STA $7F			; E53C  $85 $7F
 BFE53E:
@@ -242,49 +250,49 @@ BFE562:
 	RTS			; E568  $60
 
 ; Name	:
-	JSR $F4D3		; E569  $20 $D3 $F4
+	JSR $F4D3		; E569  $20 $D3 $F4	Wait NMI end
 	LDA $62			; E56C  $A5 $62
 	LSR A			; E56E  $4A
 	PHA			; E56F  $48
-	JSR $F56E		; E570  $20 $6E $F5
-	JSR $86A1		; E573  $20 $A1 $86
+	JSR $F56E		; E570  $20 $6E $F5	BANK SWAP PRG_ROM to C,D
+	JSR $86A1		; E573  $20 $A1 $86	Some calcuration ??
 	PLA			; E576  $68
-	JSR $F570		; E577  $20 $70 $F5
-	JSR $F96D		; E57A  $20 $6D $F9
-	JSR $FCBF		; E57D  $20 $BF $FC
+	JSR $F570		; E577  $20 $70 $F5	BANK SWAP PRG_ROM
+	JSR $F96D		; E57A  $20 $6D $F9	Reset buffer to EMPTY (7Fh bytes)
+	JSR $FCBF		; E57D  $20 $BF $FC	Draw top textbox line with character (32 x 1)
 	LDA #$34		; E580  $A9 $34
-	LDY #$E6		; E582  $A0 $E6
-	JSR $FB09		; E584  $20 $09 $FB
+	LDY #$E6		; E582  $A0 $E6		BANK 0F/E634
+	JSR $FB09		; E584  $20 $09 $FB	Draw middle textbox with Pilot FACE Blank (32 x 3)
 	LDA #$E0		; E587  $A9 $E0
 	STA $10			; E589  $85 $10
 	LDA #$03		; E58B  $A9 $03
-	STA $11			; E58D  $85 $11
+	STA $11			; E58D  $85 $11		+$10 = $03E0
 	LDA #$07		; E58F  $A9 $07
 	STA $12			; E591  $85 $12
 	LDA #$03		; E593  $A9 $03
-	STA $13			; E595  $85 $13
-	JSR $F410		; E597  $20 $10 $F4
+	STA $13			; E595  $85 $13		+$12 = $0307
+	JSR $F410		; E597  $20 $10 $F4	Check and copy buffer from $03E0- to $0307-
 	LDA #$04		; E59A  $A9 $04
 	STA $10			; E59C  $85 $10
 	LDA #$04		; E59E  $A9 $04
-	STA $11			; E5A0  $85 $11
+	STA $11			; E5A0  $85 $11		+$10 = $0404
 	LDA #$47		; E5A2  $A9 $47
 	STA $12			; E5A4  $85 $12
-	LDA #$03		; E5A6  $A9 $03
+	LDA #$03		; E5A6  $A9 $03		+$12 = $0347
 	STA $13			; E5A8  $85 $13
-	JSR $F410		; E5AA  $20 $10 $F4
+	JSR $F410		; E5AA  $20 $10 $F4	Check and copy buffer form $0404- to $0347-
 	LDA #$80		; E5AD  $A9 $80
-	STA $00			; E5AF  $85 $00
-	JSR $F9CA		; E5B1  $20 $CA $F9
-	JSR $F4D3		; E5B4  $20 $D3 $F4
+	STA $00			; E5AF  $85 $00		Convert size is 80h
+	JSR $F9CA		; E5B1  $20 $CA $F9	Apply text table, in $0300-$037F
+	JSR $F4D3		; E5B4  $20 $D3 $F4	Wait NMI end
 	LDA #$C0		; E5B7  $A9 $C0
 	STA $2C			; E5B9  $85 $2C
 	LDA #$22		; E5BB  $A9 $22
 	STA $2D			; E5BD  $85 $2D
 	LDA #$01		; E5BF  $A9 $01
-	STA $33			; E5C1  $85 $33
-	JSR $F4DC		; E5C3  $20 $DC $F4
-	JSR $F96D		; E5C6  $20 $6D $F9
+	STA $33			; E5C1  $85 $33		Set IRQ flag ??
+	JSR $F4DC		; E5C3  $20 $DC $F4	Wait some ?? or Draw something ??
+	JSR $F96D		; E5C6  $20 $6D $F9	Reset buffer to EMPTY (7Fh bytes)
 	LDY #$1F		; E5C9  $A0 $1F
 BFE5CB:
 	LDA #$4A		; E5CB  $A9 $4A
@@ -294,28 +302,28 @@ BFE5CB:
 	DEY			; E5D5  $88
 	BPL BFE5CB		; E5D6  $10 $F3
 	LDA #$53		; E5D8  $A9 $53
-	LDY #$E6		; E5DA  $A0 $E6
-	JSR $FB09		; E5DC  $20 $09 $FB
+	LDY #$E6		; E5DA  $A0 $E6		BANK 0F/E653
+	JSR $FB09		; E5DC  $20 $09 $FB	Draw middle textbox with Pilot FACE Blank (32 x 3)
 	LDA #$28		; E5DF  $A9 $28
 	STA $10			; E5E1  $85 $10
 	LDA #$04		; E5E3  $A9 $04
-	STA $11			; E5E5  $85 $11
+	STA $11			; E5E5  $85 $11		+$10 = $0428
 	LDA #$07		; E5E7  $A9 $07
 	STA $12			; E5E9  $85 $12
 	LDA #$03		; E5EB  $A9 $03
-	STA $13			; E5ED  $85 $13
-	JSR $F410		; E5EF  $20 $10 $F4
+	STA $13			; E5ED  $85 $13		+$12 = $0307
+	JSR $F410		; E5EF  $20 $10 $F4	Check and copy buffer form $0428- to $0307-
 	LDA #$80		; E5F2  $A9 $80
-	STA $00			; E5F4  $85 $00
-	JSR $F9CA		; E5F6  $20 $CA $F9
+	STA $00			; E5F4  $85 $00		Convert size is 80h
+	JSR $F9CA		; E5F6  $20 $CA $F9	Apply text table, in $0300-$037F
 	LDA #$40		; E5F9  $A9 $40
 	STA $2C			; E5FB  $85 $2C
 	LDA #$23		; E5FD  $A9 $23
 	STA $2D			; E5FF  $85 $2D
 	LDA #$01		; E601  $A9 $01
 	STA $33			; E603  $85 $33
-	JSR $F4DC		; E605  $20 $DC $F4
-	JSR $D5CA		; E608  $20 $CA $D5
+	JSR $F4DC		; E605  $20 $DC $F4	Wait ?? Draw ??
+	JSR $D5CA		; E608  $20 $CA $D5	Reset buffer to EMPTY (7Fh bytes)
 	LDA #$C4		; E60B  $A9 $C4
 	STA $8A			; E60D  $85 $8A
 	LDA #$10		; E60F  $A9 $10
@@ -326,20 +334,22 @@ BFE5CB:
 	STA $8B			; E619  $85 $8B
 	LDA #$C0		; E61B  $A9 $C0
 	STA $88			; E61D  $85 $88
-	JSR $FB4F		; E61F  $20 $4F $FB
+	JSR $FB4F		; E61F  $20 $4F $FB	Some calc ??
 	LDX #$01		; E622  $A2 $01
 	LDY #$18		; E624  $A0 $18
-	JSR $D401		; E626  $20 $01 $D4
+	JSR $D401		; E626  $20 $01 $D4	Write something to $03C1-
 	LDA #$01		; E629  $A9 $01
 	STA $2F			; E62B  $85 $2F
-	JSR $F3D0		; E62D  $20 $D0 $F3
-	JSR $F3D0		; E630  $20 $D0 $F3
+	JSR $F3D0		; E62D  $20 $D0 $F3	Wait what ??
+	JSR $F3D0		; E630  $20 $D0 $F3	??
 	RTS			; E633  $60
 
-;$E634 - data block = ($E634-$E671) - Pilot FACE Blank ??
+;$E634 - data block = ($E634-$E652) - Pilot FACE Blank 32 x 3
 .byte $00,$03,$20,$47,$40,$47,$60,$47,$3f,$48,$5f,$48
 .byte $7f,$48,$42,$00,$43,$00,$44,$00,$45,$00,$62,$00,$63,$00,$64,$00
-.byte $65,$00,$ff,$00,$03,$00,$47,$20,$47,$1f,$48,$3f,$48,$02,$00,$03
+.byte $65,$00,$ff
+;$E653 - data block = ($E653-$E671) - Pilot FACE Blank 32 x 3
+.byte $00,$03,$00,$47,$20,$47,$1f,$48,$3f,$48,$02,$00,$03
 .byte $00,$04,$00,$05,$00,$22,$00,$23,$00,$24,$00,$25,$00,$40,$65,$5f
 .byte $66,$ff
 
@@ -1555,7 +1565,7 @@ BFEF0B:
 	LDX #$04		; F292  $A2 $04
 BFF294:
 	STX $0742		; F294  $8E $42 $07
-	JMP $F4D3		; F297  $4C $D3 $F4
+	JMP $F4D3		; F297  $4C $D3 $F4	Wait NMI end
 
 ;$F29A
 .byte $a9,$04,$8d,$42,$07,$4c
@@ -1767,7 +1777,11 @@ BFF3D4:
 	STA $10			; F40A  $85 $10
 	LDA #$00		; F40C  $A9 $00
 	STA $11			; F40E  $85 $11
-	JSR $F459		; F410  $20 $59 $F4
+; Name	:
+; Marks	: +$10 = Input address
+;	  +$12 = output address
+;	  Check character from input to output
+	JSR $F459		; F410  $20 $59 $F4	Check character write converted character to +$12
 	CLC			; F413  $18
 	LDA $12			; F414  $A5 $12
 	ADC #$20		; F416  $69 $20
@@ -1786,9 +1800,9 @@ BFF3D4:
 	LDY $00			; F42C  $A4 $00
 	LDA ($10),Y		; F42E  $B1 $10
 	BEQ BFF452		; F430  $F0 $20
-	CMP #$DE		; F432  $C9 $DE
+	CMP #$DE		; F432  $C9 $DE		TAK "
 	BEQ BFF442		; F434  $F0 $0C
-	CMP #$DF		; F436  $C9 $DF
+	CMP #$DF		; F436  $C9 $DF		Half TAK '
 	BEQ BFF442		; F438  $F0 $08
 	CMP #$E0		; F43A  $C9 $E0
 	BCC BFF447		; F43C  $90 $09
@@ -1811,6 +1825,10 @@ BFF452:
 	RTS			; F458  $60
 
 ; Name	:
+; Marks	: Check data
+;	  +$10 = input
+;	  +$12 = output
+;	  MAY BE DO NOT NEED for HANGUL
 	LDA $00			; F459  $A5 $00
 	PHA			; F45B  $48
 	LDA $01			; F45C  $A5 $01
@@ -1821,9 +1839,9 @@ BFF452:
 	LDY $00			; F465  $A4 $00
 	LDA ($10),Y		; F467  $B1 $10
 	BEQ BFF4AA		; F469  $F0 $3F
-	CMP #$DE		; F46B  $C9 $DE
+	CMP #$DE		; F46B  $C9 $DE		TAK "
 	BEQ BFF481		; F46D  $F0 $12
-	CMP #$DF		; F46F  $C9 $DF
+	CMP #$DF		; F46F  $C9 $DF		Half TAK '
 	BEQ BFF481		; F471  $F0 $0E
 	CMP #$E0		; F473  $C9 $E0
 	BCC BFF4A3		; F475  $90 $2C
@@ -1873,11 +1891,13 @@ BFF4AA:
 .byte $85,$00,$60
 
 ; Name	:
+; Marks	: Wait NMI end
 	LDA $22			; F4D3  $A5 $22
 BFF4D5:
 	CMP $22			; F4D5  $C5 $22
 	BEQ BFF4D5		; F4D7  $F0 $FC
 	RTS			; F4D9  $60
+
 	STA $37			; F4DA  $85 $37
 ; Name	:
 BFF4DC:
@@ -1973,11 +1993,13 @@ BFF523:
 .byte $2C
 
 ; Name	:
+; Marks	: BANK SWAP to PRG_ROM 6, 7
 	LDA #$03		; F565  $A9 $03
 	;BIT $04A9		; F567  $2C $A9 $04
 .byte $2C
 
 ; Name	:
+; Marks	: BANK SWAP to PRG_ROM 8,9
 	LDA #$04		; F568  $A9 $04
 	;BIT $05A9		; F56A  $2C $A9 $05
 .byte $2C
@@ -1991,8 +2013,10 @@ BFF523:
 	LDA #$06		; F56E  $A9 $06
 
 ; Name	:
-; A	:
-; Marks	:
+; A	: A << 1 is BANK
+; X	:
+; Y	:
+; Marks	: BANK SWAP PRG_ROM
 	STX $64			; F570  $86 $64
 	STY $65			; F572  $84 $65
 	ASL A			; F574  $0A
@@ -2425,7 +2449,10 @@ BFF8C2:
 ;$F900
 .byte $f0,$00,$0a,$14,$1e,$28,$32,$3c,$46,$50,$5a,$64,$6e,$78,$82,$8c
 .byte $96,$a0,$aa,$b4,$be,$c8,$d2,$dc,$e6,$f0,$fa,$00,$05,$0a,$0f,$14
-.byte $19,$1e,$23,$00,$01,$02,$03,$04,$00,$01,$02,$03,$04,$00,$01,$02
+.byte $19,$1e,$23
+
+;$F923 - data block
+.byte $00,$01,$02,$03,$04,$00,$01,$02,$03,$04,$00,$01,$02
 .byte $03,$04,$00,$01,$02,$03,$04,$00,$01,$02,$03,$04,$00,$01,$02,$03
 .byte $04,$00,$01,$02,$03,$04,$00,$01,$02,$03,$04,$00,$00,$00,$00,$00
 .byte $01,$01,$01,$01,$01,$02,$02,$02,$02,$02,$03,$03,$03,$03,$03
@@ -2446,7 +2473,7 @@ BFF966:
 	RTS			; F96C	$60
 
 ; Name	:
-; Marks	: Write tile buffer to background color
+; Marks	: Reset tile buffer to EMPTY(With background color)
 	LDX #$7F		; F96D	$a2 $7f
 .if ORIGINAL
 	LDA #$20		; F96F	$a9 $20
@@ -2520,11 +2547,13 @@ BFF9AA:
 	JMP $F9D2		; F9C3	$4c $d2 $f9
 
 ; Name	:
-; Marks	: text table to tile table ??
-;	  $0300 convert $0300
+; Marks	: text table to tile by table, convert size is 84bytes
+;	  $0300 convert to $0300
 	LDA #$54		; F9C6	$a9 $54
 	STA $00			; F9C8	$85 $00
 ; Name	:
+; Marks	: text convert to tile by table
+;	  $00 is size to converting text data
 	LDA #$00		; F9CA	$a9 $00
 	STA $10			; F9CC	$85 $10
 	LDA #$03		; F9CE	$a9 $03
@@ -2857,7 +2886,8 @@ BFFC81:
 	RTS			; FCBE  $60
 
 ; Name	:
-; Marks	: Top textbox line (Large)
+; Marks	: Top textbox line (16 bytes Large)
+;	  MAY BE DO NOT NEED for HANGUL
 .if ORIGINAL
 	LDA #$61		; FCBF  $A9 $61
 .else
@@ -2987,7 +3017,7 @@ BFFD6D:
 	LDA #$10		; FD6F  $A9 $10
 	STA $43			; FD71  $85 $43
 BFFD73:
-	JSR $F4D3		; FD73  $20 $D3 $F4
+	JSR $F4D3		; FD73  $20 $D3 $F4	Wait NMI end
 	LDA $42			; FD76  $A5 $42
 	BNE BFFD73		; FD78  $D0 $F9
 	RTS			; FD7A  $60
@@ -3205,7 +3235,7 @@ BFFEEB:
 	CLI			; FEFA	$58
 	JSR $F3C8		; FEFB	$20 $c8 $f3
 	JSR $F34A		; FEFE	$20 $4a $f3
-	JSR $F4D3		; FF01	$20 $d3 $f4
+	JSR $F4D3		; FF01	$20 $d3 $f4	Wait NMI end
 	JMP $C003		; FF04	$4c $03 $c0
 
 ;$FF07 - data(size = 1Fh)

@@ -5,16 +5,31 @@ $5E	= BANK CHR $1400-$17FF
 $5F	= BANK CHR $1800-$1BFF
 $60	= BANK CHR $1C00-$1FFF
 
+$61	= BANK REG
+$62	= BANK PRG
 $63	= BANK PRG
 
-$D1-	= NAME temp buffer
+$95	= TEAM COLOR ??
+$96	= Target PILOT ??
+
+$D1-$EE	= String temp buffer
 
 $300-	= PPU temp buffer
 
 $450-	= Guard Gauge temp buffer
+
+$6211	= ??
+
+$621A-	= ??
+$6247-	= ??
+$62A3-	= ??
+$62B9-	= ??
 
 $6331-	= NT
 $62F5-	= PL
 $62E1-	= EX
 $631D-	= CL
 $6309-	= EX
+
+$6359-	= ??
+$6369-	= ??

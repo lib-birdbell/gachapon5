@@ -563,8 +563,20 @@ BEC4D4:
 .byte $aa,$a5,$62,$4a,$48,$20
 .byte $68,$f5,$bd,$71,$9c,$85,$14,$bd,$72,$9c,$85,$15,$68,$4c,$70,$f5
 .byte $aa,$a5,$62,$4a,$48,$20,$68,$f5,$bd,$99,$9c,$85,$14,$bd,$9a,$9c
-.byte $85,$15,$68,$4c,$70,$f5,$aa,$a5,$62,$4a,$48,$a9,$9c,$85,$10,$a9
-.byte $b5,$85,$11,$4c,$d5,$c5
+.byte $85,$15,$68,$4c,$70,$f5
+
+; Name	:
+; A	:
+	TAX			; C536  AA             
+	LDA $62			; C537  A5 62          
+	LSR A			; C539  4A             
+	PHA			; C53A  48             
+	LDA #$9C		; C53B  A9 9C          
+	STA $10			; C53D  85 10          
+	LDA #$B5		; C53F  A9 B5          
+	STA $11			; C541  85 11		$10+ = $B59C
+	JMP $C5D5		; C543  4C D5 C5       
+
 ; Name	:
 	CMP #$09		; C546  C9 09          
 	BCC BEC54C		; C548  90 02          
@@ -580,10 +592,27 @@ BEC54C:
 	STA $11			; C557  85 11		BANK 08 08/9835
 	JMP $C5D5		; C559  4C D5 C5       
 
-;$C55C
-.byte $aa,$a5,$62,$4a
-.byte $48,$a9,$1c,$85,$10,$a9,$9c,$85,$11,$4c,$d5,$c5,$aa,$a5,$62,$4a
-.byte $48,$a9,$31,$85,$10,$a9,$9c,$85,$11,$4c,$d5,$c5
+; Name	:
+	TAX			; C55C  AA             
+	LDA $62			; C55D  A5 62          
+	LSR A			; C55F  4A             
+	PHA			; C560  48             
+	LDA #$1C		; C561  A9 1C          
+	STA $10			; C563  85 10          
+	LDA #$9C		; C565  A9 9C          
+	STA $11			; C567  85 11		$10+ = $9C1C
+	JMP $C5D5		; C569  4C D5 C5       
+
+; Name	:
+	TAX			; C56C  AA             
+	LDA $62			; C56D  A5 62          
+	LSR A			; C56F  4A             
+	PHA			; C570  48             
+	LDA #$31		; C571  A9 31          
+	STA $10			; C573  85 10          
+	LDA #$9C		; C575  A9 9C          
+	STA $11			; C577  85 11		$10+ = $9C31
+	JMP $C5D5		; C579  4C D5 C5       
 
 ; Name	:
 ; Marks	: Load UNIT NAME ??
@@ -606,7 +635,7 @@ BEC54C:
 	LDA #$77		; C591  A9 77          
 	STA $10			; C593  85 10          
 	LDA #$98		; C595  A9 98          
-	STA $11			; C597  85 11		BANK 08 08/9877
+	STA $11			; C597  85 11		BANK 08/9877
 	JMP $C5D5		; C599  4C D5 C5       
 
 ;$C59C
@@ -616,6 +645,7 @@ BEC54C:
 .byte $d5,$c5
 
 ; Name	:
+; A	: Target
 ; Marks	:
 	TAX			; C5C2  AA             
 	LDA $62			; C5C3  A5 62          
@@ -624,38 +654,40 @@ BEC54C:
 	LDA #$09		; C5C7  A9 09          
 	STA $10			; C5C9  85 10          
 	LDA #$96		; C5CB  A9 96          
-	STA $11			; C5CD  85 11          
+	STA $11			; C5CD  85 11		BANK 08/9609 - Pilot Full Name
 	CPX #$29		; C5CF  E0 29          
 	BCC BEC5D5		; C5D1  90 02          
 	LDX #$28		; C5D3  A2 28          
 ; Marks	:
 BEC5D5:
-	JSR $F568		; C5D5  20 68 F5       
-	JSR $C5F8		; C5D8  20 F8 C5       
+	JSR $F568		; C5D5  20 68 F5	BANK SWAP to PRG_ROM 8, 9
+	JSR $C5F8		; C5D8  20 F8 C5	Find string address from table
 	LDY #$FF		; C5DB  A0 FF          
 BEC5DD:
 	INY			; C5DD  C8             
 	CPY #$1D		; C5DE  C0 1D          
 	BCS BEC5E9		; C5E0  B0 07          
 	LDA ($10),Y		; C5E2  B1 10          
-	STA $00D1,Y		; C5E4  99 D1 00       
+	STA $00D1,Y		; C5E4  99 D1 00	Copy string from +$10 to $D1,Y
 	BNE BEC5DD		; C5E7  D0 F4          
 BEC5E9:
 	TYA			; C5E9  98             
 	TAX			; C5EA  AA             
-	LDA #$00		; C5EB  A9 00          
+	LDA #$00		; C5EB  A9 00		End of string is NULL data
 BEC5ED:
 	STA $D1,X		; C5ED  95 D1          
 	INX			; C5EF  E8             
 	CPX #$1E		; C5F0  E0 1E          
 	BCC BEC5ED		; C5F2  90 F9          
 	PLA			; C5F4  68             
-	JMP $F570		; C5F5  4C 70 F5       
+	JMP $F570		; C5F5  4C 70 F5	BANK SWAP PRG_ROM
 
 ; Name	:
 ; X	: string number to find
 ; Marks	: Find specific string address
 ;	  Seperator character is 00h
+;	  +$10 = Input address
+;	  Update string address(+$10)
 	CPX #$00		; C5F8  E0 00          
 	BEQ BEC614		; C5FA  F0 18          
 BEC5FC:
@@ -1324,6 +1356,118 @@ BED3E3:
 	JSR $F56E		; D3E8  20 6E F5       
 	RTS			; D3EB  60             
 
+.if 0
+                   --------sub start--------
+D3EC  8A             TXA
+D3ED  0A             ASL A
+D3EE  AA             TAX
+                   --------sub start--------
+D3EF  BD C8 D7       LDA $D7C8,X
+D3F2  99 C1 03       STA $03C1,Y
+D3F5  BD C9 D7       LDA $D7C9,X
+D3F8  99 C2 03       STA $03C2,Y
+D3FB  A9 30          LDA #$30
+D3FD  99 C3 03       STA $03C3,Y
+D400  60             RTS
+                   ----------------
+                   --------sub start--------
+D401  8A             TXA
+D402  0A             ASL A
+D403  AA             TAX
+D404  BD 1A D8       LDA $D81A,X
+D407  99 C1 03       STA $03C1,Y
+D40A  BD 1B D8       LDA $D81B,X
+D40D  99 C2 03       STA $03C2,Y
+D410  A9 30          LDA #$30
+D412  99 C3 03       STA $03C3,Y
+D415  60             RTS
+                   ----------------
+                   --------sub start--------
+D416  A5 B2          LDA $B2
+D418  10 02          BPL $D41C
+D41A  A9 28          LDA #$28
+D41C  8D E7 05       STA $05E7
+D41F  A5 B3          LDA $B3
+D421  10 02          BPL $D425
+D423  A9 28          LDA #$28
+D425  8D E8 05       STA $05E8
+D428  A6 AC          LDX $AC
+D42A  BD B9 63       LDA $63B9,X
+D42D  8D E9 05       STA $05E9
+D430  A4 AD          LDY $AD
+D432  B9 B9 63       LDA $63B9,Y
+D435  8D EA 05       STA $05EA
+D438  A6 AC          LDX $AC
+D43A  A4 AD          LDY $AD
+D43C  BD 79 63       LDA $6379,X
+D43F  AA             TAX
+D440  BD FD E0       LDA $E0FD,X
+D443  8D A9 05       STA $05A9
+D446  B9 79 63       LDA $6379,Y
+D449  A8             TAY
+D44A  B9 FD E0       LDA $E0FD,Y
+D44D  8D AA 05       STA $05AA
+D450  A6 AC          LDX $AC
+D452  A4 AD          LDY $AD
+D454  BD 99 63       LDA $6399,X
+D457  AA             TAX
+D458  BD FD E0       LDA $E0FD,X
+D45B  8D AB 05       STA $05AB
+D45E  B9 99 63       LDA $6399,Y
+D461  A8             TAY
+D462  B9 FD E0       LDA $E0FD,Y
+D465  8D AD 05       STA $05AD
+D468  A6 AC          LDX $AC
+D46A  A4 AD          LDY $AD
+D46C  BD A9 63       LDA $63A9,X
+D46F  8D AC 05       STA $05AC
+D472  B9 A9 63       LDA $63A9,Y
+D475  8D AE 05       STA $05AE
+D478  A6 AC          LDX $AC
+D47A  A4 AD          LDY $AD
+D47C  BD D9 63       LDA $63D9,X
+D47F  AA             TAX
+D480  BD FD E0       LDA $E0FD,X
+D483  8D AF 05       STA $05AF
+D486  B9 D9 63       LDA $63D9,Y
+D489  A8             TAY
+D48A  B9 FD E0       LDA $E0FD,Y
+D48D  8D B1 05       STA $05B1
+D490  A6 AC          LDX $AC
+D492  A4 AD          LDY $AD
+D494  BD E9 63       LDA $63E9,X
+D497  8D B0 05       STA $05B0
+D49A  B9 E9 63       LDA $63E9,Y
+D49D  8D B2 05       STA $05B2
+D4A0  A6 A7          LDX $A7
+D4A2  BD 33 E1       LDA $E133,X
+D4A5  8D A8 05       STA $05A8
+D4A8  60             RTS
+                   ----------------
+                   --------sub start--------
+D4A9  18             CLC
+D4AA  6D AC 61       ADC $61AC
+D4AD  85 02          STA $02
+D4AF  20 F4 C4       JSR $C4F4
+D4B2  46 02          LSR $02
+D4B4  A4 02          LDY $02
+D4B6  B9 22 D8       LDA $D822,Y
+D4B9  85 02          STA $02
+D4BB  A0 00          LDY #$00
+D4BD  20 E5 C4       JSR $C4E5
+D4C0  A5 9B          LDA $9B
+D4C2  C5 01          CMP $01
+D4C4  F0 09          BEQ $D4CF
+D4C6  C8             INY
+D4C7  C4 02          CPY $02
+D4C9  90 F2          BCC $D4BD
+D4CB  F0 F0          BEQ $D4BD
+D4CD  A0 00          LDY #$00
+D4CF  60             RTS
+                   ----------------
+
+.endif
+
 ;$D3EC
 .byte $8a,$0a,$aa,$bd
 .byte $c8,$d7,$99,$c1,$03,$bd,$c9,$d7,$99,$c2,$03,$a9,$30,$99,$c3,$03
@@ -1498,7 +1642,9 @@ BED606:
 .byte $0a,$36,$17,$36,$28,$36,$06,$36,$03,$36,$02,$36,$00,$36,$07,$36
 ;$D800
 .byte $00,$36,$07,$36,$06,$36,$17,$36,$07,$36,$01,$36,$28,$36,$21,$36
-.byte $03,$36,$00,$10,$10,$36,$28,$36,$1a,$2a,$06,$36,$06,$36,$0f,$36
+.byte $03,$36,$00,$10,$10,$36,$28,$36,$1a,$2a
+;$D81A - data block =
+.byte $06,$36,$06,$36,$0f,$36
 .byte $1a,$2a,$05,$05,$20,$07,$02,$02,$09,$03,$02,$02,$09,$03,$02,$02
 .byte $09,$03,$02,$02,$09,$03,$02,$ff,$ff,$ff,$15,$0c,$09,$01,$0d,$ff
 .byte $ff,$ff,$0a,$0d,$09,$ff,$06,$0b,$0a,$11,$05,$ff,$ff,$ff,$08,$ff
