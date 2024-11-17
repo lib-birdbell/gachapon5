@@ -9,8 +9,14 @@ $61	= BANK REG
 $62	= BANK PRG
 $63	= BANK PRG
 
+$7E	= KEY xxxx ?xx? <- ? is A or S
+
 $95	= TEAM COLOR ??
 $96	= Target PILOT ??
+
+$A4	= ??
+$AC	= ?? use X on 6389,X
+$AD	= ?? use X on 6389,X
 
 $D1-$EE	= String temp buffer
 
@@ -33,3 +39,5 @@ $6309-	= EX
 
 $6359-	= ??
 $6369-	= ??
+
+$6389-	= ??

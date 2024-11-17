@@ -1214,12 +1214,12 @@ BDAB45:
 	STA $6369,X		; AB7B  9D 69 63       
 	LDA $A4			; AB7E  A5 A4          
 	BEQ BDAB85		; AB80  F0 03          
-	JSR $CE46		; AB82  20 46 CE       
+	JSR $CE46		; AB82  20 46 CE	??
 BDAB85:
 	LDA #$FF		; AB85  A9 FF          
 	STA $9D			; AB87  85 9D          
 	JSR $CEE1		; AB89  20 E1 CE       
-	JMP $86A1		; AB8C  4C A1 86       
+	JMP $86A1		; AB8C  4C A1 86	Some calcuration ??
 BDAB8F:
 	JSR $986F		; AB8F  20 6F 98       
 	JSR $C2EF		; AB92  20 EF C2       

@@ -6,7 +6,7 @@ ca65 bank_02.asm -g
 ca65 bank_03.asm -g
 ca65 bank_04.asm -g 
 ca65 bank_05.asm -g 
-ca65 bank_06.asm -g
+ca65 -D ORIGINAL=1 bank_06.asm -g
 ca65 bank_07.asm -g
 ca65 -D ORIGINAL=1 bank_08.asm -g
 ca65 bank_09.asm -g

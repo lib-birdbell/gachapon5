@@ -50,8 +50,9 @@ B7A087:
 	RTS			; A087  60             
 
 ; Name	:
+; X	:
 	STX $00			; A088  86 00          
-	JSR $FCD4		; A08A  20 D4 FC       
+	JSR $FCD4		; A08A  20 D4 FC	Some calcuration
 	LDX $00			; A08D  A6 00          
 	LDA $6345,X		; A08F  BD 45 63       
 	CMP $84			; A092  C5 84          

@@ -830,13 +830,14 @@ BC8696:
 	RTS			; 86A0  60             
 
 ; Name	:
+; Marks	: Some calcuration
 	JSR $8860		; 86A1  20 60 88       
 	JSR $87FB               ; 86A4  20 FB 87       
 	JSR $8748               ; 86A7  20 48 87       
 	JSR $8762               ; 86AA  20 62 87       
 	JSR $8780               ; 86AD  20 80 87       
 	JSR $896D               ; 86B0  20 6D 89       
-	JSR $89C2               ; 86B3  20 C2 89       
+	JSR $89C2               ; 86B3  20 C2 89	SCREEN CHANGED ??
 	JSR $8A0C               ; 86B6  20 0C 8A       
 	JSR $86BD               ; 86B9  20 BD 86       
 	RTS                     ; 86BC  60             

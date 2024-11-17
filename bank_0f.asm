@@ -943,7 +943,7 @@ BFEC49:
 	STA $5F			; EC57	$85 $5f
 BFEC59:
 	LDY #$00		; EC59	$a0 $00
-	STY $8000		; EC5B	$8c $00 $80	BANK CHR $0000-$07FF
+	STY $8000		; EC5B	$8c $00 $80	BANK CHR $0000-$07FF - MAP
 	LDA $5B			; EC5E	$a5 $5b
 	STA $8001		; EC60	$8d $01 $80
 	INY			; EC63	$c8
@@ -1039,7 +1039,7 @@ BFECFB:
 	LDY #$00		; ED1B  $A0 $00
 	STY $8000		; ED1D  $8C $00 $80
 .if ORIGINAL
-	LDX #$00		; ED20  $A2 $00		BANK PRG
+	LDX #$00		; ED20  $A2 $00		BANK CHR ROM
 .else
 	LDX #$00
 .endif
@@ -1047,7 +1047,7 @@ BFECFB:
 	INY			; ED25  $C8
 	STY $8000		; ED26  $8C $00 $80
 .if ORIGINAL
-	LDX #$02		; ED29  $A2 $02		BANK PRG
+	LDX #$02		; ED29  $A2 $02		BANK CHR ROM
 .else
 	LDX #$02
 .endif
@@ -1934,6 +1934,7 @@ BFF504:
 	RTS			; F50A  $60
 
 ; Name	:
+; Marks	: Key or Event ?? timer wait
 	LDA #$78                ; F50B  $A9 $78
 	STA $7F			; F50D  $85 $7F
 BFF50F:
@@ -2010,6 +2011,7 @@ BFF523:
 .byte $2C
 
 ; Name	:
+; Marks	: BANK SWAP to PRG_ROM C,D
 	LDA #$06		; F56E  $A9 $06
 
 ; Name	:
@@ -2491,7 +2493,7 @@ BFF971:
 .byte $fb,$60
 
 ; Name	:
-; Marks	: Reset 2-line tile buffer as EMPTY tile
+; Marks	: Reset 2-line tile buffer as EMPTY tile (32 x 2)
 	LDX #$3F		; F982  A2 3F          
 .if ORIGINAL
 	LDA #$20		; F984  A9 20          
@@ -2858,6 +2860,7 @@ BFFC81:
 .byte $a9,$0f,$85,$1a,$a9,$27,$85,$1b,$a9,$09,$85,$1c,$38,$60
 
 ; Name	:
+; Marks	: Draw textbox top line (32 x 1)
 	LDA #$70		; FC8F  $A9 $70
 	STA PpuData_2007	; FC91  $8D $07 $20
 	LDA #$71		; FC94  $A9 $71
@@ -2913,6 +2916,7 @@ BFFCC8:
 	RTS			; FCD3  $60
 
 ; Name	:
+; Ret	: A
 	LDA #$64		; FCD4  $A9 $64
 	STA $84			; FCD6  $85 $84
 	JSR $FCE0		; FCD8  $20 $E0 $FC
@@ -2921,13 +2925,15 @@ BFFCC8:
 	RTS			; FCDF  $60
 
 ; Name	:
+; Y	:
+; Mark	: Calcurate $84 ??
 	TYA			; FCE0	$98
 	PHA			; FCE1	$48
 	LDA $18			; FCE2	$a5 $18
 	PHA			; FCE4	$48
 	LDA $19			; FCE5	$a5 $19
 	PHA			; FCE7	$48
-	JSR $FD03		; FCE8	$20 $03 $fd
+	JSR $FD03		; FCE8	$20 $03 $fd	Check BIT ??
 	BEQ BFFCFA		; FCEB	$f0 $0d
 	STA $18			; FCED	$85 $18
 BFFCEF:
@@ -2947,6 +2953,8 @@ BFFCFA:
 	RTS			; FD02	$60
 
 ; Name	:
+; Marks	: BIT calcuration
+; Ret	: A
 	LDA $84			; FD03	$a5 $84
 	BEQ BFFD12		; FD05	$f0 $0b
 	LDY #$00		; FD07	$a0 $00
@@ -2960,7 +2968,7 @@ BFFD0F:
 BFFD12:
 	RTS			; FD12	$60
 
-;$FD13
+;$FD13 - data block =
 .byte $FF,$7F,$3F,$1F,$0F,$07,$03,$01
 
 ; Name	:
