@@ -151,50 +151,81 @@ BFE490:
 ; Name	:
 ; X	: Kind of string type
 	INX			; E49D  $E8
-	BEQ BFE4C7		; E49E  $F0 $27		branch if data is FDh
+	BEQ BFE4C7		; E49E  $F0 $27		branch if data is FDh - Team color ??
 	INX			; E4A0  $E8
-	BEQ BFE4D1		; E4A1  $F0 $2E		branch if data is FCh
+	BEQ BFE4D1		; E4A1  $F0 $2E		branch if data is FCh - Set Number
 	INX			; E4A3  $E8
-	BEQ BFE4DD		; E4A4  $F0 $37		branch if data is FBh
+	BEQ BFE4DD		; E4A4  $F0 $37		branch if data is FBh - City name
 	INX			; E4A6  $E8
-	BEQ BFE4C3		; E4A7  $F0 $1A		branch if data is FAh
+	BEQ BFE4C3		; E4A7  $F0 $1A		branch if data is FAh - ??
 	INX			; E4A9  $E8
-	BEQ BFE4CD		; E4AA  $F0 $21		branch if data is F9h
+	BEQ BFE4CD		; E4AA  $F0 $21		branch if data is F9h - Set Number
 	INX			; E4AC  $E8
-	BEQ BFE4E2		; E4AD  $F0 $33		F8h
+	BEQ BFE4E2		; E4AD  $F0 $33		branch if data is F8h - 4 digit Number (Universe century)
 	INX			; E4AF  $E8
-	BEQ BFE4FF		; E4B0  $F0 $4D		F7h
+	BEQ BFE4FF		; E4B0  $F0 $4D		branch if data is F7h - 2 digit Number (Month)
 	INX			; E4B2  $E8
-	BEQ BFE50E		; E4B3  $F0 $59		F6h
+	BEQ BFE50E		; E4B3  $F0 $59		branch if data is F6h - Team color
 	INX			; E4B5  $E8
-	BEQ BFE516		; E4B6  $F0 $5E		branch if data is F5h
+	BEQ BFE516		; E4B6  $F0 $5E		branch if data is F5h - Pilot full name
 	INX			; E4B8  $E8
-	BEQ BFE51B		; E4B9  $F0 $60		F4h
+	BEQ BFE51B		; E4B9  $F0 $60		branch if data is F4h - Set Number
 	INX			; E4BB  $E8
-	BEQ BFE527		; E4BC  $F0 $69		F3h
+	BEQ BFE527		; E4BC  $F0 $69		branch if data is F3h - ??
 	LDA #$00		; E4BE  $A9 $00		End of string is NULL
 	STA $D1			; E4C0  $85 $D1
 	RTS			; E4C2  $60
 
 BFE4C3:
-.byte $a5,$af,$10,$03
+	LDA $AF			; E4C3	$A5 $AF
+	BPL BFE4CA		; ECC5	$10 $03
 BFE4C7:
-.byte $ad,$13,$62,$4c,$5c,$c5
+	LDA $6213		; E4C7	$AD $13 $62
+BFE4CA:
+	JMP $C55C		; E4CA	$4C $5C $C5
+
 BFE4CD:
-.byte $a5,$ab,$10
-.byte $02
+	LDA $AB			; E4CD	$A5 $AB
+	BPL BFE4D3		; E4CE	$10 $02
 BFE4D1:
-.byte $a5,$93,$18,$69,$31,$85,$d1,$a9,$00,$85,$d2,$60
+	LDA $93			; E4D1	$A5 $93
+BFE4D3:
+	CLC			; E4D3	$18
+	ADC #$31		; E4D4	$69 $31
+	STA $D1			; E4D6	$85 $D1
+	LDA #$00		; E4D8	$A9 $00
+	STA $D2			; ED4A	$85 $d2
+	RTS			; ED4C	$60
+
 BFE4DD:
-.byte $a5,$a6,$4c
-.byte $8c,$c5
+	LDA $A6			; ED4D	$A5 $A6
+	JMP $C58C		; ED4F	$4C $8C $C5
+
 BFE4E2:
-.byte $ad,$14,$62,$85,$18,$ad,$15,$62,$85,$19,$20,$8a,$f8,$a0
-.byte $03,$b9,$51,$04,$99,$d1,$00,$88,$10,$f7,$a9,$00,$85,$d5,$60
+	LDA $6214		; E4E2	$AD $14 $62
+	STA $18			; E4E5	$85 $18
+	LDA $6215		; E4E7	$AD $15 $62
+	STA $19			; E4EA	$85 $19
+	JSR $F88A		; E4EC	$20 $8A $F8
+	LDY #$03		; E4EF	$A0 $03
+BFE4F1:
+	LDA $0451,Y		; E4F1	$B9 $51 $04
+	STA $00D1,Y		; E4F4	$99 $D1 $00
+	DEY			; E4F7	$88
+	BPL BFE4F1		; E4F8	$10 $F7
+	LDA #$00		; E4FA	$A9 $00
+	STA $D5			; E4FC	$85 $D5
+	RTS			; E4FE	$60
+
 BFE4FF:
-.byte $ad
-;$E500
-.byte $16,$62,$20,$d4,$f8,$86,$d1,$84,$d2,$a9,$00,$85,$d3,$60
+	LDA $6216		; E4FF	$AD $16 $62
+	JSR $F8D4		; E502	$20 $D4 $F8
+	STX $D1			; E505	$86 $D1
+	STY $D2			; E507	$84 $D2
+	LDA #$00		; E509	$A9 $00
+	STA $D3			; E50B	$85 $D3
+	RTS			; E50D	$60
+
 BFE50E:
 	LDA $95			; E50E  $A5 $95
 	CLC			; E510  $18
@@ -215,7 +246,11 @@ BFE51B:
 	RTS			; E526  $60
 
 BFE527:
-.byte $a5,$a5,$4c,$8c,$c5,$90,$01,$60
+	LDA $A5			; E527	$A5 $A5
+	JMP $C58C		; E529	$4C $8C $C5
+
+;$E52C
+.byte $90,$01,$60
 
 ; Name	:
 	LDA $6211		; E52F  $AD $11 $62

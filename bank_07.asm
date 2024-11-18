@@ -101,6 +101,8 @@ B7A0C7:
 
 ;$A0E3 - data block = string table, 00h-7Fh : fixed word, 80h-FFh : variable word
 .byte $f6,$03,$f5,$04,$fe,$21,$0b,$0d,$fe,$1f,$f4,$20,$ff
+
+;$A0F0
 .byte $bd,$23,$f9,$85,$00,$a6,$95,$bd,$19,$62,$aa,$bd,$1a,$f9,$18,$65
 ;$A100
 .byte $00,$85,$96,$a9,$14,$85,$14,$a9,$a1,$85,$15,$c6,$95
@@ -113,8 +115,10 @@ B7A0C7:
 ;	JSR $E438		; A10D
 .byte $20,$38,$e4
 .byte $20,$2f,$e5,$60
+
 ;$A114 - data block = string table
 .byte $f6,$03,$f5,$03,$fe,$22,$04,$23,$ff
+
 ;$A11D
 .byte $bd,$23,$f9
 .byte $85,$00,$a6,$95,$bd,$19,$62,$aa,$bd,$1a,$f9,$18,$65,$00,$85,$96

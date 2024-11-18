@@ -726,7 +726,7 @@ BEC54C:
 	LDA #$1C		; C561  A9 1C          
 	STA $10			; C563  85 10          
 	LDA #$9C		; C565  A9 9C          
-	STA $11			; C567  85 11		$10+ = $9C1C
+	STA $11			; C567  85 11		BANK 08/9C1C - team color
 	JMP $C5D5		; C569  4C D5 C5       
 
 ; Name	:
@@ -737,8 +737,8 @@ BEC54C:
 	LDA #$31		; C571  A9 31          
 	STA $10			; C573  85 10          
 	LDA #$9C		; C575  A9 9C          
-	STA $11			; C577  85 11		$10+ = $9C31
-	JMP $C5D5		; C579  4C D5 C5       
+	STA $11			; C577  85 11		BANK 08/9C31 - Fleet number
+	JMP $C5D5		; C579  4C D5 C5	BANK SWAP PRG_ROM to previous
 
 ; Name	:
 ; Marks	: Load UNIT NAME ??
@@ -750,7 +750,7 @@ BEC54C:
 	STA $10			; C583  85 10          
 	LDA #$99		; C585  A9 99          
 	STA $11			; C587  85 11		BANK 08 08/9991
-	JMP $C5D5		; C589  4C D5 C5       
+	JMP $C5D5		; C589  4C D5 C5	BANK SWAP PRG_ROM to previous
 
 ; Name	:
 ; A	: City number to get

@@ -49,15 +49,17 @@ void Swap_updown(unsigned char *bmp);
 void Convert_tile(unsigned char *bmp, unsigned char *tile_map, int tileX, int tileY, unsigned char *checkRom, int use);
 void Write_tile_to_bmp(unsigned char *bmp, unsigned char *tile_map, unsigned char tileNum, int x, int y);
 void Decompress_tile(unsigned char *bmp, unsigned char *tile_map, unsigned char *checkRom);
+void Decompress_long_tile(unsigned char *bmp, unsigned char *tile_map, unsigned char *checkRom, unsigned char* stringTable, int useTable);
 void Decompress_side_tile(unsigned char *bmp, unsigned char *tile_map, int tileX, int tileY, unsigned char *checkRom, int useTable);
 void ShowTilemap(unsigned char *bmp, unsigned char *tile_map);
+unsigned char* SearchStringTable(unsigned char *stringTable, int num);
 
 
 
 
 
 int main(int argc, char** argv){
-	int fd;
+	FILE *fd;
 	int i;
 	int tileX, tileY;
 	int tileA, tileA1, tileA2, tileA3;
@@ -67,9 +69,11 @@ int main(int argc, char** argv){
 	char fileName[256];
 	unsigned char tile_map[8*2*256];
 	unsigned char rom[8*2*256*8];
+	unsigned char stringTable[256*8];
 	int useTable;
 	int useDecode2;
 	int showOriginalTilemap;
+	int largeDecode;
 
 	printf("%s %s\n", argv[0], VERSION);
 
@@ -88,6 +92,7 @@ int main(int argc, char** argv){
 	memset(fileName, 0, 256);
 	useTable = -1;
 	showOriginalTilemap = -1;
+	largeDecode = 0;
 	
 	// Check mode
 	for(i=1;i<argc;i++){
@@ -135,6 +140,10 @@ int main(int argc, char** argv){
 		if(strcmp(argv[i], "-o") == 0){
 			showOriginalTilemap = 1;
 		}
+		if(strcmp(argv[i], "-l") == 0){
+			i++;
+			largeDecode = atoi(argv[i]);
+		}
 	}
 	
 	if(tileX == -1){
@@ -158,35 +167,40 @@ int main(int argc, char** argv){
 	printf("input file name =%s (check address = %xh)\n", fileName, checkA);
 
 	// File open
-	fd = open(fileName, O_RDWR);
-	if(fd <= 0){
+	fd = fopen(fileName, "rb");
+	if(fd == NULL){
 		printf("File open failed! [%s] %d\n", fileName, fd);
-		return fd;
+		return -EINVAL;
 	}
 
-	lseek(fd, tileA, SEEK_SET);
+	fseek(fd, tileA, SEEK_SET);
 
 	// Read file (tile map)
 	//read(fd, tile_map, 8*2*16*16);
-	read(fd, tile_map, 0x400);
+	fread(tile_map, 1, 0x400, fd);
 	
 	// 0x0400-0x07FF
-	lseek(fd, tileA1, SEEK_SET);
-	read(fd, &tile_map[0x400], 0x400);
+	fseek(fd, tileA1, SEEK_SET);
+	fread(&tile_map[0x400], 1, 0x400, fd);
 
 	// 0x0800-0x0BFF	
-	lseek(fd, tileA2, SEEK_SET);
-	read(fd, &tile_map[0x800], 0x400);
+	fseek(fd, tileA2, SEEK_SET);
+	fread(&tile_map[0x800], 1, 0x400, fd);
 
 	// 0x0C00-0x0FFF	
-	lseek(fd, tileA3, SEEK_SET);
-	read(fd, &tile_map[0xC00], 0x400);
+	fseek(fd, tileA3, SEEK_SET);
+	fread(&tile_map[0xC00], 1, 0x400, fd);
 	
 	// Read file (strings)
-	lseek(fd, checkA, SEEK_SET);
-	read(fd, rom, 8*2*tileX*tileY);
+	fseek(fd, checkA, SEEK_SET);
+	fread(rom, 1, 8*2*tileX*tileY, fd);
 	
-	close(fd);
+	if(largeDecode){
+		fseek(fd, largeDecode, SEEK_SET);
+		fread(stringTable, 1, 256*8, fd);
+	}
+	
+	fclose(fd);
 	
 	
 
@@ -198,6 +212,8 @@ int main(int argc, char** argv){
 		Decompress_side_tile(bmp, tile_map, tileX, tileY, rom, useTable);
 	}else if(useTable == 2){
 		Decompress_tile(bmp, tile_map, rom);
+	}else if(largeDecode){
+		Decompress_long_tile(bmp, tile_map, rom, stringTable, useTable);
 	}else{
 		Convert_tile(bmp, tile_map, tileX, tileY, rom, useTable);
 	}
@@ -226,6 +242,7 @@ void Show_how_to_use(void){
 		printf(" -t : use table(option)\n");
 		printf(" -d : decompress(option))\n");
 		printf(" -e : decompress side screen(option))\n");
+		printf(" -l : decompress large message screen(option))\n");
 		printf(" -o : show original tilemap(option)");
 		printf("Output file name is [addr+time+seq.bmp]\n");
 		printf(" 320x280 size\n");
@@ -429,9 +446,8 @@ void Write_tile_to_bmp(unsigned char *bmp, unsigned char *tile_map, unsigned cha
 }
 
 void Decompress_tile(unsigned char *bmp, unsigned char *tile_map, unsigned char *checkRom){
-	unsigned char r, g, b;
-	unsigned char lbyte, rbyte, tileNum, tileA, tileB;
-	int x, y, k, i;
+	unsigned char tileNum, tileA, tileB;
+	int x, y, i;
 	int tile_count = 0;
 	int text_count;
 	
@@ -505,6 +521,145 @@ void Decompress_tile(unsigned char *bmp, unsigned char *tile_map, unsigned char 
 	}
 }
 
+void Decompress_long_tile(unsigned char *bmp, unsigned char *tile_map, unsigned char *checkRom, unsigned char* stringTable, int useTable){
+	int tile_count = 0;
+	int x, y, i;
+	unsigned char tileNum;
+	unsigned char *string;
+
+	x = 0;
+	y = 0;
+
+#define	MK_SP	0x64
+
+	while(tile_count < (32*32)){
+		tileNum = checkRom[tile_count++];
+//printf("tileNum =%02x\n", tileNum);
+		if(tileNum < 0x80){		// Normal character
+			if(tileNum > 42){
+				break;
+			}
+			string = SearchStringTable(stringTable, tileNum);
+			i = 0;
+			while(string[i] != 0x00 && tile_count < (32*32)){
+				//printf("%02xh ", string[i]);
+				if(useTable == 1){
+					tileNum = table[string[i++]];
+				}else{
+					tileNum = string[i++];
+				}
+				Write_tile_to_bmp(bmp, tile_map, tileNum, x, y);
+				x++;
+				if(x >= 32){
+					x = 0;
+					y++;
+				}
+				//tile_count++;
+			}
+			continue;
+		}else{					// Special character
+			if(tileNum == 0xFF){		// End of string
+				break;
+			}else if(tileNum == 0xFE){	// Next line
+				x = 0;
+				y++;
+				continue;
+			}else if(tileNum == 0xFE){	//
+				Write_tile_to_bmp(bmp, tile_map, MK_SP, x++, y);
+				if(x >= 32){
+					x = 0;
+					y++;
+				}
+				Write_tile_to_bmp(bmp, tile_map, 0xB1, x, y);
+			}else if(tileNum == 0xFD){	//
+				Write_tile_to_bmp(bmp, tile_map, MK_SP, x++, y);
+				if(x >= 32){
+					x = 0;
+					y++;
+				}
+				Write_tile_to_bmp(bmp, tile_map, 0xB3, x, y);
+			}else if(tileNum == 0xFC){	//
+				Write_tile_to_bmp(bmp, tile_map, MK_SP, x++, y);
+				if(x >= 32){
+					x = 0;
+					y++;
+				}
+				Write_tile_to_bmp(bmp, tile_map, 0x51, x, y);
+			}else if(tileNum == 0xFB){	//
+				Write_tile_to_bmp(bmp, tile_map, MK_SP, x++, y);
+				if(x >= 32){
+					x = 0;
+					y++;
+				}
+				Write_tile_to_bmp(bmp, tile_map, 0xF5, x, y);
+			}else if(tileNum == 0xFA){	//
+				Write_tile_to_bmp(bmp, tile_map, MK_SP, x++, y);
+				if(x >= 32){
+					x = 0;
+					y++;
+				}
+				Write_tile_to_bmp(bmp, tile_map, 0x50, x, y);
+			}else if(tileNum == 0xF9){	//
+				Write_tile_to_bmp(bmp, tile_map, MK_SP, x++, y);
+				if(x >= 32){
+					x = 0;
+					y++;
+				}
+				Write_tile_to_bmp(bmp, tile_map, 0x4A, x, y);
+			}else if(tileNum == 0xF8){	//
+				Write_tile_to_bmp(bmp, tile_map, MK_SP, x++, y);
+				if(x >= 32){
+					x = 0;
+					y++;
+				}
+				Write_tile_to_bmp(bmp, tile_map, 0x49, x, y);
+			}else if(tileNum == 0xF7){	//
+				Write_tile_to_bmp(bmp, tile_map, MK_SP, x++, y);
+				if(x >= 32){
+					x = 0;
+					y++;
+				}
+				Write_tile_to_bmp(bmp, tile_map, 0x48, x, y);
+			}else if(tileNum == 0xF6){	//
+				Write_tile_to_bmp(bmp, tile_map, MK_SP, x++, y);
+				if(x >= 32){
+					x = 0;
+					y++;
+				}
+				Write_tile_to_bmp(bmp, tile_map, 0x47, x, y);
+			}else if(tileNum == 0xF5){	// Pilot full name
+				Write_tile_to_bmp(bmp, tile_map, MK_SP, x++, y);
+				if(x >= 32){
+					x = 0;
+					y++;
+				}
+				Write_tile_to_bmp(bmp, tile_map, 0x46, x, y);
+			}else if(tileNum == 0xF4){	//
+				Write_tile_to_bmp(bmp, tile_map, MK_SP, x++, y);
+				if(x >= 32){
+					x = 0;
+					y++;
+				}
+				Write_tile_to_bmp(bmp, tile_map, 0x45, x, y);
+			}else if(tileNum == 0xF3){	//
+				Write_tile_to_bmp(bmp, tile_map, MK_SP, x++, y);
+				if(x >= 32){
+					x = 0;
+					y++;
+				}
+				Write_tile_to_bmp(bmp, tile_map, 0x43, x, y);
+			}else{						// NULL
+				Write_tile_to_bmp(bmp, tile_map, 0x00, x, y);
+			}
+		}
+		x++;
+		if(x >= 32){
+			x = 0;
+			y++;
+		}
+	}
+}
+
 void Decompress_side_tile(unsigned char *bmp, unsigned char *tile_map, int tileX, int tileY, unsigned char *checkRom, int useTable){
 	unsigned char r, g, b;
 	unsigned char lbyte, rbyte, tileNum, tileA, tileB;
@@ -523,7 +678,7 @@ void Decompress_side_tile(unsigned char *bmp, unsigned char *tile_map, int tileX
 		temp[i] = 0x62;
 	}
 	
-	printf("ADDR = %02x,%02x\n", checkRom[0], checkRom[1]);
+	//printf("ADDR = %02x,%02x\n", checkRom[0], checkRom[1]);
 	
 	while(tile_count < 0x100){
 		tileNum = checkRom[tile_count++];
@@ -616,6 +771,27 @@ void ShowTilemap(unsigned char *bmp, unsigned char *tile_map){
 	for(y=0;y<16;y++){
 		for(x=0;x<16;x++){
 			Write_tile_to_bmp(bmp, tile_map, tileNum++, x, y);
+		}
+	}
+}
+
+unsigned char* SearchStringTable(unsigned char *stringTable, int num){
+	int count = 0;
+	int match_count = 0;
+	
+	if(num == 0){
+		return stringTable;
+	}
+
+	while(count < 512){
+		//printf("%02x,", stringTable[count]);
+		if(stringTable[count] == 0x00){
+			match_count++;
+		}
+		count++;
+		if(match_count == num){
+			//printf("return num=%d\n", num);
+			return &stringTable[count];
 		}
 	}
 }
