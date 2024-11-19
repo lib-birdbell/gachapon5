@@ -435,10 +435,19 @@
 .byte $05,$00,$00,$00,$00
 ;($9835-$9876 : 41 bytes - 10 names) - data block = UNION NAME
 ;$9835 0> ªÁªåª¦ªêªÄ neutrality
+.if ORIGINAL
 .byte $81,$6d,$73,$98,$82,$00
+.else
+.byte B_ME,B_JOEM,B_RYUNG,$98,$82,$00
+.endif
 ;$983B 1> ªìªóªÝª¦ federation
+.if ORIGINAL
 .byte $9a,$9d,$8e,$df,$73
 .byte $00
+.else
+.byte B_YOU,B_NEE,B_ON,$df,$73
+.byte $00
+.endif
 ;$9841 2> 
 .byte $bc,$de,$b5,$dd,$00
 ;$9846 3>

@@ -2460,7 +2460,11 @@ BFF8C2:
 
 ; Name	:
 	JSR $F88A		; F8C3  $20 $8A $F8
+.if ORIGINAL
 	LDA #$30		; F8C6  $A9 $30
+.else
+	LDA #$41
+.endif
 	STA $0455		; F8C8  $8D $55 $04
 	CLC			; F8CB  $18
 	ADC $00			; F8CC  $65 $00

@@ -390,8 +390,9 @@ BEC291:
 .byte $00,$03,$01,$e0,$02,$e1,$03,$e2,$04,$e3,$0f,$e4,$10,$e5,$11,$e6
 .byte $12,$e7,$1a,$e9,$33,$cc,$34,$aa,$35,$b2,$36,$bd,$28,$de,$ff
 .else
-.byte $00,$03,$01,T_4,$02,T_3,$03,T_2,$04,T_1,$0f,$e4,$10,$e5,$11,$e6
-.byte $12,$e7,$1a,T_9,$33,T_5,$34,T_6,$35,T_7,$36,T_8,$28,T_0,$ff
+.byte $00,$03,$01,T_4,$02,T_3,$03,T_2,$04,T_1,$0f,B_WU,$10,B_JU,$11,B_SAE
+.byte $12,B_GI,$1a,B_WOL,$36,B_TURN,$47,B_DO,$48,B_SI,$49,B_LL,$4B,B_GO
+.byte $ff
 .endif
 
 ; Name	:
@@ -403,7 +404,7 @@ BEC291:
 	JSR $F95F		; C2F6  20 5F F9	Write tile buffer to upper textbox line
 	LDA #$65		; C2F9  A9 65          
 	LDY #$C3		; C2FB  A0 C3		0E/C365
-	JSR $FB09		; C2FD  20 09 FB       
+	JSR $FB09		; C2FD  20 09 FB	Draw 14 x 6 screen
 	LDX $6213		; C300  AE 13 62       
 	LDA $6222,X		; C303  BD 22 62       
 	STA $18			; C306  85 18          
@@ -448,9 +449,15 @@ BEC33A:
 	JMP $F570		; C362  4C 70 F5       
 
 ;$C365 - data block = 자금 수입 도시 부대 screen (14 x 6)
+.if ORIGINAL
 .byte $00,$03,$0f,$75,$10,$e8,$1a,$5c,$36,$5c,$2b
 .byte $ea,$2c,$eb,$47,$84,$48,$7c,$49,$3a,$4e,$8c,$4f,$80,$50,$72,$40
 .byte $de,$51,$3a,$ff
+.else
+.byte $00,$03,$0f,B_YOU,$10,B_JI,$1a,B_USD,$36,B_USD,$2b
+.byte B_SOO,$2c,B_IP,$47,B_DO,$48,B_SI,$49,B_COLON,$4e,B_BOO,$4f,B_DAE,$50,B_COLON
+.byte $11,B_BI,$ff,$3a,$ff
+.endif
 
 ; Name	:
 	JSR $C4DD		; C384  20 DD C4       
