@@ -34,7 +34,10 @@ echo "Team color"
 tileview.exe -x 32 -y 16 %TILE_ADDR_ALL% -c 72748 -i %ROM_FILE_NAME% -t
 echo "Fleet 1 2 3 4"
 tileview.exe -x 32 -y 16 %TILE_ADDR_ALL% -c 72769 -i %ROM_FILE_NAME% -t
-echo "Down panel"
+echo "Base panel ( 14 x 6 )"
+tileview.exe -x 14 -y 6 %TILE_ADDR_ALL% -c 115424 -i %ROM_FILE_NAME% -e -t
+tileview.exe -x 14 -y 6 %TILE_ADDR_ALL% -c 115573 -i %ROM_FILE_NAME% -e -t
+echo "Down panel ( 14 x 4 )"
 tileview.exe -x 14 -y 24 %TILE_ADDR_ALL% -c 49168 -i %ROM_FILE_NAME% -t
 tileview.exe -x 14 -y 24 %TILE_ADDR_ALL% -c 49504 -i %ROM_FILE_NAME% -t
 tileview.exe -x 14 -y 24 %TILE_ADDR_ALL% -c 49840 -i %ROM_FILE_NAME% -t

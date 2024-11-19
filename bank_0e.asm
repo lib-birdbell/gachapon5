@@ -384,7 +384,7 @@ BEC291:
 	JSR $F420		; C2CA  20 20 F4       
 	JMP $FAF0		; C2CD  4C F0 FA       
 
-;$C2D0 - data block = compressed data : 우주세기 월 페이즈
+;$C2D0 - data block = compressed data : 우주세기 월 페이즈 (14 x 4)
 ; $00,$03 is address
 .if ORIGINAL
 .byte $00,$03,$01,$e0,$02,$e1,$03,$e2,$04,$e3,$0f,$e4,$10,$e5,$11,$e6
@@ -447,7 +447,7 @@ BEC33A:
 	PLA			; C361  68             
 	JMP $F570		; C362  4C 70 F5       
 
-;$C365 - data block = 자금 수입 도시 부대 screen
+;$C365 - data block = 자금 수입 도시 부대 screen (14 x 6)
 .byte $00,$03,$0f,$75,$10,$e8,$1a,$5c,$36,$5c,$2b
 .byte $ea,$2c,$eb,$47,$84,$48,$7c,$49,$3a,$4e,$8c,$4f,$80,$50,$72,$40
 .byte $de,$51,$3a,$ff
