@@ -270,7 +270,9 @@ BC8203:
 	RTS			; 8203  60             
 
 ;$8204 - data block =
-.byte $d4,$84,$18,$82,$0a,$70,$18,$72,$26,$74,$34,$76
+.byte $d4,$84,$18,$82
+;$8208 - data block = (some address ??)
+.byte $0a,$70,$18,$72,$26,$74,$34,$76
 ;$8210 - data block = 2 bytes each (some address ??)
 .byte $14,$72
 .byte $22,$74
@@ -418,7 +420,7 @@ BC8300:
 .byte $73,$9c,$76,$77,$7c,$8f,$7d,$76,$3f,$20,$20,$20
 .else
 .byte $40,$40,B_EE,B_JEON,$40,B_RAE,B_CO,B_D_E,B_LL,$40,$40,$40,$40,$40
-.byte $40,$40,B_JI,B_WOOL,B_GUN,B_GA,B_OH,B_QST,$40,$40,$40,$40,$40,$40
+.byte $40,$40,B_OH,B_BA,B_RA,B_EE,B_T_E,$40,B_HAP,B_NEE,B_DA,B_DOT,$40,$40
 .endif
 
 ; Name	:
@@ -492,6 +494,7 @@ BC83C0:
 	JSR $F8D4		; 83CD  20 D4 F8       
 	STX $032F		; 83D0  8E 2F 03       
 	STY $0330		; 83D3  8C 30 03       
+.if ORIGINAL
 	LDA #$BC		; 83D6  A9 BC          
 	STA $030E		; 83D8  8D 0E 03       
 	LDA #$C5		; 83DB  A9 C5          
@@ -501,6 +504,17 @@ BC83C0:
 	LDA #$B5		; 83E5  A9 B5          
 	STA $0311		; 83E7  8D 11 03       
 	LDA #$E9		; 83EA  A9 E9          
+.else
+	LDA #B_SI		; 83D6  A9 BC          
+	STA $030E		; 83D8  8D 0E 03       
+	LDA #B_NA		; 83DB  A9 C5          
+	STA $030F		; 83DD  8D 0F 03       
+	LDA #B_RI		; 83E0  A9 D8          
+	STA $0310		; 83E2  8D 10 03       
+	LDA #B_OH		; 83E5  A9 B5          
+	STA $0311		; 83E7  8D 11 03       
+	LDA #B_WOL
+.endif
 	STA $0331		; 83EC  8D 31 03       
 	LDA #$01		; 83EF  A9 01          
 	STA $9B			; 83F1  85 9B          
@@ -668,7 +682,11 @@ BC851D:
 	JSR $F99F		; 8545  20 9F F9       
 	LDA $90			; 8548  A5 90          
 	CLC			; 854A  18             
-	ADC #$31		; 854B  69 31          
+.if ORIGINAL
+	ADC #$31		; 854B  69 31		Load Record number
+.else
+	ADC #$42
+.endif
 	STA $0318		; 854D  8D 18 03       
 	JSR $F9C6		; 8550  20 C6 F9       
 	JSR $F98D		; 8553  20 8D F9       
@@ -708,10 +726,15 @@ BC858B:
 	TXS			; 8594  9A             
 	JMP $C003		; 8595  4C 03 C0       
 
-;$8598 - data block =
+;$8598 - data block = string 14 x 2
+.if ORIGINAL
 .byte $20,$20,$20,$20,$de,$20,$20,$20
 .byte $20,$20,$20,$20,$20,$20,$20,$20,$db,$b0,$c4,$7c,$8f,$7d,$20,$20
 .byte $20,$20,$20,$20
+.else
+.byte $40,$40,$40,$40,$40,$40,$40,$40,$40,$40,$40,$40,$40,$40
+.byte $40,$40,B_RO,B_D_E,B_HAP,B_NEE,B_DA,B_DOT,$40,$40,$40,$40,$40,$40
+.endif
 
 ; Name	:
 	LDA $91			; 85B4  A5 91          
@@ -2116,7 +2139,7 @@ BC92F6:
 BC930F:
 .byte $a9
 .byte $2a,$a0,$93,$20,$09,$fb,$60
-;$9317 - data block = text box
+;$9317 - data block = text box string
 .if ORIGINAL
 .byte $00,$03,$00,$61,$07,$63,$08,$47,$0f
 .byte $48,$10,$47,$17,$48,$18,$65,$1f,$66,$ff
