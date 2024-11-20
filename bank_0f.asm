@@ -2355,6 +2355,8 @@ BFF7FE:
 .byte $38,$60
 
 ; Name	:
+; Marks	: Return $16
+;	  Get last decimal - from $18 $19 $1A $1B ??
 	STA $18			; F800  $85 $18
 	LDA #$0A		; F802  $A9 $0A
 	STA $16			; F804  $85 $16
@@ -2362,6 +2364,7 @@ BFF7FE:
 	STA $19			; F808  $85 $19
 	STA $17			; F80A  $85 $17
 ; Name	:
+; Marks	: Input $16, $17
 	LDA $16			; F80C  $A5 $16
 	ORA $17			; F80E  $05 $17
 	BEQ BFF845		; F810  $F0 $33
@@ -2437,6 +2440,8 @@ BFF891:
 	PLA			; F8AB  $68
 	STA $05			; F8AC  $85 $05
 	RTS			; F8AE  $60
+
+; Marks	: Make blank in front of number
 	LDX #$00		; F8AF  $A2 $00
 BFF8B1:
 	LDA $0450,X		; F8B1  $BD $50 $04
@@ -2461,7 +2466,7 @@ BFF8C2:
 ; Name	:
 	JSR $F88A		; F8C3  $20 $8A $F8
 .if ORIGINAL
-	LDA #$30		; F8C6  $A9 $30
+	LDA #$30		; F8C6  $A9 $30		Add 0 (value x10)
 .else
 	LDA #$41
 .endif
@@ -2474,6 +2479,7 @@ BFF8C2:
 ; Name	:
 ; A	:
 ; Marks	: Set decimal to ascii ??
+;	  ex> 02h -> 20h:Empty(A) 20h:Empty(X) 32h:ASCII NUMBER 2(Y)
 ; Ret	: X =, Y =
 	STA $18			; F8D4  $85 $18
 	LDA #$00		; F8D6  $A9 $00
@@ -2651,10 +2657,11 @@ BFF9D6:
 .byte $b7,$b8,$b9,$bb,$6e,$6f,$7a,$7b,$7c,$7d,$7e,$7f,$34,$ff,$ff,$ff
 
 ; Name	:
+; Marks	: Draw textbox bottom panel
 	JSR $F99F		; FAED	$20 $9f $f9
 ; Name	:
-	JSR $F9C6		; FAF0	$20 $c6 $f9
-	JSR $F98D		; FAF3	$20 $8d $f9
+	JSR $F9C6		; FAF0	$20 $c6 $f9	Set +$10 = $0300, X=54h, Y=0h
+	JSR $F98D		; FAF3	$20 $8d $f9	Set +$2A = $0300
 	LDA #$06		; FAF6	$a9 $06
 	JMP $F4DA		; FAF8	$4c $da $f4
 

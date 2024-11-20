@@ -26,9 +26,16 @@ $450-	= Guard Gauge temp buffer
 
 $6211	= ??
 
+$6213	= Current team number(1-4)
+
+;ex> $622A = 1h, $6226 = 08h, $6222 = 70h -> 0870h = 2160d + 1d(x10000) -> 12160d
+$6222-5	= Team funds money Low byte
+$6226-9	= Team funds money High byte
+$622A-D	= Team funds money Very high byte(x10000 digit)
+
 $621A-	= ??
-$6247-	= ??
-$62A3-	= ??
+$6247-	= military camp number ??
+$62A3-$62B8	= CITY owner ?? (21 city)
 $62B9-	= ??
 
 $6331-	= NT

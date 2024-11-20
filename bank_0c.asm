@@ -271,7 +271,11 @@ BC8203:
 
 ;$8204 - data block =
 .byte $d4,$84,$18,$82,$0a,$70,$18,$72,$26,$74,$34,$76
-.byte $14,$72,$22,$74,$30,$76,$3e,$78
+;$8210 - data block = 2 bytes each (some address ??)
+.byte $14,$72
+.byte $22,$74
+.byte $30,$76
+.byte $3e,$78
 
 	JSR $F3C8		; 8218  20 C8 F3       
 	JSR $F3D4		; 821B  20 D4 F3       
@@ -285,7 +289,7 @@ BC8203:
 	STA $10			; 822C  85 10          
 	LDA #$81		; 822E  A9 81          
 	STA $11			; 8230  85 11          
-	JSR $FAED		; 8232  20 ED FA       
+	JSR $FAED		; 8232  20 ED FA	Draw FILE(Record) textbox bottom panel ??
 	JSR $8007		; 8235  20 07 80       
 	LDA $90			; 8238  A5 90          
 	BMI BC82B4		; 823A  30 78          
@@ -304,7 +308,7 @@ BC8203:
 	STA $19			; 8255  85 19          
 	LDA #$00		; 8257  A9 00          
 	STA $91			; 8259  85 91          
-	LDX $9B			; 825B  A6 9B          
+	LDX $9B			; 825B  A6 9B		0h = Save file not exist, 1h = Save file exist
 	LDA $8310,X		; 825D  BD 10 83       
 	STA $10			; 8260  85 10          
 	LDA $8312,X		; 8262  BD 12 83       
@@ -334,7 +338,11 @@ BC826B:
 	JSR $F99F		; 8293  20 9F F9       
 	LDA $90			; 8296  A5 90          
 	CLC			; 8298  18             
-	ADC #$31		; 8299  69 31          
+.if ORIGINAL
+	ADC #$31		; 8299  69 31		SAVE FILE number(Record number)
+.else
+	ADC #$42
+.endif
 	STA $0318		; 829B  8D 18 03       
 	JSR $F9C6		; 829E  20 C6 F9       
 	JSR $F98D		; 82A1  20 8D F9       
@@ -393,11 +401,25 @@ BC8300:
 	STA $90			; 830B  85 90          
 	JMP $8222		; 830D  4C 22 82       
 
-;$8310 - data block =
-.byte $14,$30,$83,$83,$20,$20,$20,$20,$de,$20,$20,$20,$20,$20,$20,$20
+;$8310 - data block = 2bytes each (address $8314, $8330)
+.byte $14,$30			; low byte
+.byte $83,$83			; high byte
+;$8314 - data block = 14 x 2 text string
+.if ORIGINAL
+.byte $20,$20,$20,$20,$de,$20,$20,$20,$20,$20,$20,$20
 .byte $20,$20,$20,$20,$be,$b0,$cc,$a6,$75,$7a,$85,$72,$8f,$7d,$20,$20
+.else
+.byte $40,$40,$40,$40,$40,$40,$40,$40,$40,$40,$40,$40,$40,$40
+.byte $40,$40,B_SAE,B_EE,B_B_E,B_LL,$40,B_HAP,B_NEE,B_DA,B_DOT,$40,$40,$40
+.endif
+;$8330 - datat block = 14 x 2 text string
+.if ORIGINAL
 .byte $20,$20,$20,$20,$de,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20
 .byte $73,$9c,$76,$77,$7c,$8f,$7d,$76,$3f,$20,$20,$20
+.else
+.byte $40,$40,B_EE,B_JEON,$40,B_RAE,B_CO,B_D_E,B_LL,$40,$40,$40,$40,$40
+.byte $40,$40,B_JI,B_WOOL,B_GUN,B_GA,B_OH,B_QST,$40,$40,$40,$40,$40,$40
+.endif
 
 ; Name	:
 	LDA $91			; 834C  A5 91          
@@ -415,7 +437,7 @@ BC8355:
 	RTS			; 8363  60             
 
 BC8364:
-	JSR $F95F		; 8364  20 5F F9       
+	JSR $F95F		; 8364  20 5F F9	Draw textbox top line (bottom panel)
 	LDA $90			; 8367  A5 90          
 	ASL A			; 8369  0A             
 	TAX			; 836A  AA             
@@ -493,8 +515,12 @@ BC83C0:
 	STA $10			; 8400  85 10          
 	RTS			; 8402  60             
 
-;$8403 - data block =
+;$8403 - data block = There is no FILE(Record)
+.if ORIGINAL
 .byte $77,$9b,$78,$7b,$9a,$83,$72,$8f,$7e,$9d
+.else
+.byte B_RAE,B_CO,B_D_E,B_GA,B_EMPTY,B_UP,B_SEUP,B_NEE,B_DA,B_DOT
+.endif
 
 	LDA $10			; 840D  A5 10          
 	PHA			; 840F  48             
@@ -843,6 +869,10 @@ BC8696:
 	RTS                     ; 86BC  60             
 
 ; Name	:
+; Marks	: Calcurate city income ??
+;	  $045C-$045F
+;	  $0460-$0463
+;	  $0464-$0467
 	LDX #$0B		; 86BD  A2 0B          
 	LDA #$00		; 86BF  A9 00          
 BC86C1:
@@ -852,15 +882,15 @@ BC86C1:
 	LDA #$5C		; 86C7  A9 5C          
 	STA $10			; 86C9  85 10          
 	LDA #$04		; 86CB  A9 04          
-	STA $11			; 86CD  85 11          
+	STA $11			; 86CD  85 11		+$10 = $045C
 	LDA #$60		; 86CF  A9 60          
 	STA $12			; 86D1  85 12          
 	LDA #$04		; 86D3  A9 04          
-	STA $13			; 86D5  85 13          
+	STA $13			; 86D5  85 13		+$12 = $0460
 	LDA #$64		; 86D7  A9 64          
 	STA $14			; 86D9  85 14          
 	LDA #$04		; 86DB  A9 04          
-	STA $15			; 86DD  85 15          
+	STA $15			; 86DD  85 15		+$14 = $0464
 	JMP $86FA		; 86DF  4C FA 86       
 
 ; Name	:

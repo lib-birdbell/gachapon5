@@ -434,20 +434,12 @@
 .byte $05,$00,$00,$05,$05,$04,$04,$04,$0a,$01,$08,$01,$0a,$00,$09,$00
 .byte $05,$00,$00,$00,$00
 ;($9835-$9876 : 41 bytes - 10 names) - data block = UNION NAME
+.if ORIGINAL
 ;$9835 0> ªÁªåª¦ªêªÄ neutrality
-.if ORIGINAL
 .byte $81,$6d,$73,$98,$82,$00
-.else
-.byte B_ME,B_JOEM,B_RYUNG,$98,$82,$00
-.endif
 ;$983B 1> ªìªóªÝª¦ federation
-.if ORIGINAL
 .byte $9a,$9d,$8e,$df,$73
 .byte $00
-.else
-.byte B_YOU,B_NEE,B_ON,$df,$73
-.byte $00
-.endif
 ;$9841 2> 
 .byte $bc,$de,$b5,$dd,$00
 ;$9846 3>
@@ -467,6 +459,9 @@
 ;$986D 9> ªµªóª«ª·ªÆª¤ªÞª»ªó
 .byte $7b,$9d,$76
 .byte $7c,$83,$72,$8f,$7e,$9d,$00
+.else
+.include "text/8_9835_PARTY_NAME.inc"
+.endif
 ;$9877 - data block = CITY NAME A
 ;$9877 - Earth
 .byte $81,$77,$6d,$73,$00
@@ -549,12 +544,16 @@
 .byte $0f,$23,$16,$26,$0f,$13,$16,$23,$0f,$26,$19,$29,$0f,$1a,$15,$2a
 .byte $0f,$25,$19,$2a,$0f,$00,$26,$10,$0f,$27,$06,$15
 ;$9C1C - data block ($9C1C-9C48) = TEAM COLORs
+.if ORIGINAL
 .byte $81,$6d,$73,$98
 .byte $82,$00,$71,$75,$00,$71,$76,$00,$77,$72,$9b,$00,$90,$84,$de,$98
 .byte $00
 ;$9C31 - data block ($9C31-$9C48) = Fleet 1-4 string table
 .byte $76,$9d,$80,$72,$31,$00,$76,$9d,$80,$72,$32,$00,$76,$9d,$80
 .byte $72,$33,$00,$76,$9d,$80,$72,$34,$00
+.else
+.include "text/8_9C1C_TEAM_COLOR_FLEET.inc"
+.endif
 ;$9C49 -
 .byte $15,$9d,$33,$9d,$c1,$9c,$51
 .byte $9d,$1f,$9d,$3d,$9d,$e9,$9c,$5b,$9d,$29,$9d,$47,$9d,$f4,$9c,$65

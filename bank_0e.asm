@@ -390,13 +390,16 @@ BEC291:
 .byte $00,$03,$01,$e0,$02,$e1,$03,$e2,$04,$e3,$0f,$e4,$10,$e5,$11,$e6
 .byte $12,$e7,$1a,$e9,$33,$cc,$34,$aa,$35,$b2,$36,$bd,$28,$de,$ff
 .else
-.byte $00,$03,$01,T_4,$02,T_3,$03,T_2,$04,T_1,$0f,B_WU,$10,B_JU,$11,B_SAE
+.byte $00,$03,$01,T_4,$02,T_3,$03,T_2,$04,T_1,$0f,B_WU,$10,B_ZOO,$11,B_SAE
 .byte $12,B_GI,$1a,B_WOL,$36,B_TURN,$47,B_DO,$48,B_SI,$49,B_LL,$4B,B_GO
 .byte $ff
 .endif
 
 ; Name	:
 ; Marks	: $0314-$0319 is Money?? Draw right down screen ??
+;	  Set funds money for display ($18, $19, $00 temp)
+;	  $0450-$0455 is funds money / income temp
+;	  $046C-$046F is 
 	LDA $62			; C2EF  A5 62          
 	LSR A			; C2F1  4A             
 	PHA			; C2F2  48             
@@ -407,27 +410,27 @@ BEC291:
 	JSR $FB09		; C2FD  20 09 FB	Draw 14 x 6 screen
 	LDX $6213		; C300  AE 13 62       
 	LDA $6222,X		; C303  BD 22 62       
-	STA $18			; C306  85 18          
+	STA $18			; C306  85 18		Funds money low byte
 	LDA $6226,X		; C308  BD 26 62       
-	STA $19			; C30B  85 19          
+	STA $19			; C30B  85 19		Funds money high byte
 	LDA $622A,X		; C30D  BD 2A 62       
-	STA $00			; C310  85 00          
-	JSR $F8C3		; C312  20 C3 F8       
+	STA $00			; C310  85 00		Funds money very high byte
+	JSR $F8C3		; C312  20 C3 F8	Set to buffer for funds money
 	LDY #$05		; C315  A0 05          
 BEC317:
 	LDA $0450,Y		; C317  B9 50 04       
 	STA $0314,Y		; C31A  99 14 03       
 	DEY			; C31D  88             
 	BPL BEC317		; C31E  10 F7          
-	JSR $86BD		; C320  20 BD 86       
+	JSR $86BD		; C320  20 BD 86	Income money calcuration ??
 	LDX $6213		; C323  AE 13 62       
-	LDA $045B,X		; C326  BD 5B 04       
+	LDA $045B,X		; C326  BD 5B 04	Income money low byte
 	STA $18			; C329  85 18          
-	LDA $045F,X		; C32B  BD 5F 04       
-	STA $19			; C32E  85 19          
-	LDA $0463,X		; C330  BD 63 04       
+	LDA $045F,X		; C32B  BD 5F 04	Income money high byte
+	STA $19			; C32E  85 19
+	LDA $0463,X		; C330  BD 63 04	Income money very high byte
 	STA $00			; C333  85 00          
-	JSR $F8C3		; C335  20 C3 F8       
+	JSR $F8C3		; C335  20 C3 F8	Set to buffer
 	LDY #$05		; C338  A0 05          
 BEC33A:
 	LDA $0450,Y		; C33A  B9 50 04       
@@ -440,9 +443,13 @@ BEC33A:
 	STX $034A		; C34C  8E 4A 03       
 	STY $034B		; C34F  8C 4B 03       
 	LDX $6213		; C352  AE 13 62       
-	LDA $6246,X		; C355  BD 46 62       
+	LDA $6246,X		; C355  BD 46 62	Military camp
 	CLC			; C358  18             
+.if ORIGINAL
 	ADC #$30		; C359  69 30          
+.else
+	ADC #$41
+.endif
 	STA $0352		; C35B  8D 52 03       
 	JSR $FAFE		; C35E  20 FE FA       
 	PLA			; C361  68             
@@ -456,7 +463,8 @@ BEC33A:
 .else
 .byte $00,$03,$0f,B_YOU,$10,B_JI,$1a,B_USD,$36,B_USD,$2b
 .byte B_SOO,$2c,B_IP,$47,B_DO,$48,B_SI,$49,B_COLON,$4e,B_BOO,$4f,B_DAE,$50,B_COLON
-.byte $11,B_BI,$ff,$3a,$ff
+.byte $11,B_BI,$ff
+.byte $3a,$ff
 .endif
 
 ; Name	:
