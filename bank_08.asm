@@ -569,7 +569,9 @@
 .byte $1a,$1c,$20,$ff,$01,$02,$05,$06,$07,$0c,$17,$0a,$1b,$1f,$ff,$02
 ;$9D00
 .byte $0c,$0d,$0f,$13,$15,$16,$1d,$1e,$21,$ff,$03,$04,$0b,$09,$0d,$10
-.byte $14,$11,$18,$19,$ff,$2a,$2b,$2c,$2d,$2e,$2f,$ff,$ff,$ff,$ff,$2a
+.byte $14,$11,$18,$19,$ff,$2a,$2b,$2c,$2d,$2e,$2f,$ff,$ff,$ff,$ff
+;$9D1F - data block =
+.byte $2a
 .byte $2c,$2e,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$2b,$2d,$2f,$ff,$ff,$ff,$ff
 .byte $ff,$ff,$ff,$30,$31,$32,$33,$34,$35,$ff,$ff,$ff,$ff,$30,$32,$34
 .byte $ff,$ff,$ff,$ff,$ff,$ff,$ff,$31,$33,$35,$ff,$ff,$ff,$ff,$ff,$ff

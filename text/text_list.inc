@@ -99,6 +99,15 @@ B_HE	= $6B
 B_th	= $6C
 B_V	= $6D
 
+B_LUTL	= $70
+B_MUTL	= $71
+B_RUTL	= $72
+B_LDTL	= $73
+B_RDTL	= $74
+B_MDTL	= $75
+B_LTL	= $76
+B_RTL	= $77
+
 B_USD	= $79
 B_MK2_A = $7A
 B_MK2_B	= $7B
@@ -158,6 +167,10 @@ B_SO	= $AD
 B_QST	= $AE
 B_SPZ	= $AF
 
+B_I	= $B0
+B_II	= $B1
+B_III	= $B2
+B_IIII	= $B3
 B_SOO	= $B6
 
 B_SEUP	= $BC

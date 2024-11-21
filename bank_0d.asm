@@ -652,8 +652,9 @@ BDA574:
 	RTS			; A57A  60             
 
 ; Name	:
-	JSR $A671		; A57B  20 71 A6       
-	JSR $A78C		; A57E  20 8C A7       
+; Marks	: Draw panels
+	JSR $A671		; A57B  20 71 A6	Draw top panel(upgrade screen ??)
+	JSR $A78C		; A57E  20 8C A7	Draw middle panel(upgrade screen ??)
 	LDA #$00		; A581  A9 00          
 	STA $42			; A583  85 42          
 	STA $3B			; A585  85 3B          
@@ -674,8 +675,8 @@ BDA574:
 	LDA #$94		; A5A6  A9 94          
 	STA $10			; A5A8  85 10          
 	LDA #$85		; A5AA  A9 85          
-	STA $11			; A5AC  85 11          
-	JSR $FAED		; A5AE  20 ED FA       
+	STA $11			; A5AC  85 11		BANK 06/8594
+	JSR $FAED		; A5AE  20 ED FA	Draw bottom left textbox panel
 	LDA #$00		; A5B1  A9 00          
 	STA $24			; A5B3  85 24          
 	STA $8E			; A5B5  85 8E          
@@ -773,7 +774,7 @@ BDA66B:
 .byte $d8
 
 ; Name	:
-; Marks	: Draw repair screen ??
+; Marks	: Draw repair screen ?? upgrade screen ??
 	JSR $F3C8		; A671  20 C8 F3       
 	JSR $F32B		; A674  20 2B F3       
 	JSR $F536		; A677  20 36 F5       
@@ -795,20 +796,20 @@ BDA66B:
 	STA $2C			; A69F  85 2C          
 	JSR $F982		; A6A1  20 82 F9       
 	LDA #$2F		; A6A4  A9 2F          
-	LDY #$A7		; A6A6  A0 A7          
+	LDY #$A7		; A6A6  A0 A7		BANK 0D/A72F - string
 	JSR $FB09		; A6A8  20 09 FB       
 	LDA #$5A		; A6AB  A9 5A          
-	LDY #$A7		; A6AD  A0 A7          
+	LDY #$A7		; A6AD  A0 A7		BANK 0D/A75A - string (FACE blank)
 	JSR $FB09		; A6AF  20 09 FB       
 	JSR $CAB6		; A6B2  20 B6 CA       
 	LDA #$6D		; A6B5  A9 6D          
-	LDY #$A7		; A6B7  A0 A7          
+	LDY #$A7		; A6B7  A0 A7		BANK 0D/A76D - string
 	JSR $FB09		; A6B9  20 09 FB       
 	LDA #$5A		; A6BC  A9 5A          
-	LDY #$A7		; A6BE  A0 A7          
+	LDY #$A7		; A6BE  A0 A7		BANK 0D/A75A - string (FACE blank)
 	JSR $FB09		; A6C0  20 09 FB       
 	JSR $A885		; A6C3  20 85 A8       
-	LDY $6213		; A6C6  AC 13 62       
+	LDY $6213		; A6C6  AC 13 62	Current team number(1-4)
 	LDA ($10),Y		; A6C9  B1 10          
 	JSR $F8D4		; A6CB  20 D4 F8       
 	STX $0309		; A6CE  8E 09 03       
@@ -822,12 +823,12 @@ BDA66B:
 	JSR $F8C3		; A6E0  20 C3 F8       
 	LDY #$04		; A6E3  A0 04          
 BDA6E5:
-	LDA $0450,Y		; A6E5  B9 50 04       
+	LDA $0450,Y		; A6E5  B9 50 04	upgrade pay ??
 	STA $032D,Y		; A6E8  99 2D 03       
 	DEY			; A6EB  88             
 	BPL BDA6E5		; A6EC  10 F7          
-	JSR $CAB6		; A6EE  20 B6 CA       
-	JSR $FC9F		; A6F1  20 9F FC       
+	JSR $CAB6		; A6EE  20 B6 CA	Apply to PPU
+	JSR $FC9F		; A6F1  20 9F FC	textbox bottom line (top panel)
 	LDA #$80		; A6F4  A9 80          
 	STA $88			; A6F6  85 88          
 	LDA #$C8		; A6F8  A9 C8          
@@ -841,8 +842,8 @@ BDA6E5:
 	JSR $FB4F		; A708  20 4F FB       
 	LDX #$02		; A70B  A2 02          
 	LDY #$1C		; A70D  A0 1C          
-	JSR $D401		; A70F  20 01 D4       
-	LDX $6213		; A712  AE 13 62       
+	JSR $D401		; A70F  20 01 D4	Set 3 byte to buffer
+	LDX $6213		; A712  AE 13 62	Current team number(1-4)
 	LDA $D6C2,X		; A715  BD C2 D6       
 	STA $03C1		; A718  8D C1 03       
 	STA $03C5		; A71B  8D C5 03       
@@ -855,18 +856,32 @@ BDA6E5:
 	STA $2E			; A72C  85 2E          
 	RTS			; A72E  60             
 
-;$A72F - data block = developments screen ??(compressed 2)
+;$A72F - data block = developments screen ??(compressed 2) string
+.if ORIGINAL
 .byte $00
 .byte $03,$00,$47,$20,$47,$1f,$48,$3f,$48,$01,$76,$02,$72,$03,$8a,$04
 .byte $82,$26,$de,$0e,$de,$2d,$da,$2e,$cd,$2f,$d9,$30,$a6,$31,$71,$32
 .byte $79,$12,$de,$33,$99,$34,$86,$35,$8a,$ff
-;$A75A - data block = 
+.else
+.byte $00,$03
+.byte $00,B_LTL,$20,B_LTL,$1f,B_RTL,$3f,B_RTL
+.byte $01,B_GAE,$02,B_JO
+.byte $2d,B_YOU,$2e,B_NEE,$2f,B_T_E,$31,B_GAE,$32,B_JO,$33,B_BI
+.byte $ff,$03,$8a,$04,$82,$26,$de,$0e,$de,$30,$a6,$12,$de,$34,$86,$35,$8a
+.endif
+;$A75A - data block =  FACE blank
 .byte $00,$03,$1a,$00,$1b,$00
 .byte $1c,$00,$1d,$00,$3a,$00,$3b,$00,$3c,$00,$3d,$00,$ff
-;$A76D - data block =
+;$A76D - data block = tech level 0 dollar payment - string
+.if ORIGINAL
 .byte $00,$03,$02
 .byte $c3,$03,$af,$04,$b8,$05,$da,$06,$cd,$07,$d9,$32,$30,$33,$5c,$34
 .byte $76,$35,$76,$36,$99,$37,$7f,$17,$de,$38,$2e,$ff
+.else
+.byte $00,$03
+.byte $04,B_CO,$05,B_UH,$07,B_GAE,$08,B_JO,$32,B_0,$33,B_USD,$35,B_IP,$36,B_NEE,$37,B_DA,$38,B_DOT
+.byte $ff,$35,B_GAE,$36,B_JO,$37,B_BI,$04,$b8
+.endif
 
 ; Name	:
 	LDA PpuStatus_2002	; A78C  AD 02 20       
@@ -877,11 +892,11 @@ BDA6E5:
 	LDA #$00		; A799  A9 00          
 	STA PpuData_2007	; A79B  8D 07 20       
 	STA PpuData_2007	; A79E  8D 07 20       
-	LDA #$70		; A7A1  A9 70          
+	LDA #$70		; A7A1  A9 70		Left Up Textbox Line
 	STA PpuData_2007	; A7A3  8D 07 20       
-	LDA #$71		; A7A6  A9 71          
+	LDA #$71		; A7A6  A9 71		Middle Up Textbox Line
 	JSR $F237		; A7A8  20 37 F2       
-	LDA #$72		; A7AB  A9 72          
+	LDA #$72		; A7AB  A9 72		Right Up Textbox Line
 	STA PpuData_2007	; A7AD  8D 07 20       
 	LDA #$00		; A7B0  A9 00          
 	STA PpuData_2007	; A7B2  8D 07 20       
@@ -894,39 +909,48 @@ BDA6E5:
 	LDA $9F			; A7C3  A5 9F          
 	ASL A			; A7C5  0A             
 	STA $00			; A7C6  85 00          
-	LDX $6213		; A7C8  AE 13 62       
+	LDX $6213		; A7C8  AE 13 62	Current team number(1-4)
 	LDA $6242,X		; A7CB  BD 42 62       
 	ASL A			; A7CE  0A             
 	ASL A			; A7CF  0A             
 	ASL A			; A7D0  0A             
 	ADC $00			; A7D1  65 00          
-	JSR $C4F4		; A7D3  20 F4 C4       
+	JSR $C4F4		; A7D3  20 F4 C4	BANK SWAP to 8,9 get some text ??
 	LDA #$00		; A7D6  A9 00          
 	STA $02			; A7D8  85 02          
 	LDA #$05		; A7DA  A9 05          
 	STA $03			; A7DC  85 03          
 BDA7DE:
 	LDA #$31		; A7DE  A9 31          
-	LDY #$A8		; A7E0  A0 A8          
-	JSR $FB09		; A7E2  20 09 FB       
+	LDY #$A8		; A7E0  A0 A8		BANK 0D/A831
+	JSR $FB09		; A7E2  20 09 FB	Draw middle panel side textbox line (28 x 2) to buffer
 	LDA #$00		; A7E5  A9 00          
 	STA $0E			; A7E7  85 0E          
 	LDA #$03		; A7E9  A9 03          
 	STA $0F			; A7EB  85 0F          
-	JSR $AA40		; A7ED  20 40 AA       
+	JSR $AA40		; A7ED  20 40 AA	Draw NUMBER:UNIT
 	JSR $CAB6		; A7F0  20 B6 CA       
 	LDA $02			; A7F3  A5 02          
 	CMP #$05		; A7F5  C9 05          
-	BCC BDA7DE		; A7F7  90 E5          
+	BCC BDA7DE		; A7F7  90 E5		loop until last UNIT
 	LDA #$31		; A7F9  A9 31          
-	LDY #$A8		; A7FB  A0 A8          
-	JSR $FB09		; A7FD  20 09 FB       
+	LDY #$A8		; A7FB  A0 A8		BANK 0D/A831
+	JSR $FB09		; A7FD  20 09 FB	Draw middle panel side textbox line (28 x 2) to buffer
+.if ORIGINAL
 	LDA #$65		; A800  A9 65          
 	STA $0322		; A802  8D 22 03       
 	LDA #$66		; A805  A9 66          
 	STA $033D		; A807  8D 3D 03       
 	LDY #$19		; A80A  A0 19          
 	LDA #$4A		; A80C  A9 4A          
+.else
+	LDA #B_LDTL		; A800  A9 65          
+	STA $0322		; A802  8D 22 03       
+	LDA #B_RDTL		; A805  A9 66          
+	STA $033D		; A807  8D 3D 03       
+	LDY #$19		; A80A  A0 19          
+	LDA #B_MDTL
+.endif
 BDA80E:
 	STA $0323,Y		; A80E  99 23 03       
 	DEY			; A811  88             
@@ -944,9 +968,17 @@ BDA80E:
 	JSR $F0A4		; A82D  20 A4 F0       
 	RTS			; A830  60             
 
-;$A831 - data block = ($A831-$A84B)
+;$A831 - data block = ($A831-$A84B) string - middle panel textbox side line (in upgrade ??) 28 x 2 ??
+.if ORIGINAL
 .byte $00,$03,$00,$00,$01,$00,$02,$47,$20,$00,$21,$00,$22,$47,$1d
 .byte $48,$1e,$00,$1f,$00,$3d,$48,$3e,$00,$3f,$00,$ff
+.else
+.byte $00,$03
+.byte $00,$00,$01,$00,$02,B_LTL
+.byte $20,$00,$21,$00,$22,B_LTL
+.byte $1d,B_RTL,$1e,$00,$1f,$00
+.byte $3d,B_RTL,$3e,$00,$3f,$00,$ff
+.endif
 
 ; Name	:
 	JSR $A885		; A84C  20 85 A8       
@@ -1066,11 +1098,12 @@ BDA994:
 .byte $00,$3f,$00,$5d,$48,$5e,$00,$5f,$00,$7d,$48,$7e,$00,$7f,$00,$ff
 
 ; Name	:
+; Marks	: Draw UNIT NUMBER:NAME
 	LDY $02			; AA40  A4 02          
 	JSR $C4E5		; AA42  20 E5 C4       
 	LDA $9B			; AA45  A5 9B          
 	BMI BDAAB6		; AA47  30 6D          
-	JSR $C57C		; AA49  20 7C C5       
+	JSR $C57C		; AA49  20 7C C5	Load UNIT name
 	CLC			; AA4C  18             
 	LDA $0E			; AA4D  A5 0E          
 	ADC #$07		; AA4F  69 07          
@@ -1078,13 +1111,13 @@ BDA994:
 	LDA $0F			; AA53  A5 0F          
 	ADC #$00		; AA55  69 00          
 	STA $13			; AA57  85 13          
-	JSR $F408		; AA59  20 08 F4       
+	JSR $F408		; AA59  20 08 F4	Check character and write to buffer
 	LDA $02			; AA5C  A5 02          
 	STA $18			; AA5E  85 18          
 	INC $18			; AA60  E6 18          
 	LDA #$00		; AA62  A9 00          
 	STA $19			; AA64  85 19          
-	JSR $F884		; AA66  20 84 F8       
+	JSR $F884		; AA66  20 84 F8	Set some digit(number) to buffer
 	LDY #$24		; AA69  A0 24          
 	LDA $0453		; AA6B  AD 53 04       
 	STA ($0E),Y		; AA6E  91 0E          
@@ -1092,7 +1125,11 @@ BDA994:
 	LDA $0454		; AA71  AD 54 04       
 	STA ($0E),Y		; AA74  91 0E          
 	INY			; AA76  C8             
+.if ORIGINAL
 	LDA #$3A		; AA77  A9 3A          
+.else
+	LDA #B_COLON
+.endif
 	STA ($0E),Y		; AA79  91 0E          
 	LDY $03			; AA7B  A4 03          
 	JSR $C4E5		; AA7D  20 E5 C4       
@@ -1120,7 +1157,11 @@ BDA994:
 	LDA $0454		; AAAC  AD 54 04       
 	STA ($0E),Y		; AAAF  91 0E          
 	INY			; AAB1  C8             
+.if ORIGINAL
 	LDA #$3A		; AAB2  A9 3A          
+.else
+	LDA #B_COLON
+.endif
 	STA ($0E),Y		; AAB4  91 0E          
 BDAAB6:
 	INC $02			; AAB6  E6 02          

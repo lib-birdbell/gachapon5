@@ -2228,17 +2228,27 @@ BC93B7:
 	STA $2D			; 93C3	$85 $2d
 	LDA #$40		; 93C5	$a9 $40
 	STA $2C			; 93C7	$85 $2c
-	JSR $F982		; 93C9	$20 $82 $f9
-	JSR $FCBF		; 93CC  20 BF FC       
+	JSR $F982		; 93C9	$20 $82 $f9	Reset 2-line tile buffer (32 x 2)
+	JSR $FCBF		; 93CC  20 BF FC	Top textbox line
+.if ORIGINAL
 	LDA #$47		; 93CF  A9 47          
 	STA $0320		; 93D1  8D 20 03       
 	LDA #$48		; 93D4  A9 48          
+.else
+	LDA #B_LTL		; 93CF  A9 47          
+	STA $0320		; 93D1  8D 20 03       
+	LDA #B_RTL		; 93D4  A9 48          
+.endif
 	STA $033F		; 93D6  8D 3F 03       
 	LDX #$00		; 93D9  A2 00          
 	STX $01			; 93DB  86 01          
 	TXA			; 93DD  8A             
 	CLC			; 93DE  18             
+.if ORIGINAL
 	ADC #$31		; 93DF  69 31          
+.else
+	ADC #$42
+.endif
 	STA $0324		; 93E1  8D 24 03       
 	LDA #$E0		; 93E4  A9 E0          
 	LDY #$94		; 93E6  A0 94          
@@ -2358,9 +2368,16 @@ BC94B5:
 	JSR $F4DC		; 94DA  20 DC F4       
 	JMP $F346		; 94DD  4C 46 F3       
 
-;$94E0 - data block = ($94E0-$9547)
+;$94E0 - data block = ($94E0-$9547) - string - X th fleet city
+.if ORIGINAL
 .byte $00,$03,$22,$80,$23,$72,$25,$76,$26,$9d,$27,$80,$28,$72,$29,$3a
-.byte $02,$de,$33,$8a,$13,$de,$34,$7c,$35,$6e,$36,$3a,$ff,$00,$03,$2a
+.byte $02,$de,$33,$8a,$13,$de,$34,$7c,$35,$6e,$36,$3a,$ff
+.else
+.byte $00,$03
+.byte $22,B_JAE,$25,B_HAAM,$26,B_DAE,$29,B_COLON
+.byte $33,B_DO,$34,B_SI,$36,B_COLON,$ff,$23,$72,$27,$80,$28,B_COLON,$02,$de,$13,$de,$35,$6e
+.endif
+.byte $00,$03,$2a
 ;$9500
 .byte $80,$2b,$72,$2c,$77,$2d,$4f,$ff,$00,$03,$2a,$7a,$2b,$73,$2c,$84
 .byte $0c,$de,$2d,$73,$2e,$7d,$0e,$de,$2f,$90,$ff,$00,$03,$2a,$7e,$2b

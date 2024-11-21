@@ -35,14 +35,14 @@
 .byte B_GUN,B_DAM,B_F,B_9,B_1,$00
 .byte B_RA,B_FL,B_RAE,B_SI,B_AH,$00
 
-.byte $bc,$de,$d1,$00
-.byte $bb,$de,$b8,$00
-.byte $bc,$de,$d1,$f4,$00
-.byte $b9,$de,$d9,$b8,$de,$b8,$de,$00
-.byte $bc,$de,$d1,$f5,$00
-.byte $b6,$de,$bb,$de,$43,$00
-.byte $bc,$de,$aa,$b6,$de,$dd,$00
-.byte $b7,$de,$d7,$c4,$de,$b0,$b6,$de,$00
+.byte B_MULTI,$00
+.byte B_JA,B_QOO,$00
+.byte B_MULTI,B_2,$00
+.byte B_MULTI,B_MULTI,B_MULTI,$00
+.byte B_MULTI,B_3,$00
+.byte B_GA,B_JA,B_C,$00
+.byte B_JAE,B_MULTI,$00
+.byte B_GI,B_RA,B_DO,B_GA,$00
 
 .byte B_HWA,B_EE,B_T_E,B_BE,B_EE,B_S_E,$00
 .byte B_JAN,B_JI,B_BA,B_R_E,$00
@@ -51,12 +51,12 @@
 .byte B_DO,B_GO,B_S_E,B_GI,B_UH,$00
 .byte B_RAE,B_WU,B_ROO,B_RA,$00
 
-.byte $bb,$d7,$d0,$bd,$00
-.byte $d1,$bb,$b2,$00
-.byte $b1,$b2,$d8,$af,$bc,$ad,$00
-.byte $b4,$dd,$c4,$de,$d7,$00
-.byte $d7,$b0,$c1,$ac,$c0,$b0,$00
-.byte $d1,$bb,$b6,$00
+.byte B_SA,B_RA,B_ME,B_S_E,$00
+.byte B_MOO,B_SA,B_EE,$00
+.byte B_AH,B_EE,B_RI,B_SI,$00
+.byte B_MULTI,B_D_E,B_RA,$00
+.byte B_RA,B_MULTI,B_MULTI,$00
+.byte B_MOO,B_SA,B_CA,$00
 
 ;.byte $de,$ac
 .byte $dd,$b8,$dd,$c0,$de,$d1,$b8,$bd,$de,$db,$bd,$dd,$b8,$de
@@ -65,4 +65,6 @@
 .byte $b0,$d7,$dd,$c0,$de,$d1,$de,$dd,$b3,$d9,$cc,$c8,$d9,$b8,$da,$b2
 .byte $b0,$b6,$de,$dd,$c0,$de,$d1,$b5,$dd,$c0,$de,$d1,$cb,$de,$b0,$dd
 .byte $c0,$de,$d1,$cf,$dd,$bb,$b0,$d9,$d1,$46,$39,$31,$b0,$bd,$de,$ca
-.byte $de,$d9,$de,$cf,$bc,$de,$dd,$b7,$de,$b1,$d7
+.byte $de,$d9,$de,$cf,$bc,$de,$dd,$b7,$de,$b1,$d7,$de,$d1,$b8,$de,$d1
+.byte $b8,$de,$b8,$de,$de,$d1,$de,$43,$aa,$b6,$de,$dd,$de,$b0,$b6,$de
+.byte $bc,$ad,$de,$d7,$ac,$c0,$b0

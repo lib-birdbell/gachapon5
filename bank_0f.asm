@@ -2935,7 +2935,7 @@ BFFC81:
 	RTS			; FCBE  $60
 
 ; Name	:
-; Marks	: Top textbox line (16 bytes Large)
+; Marks	: Top textbox line (32 bytes Large)
 ;	  MAY BE DO NOT NEED for HANGUL
 .if ORIGINAL
 	LDA #$61		; FCBF  $A9 $61

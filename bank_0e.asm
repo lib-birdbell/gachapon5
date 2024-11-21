@@ -1681,13 +1681,58 @@ BECC21:
 
 ;$CD81
 .byte $aa,$a5,$62,$4a,$48,$20,$68,$f5,$e0,$29,$90,$02,$a2,$28,$bd
-.byte $1e,$d6,$a8,$68,$4c,$70,$f5,$20,$5f,$f9,$a9,$ed,$a0,$cd,$20,$09
-.byte $fb,$ae,$13,$62,$bd,$22,$62,$85,$18,$bd,$26,$62,$85,$19,$bd,$2a
-.byte $62,$85,$00,$20,$c3,$f8,$a0,$05,$b9,$50,$04,$99,$14,$03,$88,$10
-.byte $f7,$a5,$a2,$30,$1c,$85,$00,$a5,$a0,$85,$18,$a5,$a1,$85,$19,$20
-.byte $c3,$f8,$a0,$05,$b9,$50,$04,$99,$30,$03,$88,$10,$f7,$20,$fe,$fa
-.byte $60,$a9,$2d,$a0,$05,$99,$30,$03,$88,$10,$fa,$30,$f0,$00,$03,$0f
-.byte $75,$10,$e8,$1a,$5c,$36,$5c,$2b,$8b,$2c,$96,$2d,$73,$ff,$48,$8a
+.byte $1e,$d6,$a8,$68,$4c,$70,$f5
+
+; Name	:
+	JSR $F95F		; CD97  20 5F F9       
+	LDA #$ED		; CD9A  A9 ED          
+	LDY #$CD		; CD9C  A0 CD          
+	JSR $FB09		; CD9E  20 09 FB       
+	LDX $6213		; CDA1  AE 13 62       
+	LDA $6222,X		; CDA4  BD 22 62       
+	STA $18			; CDA7  85 18          
+	LDA $6226,X		; CDA9  BD 26 62       
+	STA $19			; CDAC  85 19          
+	LDA $622A,X		; CDAE  BD 2A 62       
+	STA $00			; CDB1  85 00          
+	JSR $F8C3		; CDB3  20 C3 F8	Draw decimal to $0450-$0454??
+	LDY #$05		; CDB6  A0 05          
+BECDB8:
+	LDA $0450,Y		; CDB8  B9 50 04       
+	STA $0314,Y		; CDBB  99 14 03       
+	DEY			; CDBE  88             
+	BPL BECDB8		; CDBF  10 F7          
+	LDA $A2			; CDC1  A5 A2          
+	BMI BECDE1		; CDC3  30 1C          
+	STA $00			; CDC5  85 00          
+	LDA $A0			; CDC7  A5 A0          
+	STA $18			; CDC9  85 18          
+	LDA $A1			; CDCB  A5 A1          
+	STA $19			; CDCD  85 19          
+	JSR $F8C3		; CDCF  20 C3 F8	Draw decimal to $0450-$0454??
+	LDY #$05		; CDD2  A0 05          
+BECDD4:
+	LDA $0450,Y		; CDD4  B9 50 04       
+	STA $0330,Y		; CDD7  99 30 03       
+	DEY			; CDDA  88             
+	BPL BECDD4		; CDDB  10 F7          
+	JSR $FAFE		; CDDD  20 FE FA	Draw to PPU
+	RTS			; CDE0  60             
+
+BECDE1:
+.byte $a9,$2d,$a0,$05,$99,$30,$03,$88,$10,$fa,$30,$f0
+
+;$CDED - data block = string - funds money, upgrade pay
+.if ORIGINAL
+.byte $00,$03,$0f
+.byte $75,$10,$e8,$1a,$5c,$36,$5c,$2b,$8b,$2c,$96,$2d,$73,$ff
+.else
+.byte $00,$03
+.byte $0f,B_TEAM,$10,B_BI,$1a,B_USD,$36,B_USD,$2b,B_GAE,$2c,B_JO,$2d,B_BI,$ff
+.endif
+
+;$CDFE
+.byte $48,$8a
 ;$CE00
 .byte $4a,$4a,$18,$69,$01,$cd,$13,$62,$f0,$03,$68,$18,$60,$68,$38,$60
 
@@ -2068,6 +2113,8 @@ BED3E3:
 	RTS			; D400  60             
 
 ; Name	:
+; X	:
+; Y	:
 	TXA			; D401  8A             
 	ASL A			; D402  0A             
 	TAX			; D403  AA             
@@ -2351,7 +2398,7 @@ BED606:
 ;$D800
 .byte $00,$36,$07,$36,$06,$36,$17,$36,$07,$36,$01,$36,$28,$36,$21,$36
 .byte $03,$36,$00,$10,$10,$36,$28,$36,$1a,$2a
-;$D81A - data block =
+;$D81A - data block = 2 bytes are each pair
 .byte $06,$36,$06,$36,$0f,$36
 .byte $1a,$2a,$05,$05,$20,$07,$02,$02,$09,$03,$02,$02,$09,$03,$02,$02
 .byte $09,$03,$02,$02,$09,$03,$02,$ff,$ff,$ff,$15,$0c,$09,$01,$0d,$ff

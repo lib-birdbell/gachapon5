@@ -34,6 +34,7 @@ $6226-9	= Team funds money High byte
 $622A-D	= Team funds money Very high byte(x10000 digit)
 
 $621A-	= ??
+$6243-$6246	= ??
 $6247-	= military camp number ??
 $62A3-$62B8	= CITY owner ?? (21 city)
 $62B9-	= ??
