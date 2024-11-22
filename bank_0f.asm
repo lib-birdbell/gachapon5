@@ -3077,6 +3077,7 @@ BFFD73:
 	RTS			; FD7A  $60
 
 ; Name	:
+; Marks	: Make GAUGE 8
 	LDA $19                 ; FD7B  $A5 $19
 	STA $9B			; FD7D  $85 $9B
 	LDA #$00		; FD7F  $A9 $00
@@ -3110,13 +3111,21 @@ BFFDA8:
 	TAY			; FDB2  $A8
 	BEQ BFFDBB		; FDB3  $F0 $06
 	TAX			; FDB5  $AA
+.if ORIGINAL
 	LDA #$1B		; FDB6  $A9 $1B
+.else
+	LDA #B_IIII
+.endif
 	JSR $FDC6		; FDB8  $20 $C6 $FD
 BFFDBB:
 	LDA $16			; FDBB  $A5 $16
 	BEQ BFFDC5		; FDBD  $F0 $06
 	CLC			; FDBF  $18
+.if ORIGINAL
 	ADC #$17		; FDC0  $69 $17
+.else
+	ADC #$AF
+.endif
 	STA $0450,Y		; FDC2  $99 $50 $04
 BFFDC5:
 	RTS			; FDC5  $60

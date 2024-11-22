@@ -11,6 +11,8 @@ $63	= BANK PRG
 
 $7E	= KEY xxxx ?xx? <- ? is A or S
 
+$93	= Fleet number
+$94	= Current Fleet ?? (00h-0Fh) ??
 $95	= TEAM COLOR ??
 $96	= Target PILOT ??
 
@@ -45,7 +47,10 @@ $62E1-	= EX
 $631D-	= CL
 $6309-	= EX
 
-$6359-	= ??
-$6369-	= ??
-
-$6389-	= ??
+$6359-	= fleet status ??
+$6369-	= ?? CITY ??
+$6379-	= Current Mobile armor ??
+$6389-	= Current Mobile armor HP
+$6399-	= ??
+$63A9-	= ??
+$63B9-	= ??

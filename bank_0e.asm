@@ -396,7 +396,8 @@ BEC291:
 .endif
 
 ; Name	:
-; Marks	: $0314-$0319 is Money?? Draw right down screen ??
+; Marks	: Draw right down screen - Money / Income / City / Military camp
+;	  $0314-$0319 is Money?? 
 ;	  Set funds money for display ($18, $19, $00 temp)
 ;	  $0450-$0455 is funds money / income temp
 ;	  $046C-$046F is 
@@ -408,7 +409,7 @@ BEC291:
 	LDA #$65		; C2F9  A9 65          
 	LDY #$C3		; C2FB  A0 C3		0E/C365
 	JSR $FB09		; C2FD  20 09 FB	Draw 14 x 6 screen
-	LDX $6213		; C300  AE 13 62       
+	LDX $6213		; C300  AE 13 62	Current team number(1-4)
 	LDA $6222,X		; C303  BD 22 62       
 	STA $18			; C306  85 18		Funds money low byte
 	LDA $6226,X		; C308  BD 26 62       
@@ -423,7 +424,7 @@ BEC317:
 	DEY			; C31D  88             
 	BPL BEC317		; C31E  10 F7          
 	JSR $86BD		; C320  20 BD 86	Income money calcuration ??
-	LDX $6213		; C323  AE 13 62       
+	LDX $6213		; C323  AE 13 62	Current team number(1-4)
 	LDA $045B,X		; C326  BD 5B 04	Income money low byte
 	STA $18			; C329  85 18          
 	LDA $045F,X		; C32B  BD 5F 04	Income money high byte
@@ -437,12 +438,12 @@ BEC33A:
 	STA $0330,Y		; C33D  99 30 03       
 	DEY			; C340  88             
 	BPL BEC33A		; C341  10 F7          
-	LDX $6213		; C343  AE 13 62       
+	LDX $6213		; C343  AE 13 62	Current team number(1-4)
 	LDA $046B,X		; C346  BD 6B 04       
 	JSR $F8D4		; C349  20 D4 F8       
 	STX $034A		; C34C  8E 4A 03       
 	STY $034B		; C34F  8C 4B 03       
-	LDX $6213		; C352  AE 13 62       
+	LDX $6213		; C352  AE 13 62	Current team number(1-4)
 	LDA $6246,X		; C355  BD 46 62	Military camp
 	CLC			; C358  18             
 .if ORIGINAL
@@ -799,7 +800,7 @@ BEC54C:
 	LDA #$13		; C5B1  A9 13          
 	STA $10			; C5B3  85 10          
 	LDA #$95		; C5B5  A9 95          
-	STA $11			; C5B7  85 11          
+	STA $11			; C5B7  85 11		BANK 08/9513
 	CPX #$29		; C5B9  E0 29          
 	BCC BEC5BF		; C5BB  90 02          
 	LDX #$28		; C5BD  A2 28          

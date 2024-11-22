@@ -90,6 +90,10 @@ B_M	= $53
 B_S	= $54
 B_Z	= $55
 
+B_MLTL	= $5A
+B_MMTL	= $5B
+B_MRTL	= $5C
+
 B_TWO	= $60
 B_T_E	= $61
 B_TEE	= $62
@@ -171,7 +175,14 @@ B_I	= $B0
 B_II	= $B1
 B_III	= $B2
 B_IIII	= $B3
+B_NT	= $B4
+B_PL	= $B5
 B_SOO	= $B6
+B_HP	= $B7
+B_AT	= $B8
+B_DF	= $B9
+B_CL	= $BA
+B_EX	= $BB
 
 B_SEUP	= $BC
 B_SEUNG	= $BD

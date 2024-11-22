@@ -1741,7 +1741,7 @@ BC8F91:
 	TAY			; 8FB0  A8             
 	LDA $6369,Y		; 8FB1  B9 69 63       
 	STA $92			; 8FB4  85 92          
-	JSR $C2EF		; 8FB6  20 EF C2       
+	JSR $C2EF		; 8FB6  20 EF C2	Draw right down panel - Money / Income / City / Military camp
 	JSR $CA1C		; 8FB9  20 1C CA       
 	PLA			; 8FBC  68             
 	STA $03			; 8FBD  85 03          
@@ -2245,14 +2245,14 @@ BC93B7:
 	TXA			; 93DD  8A             
 	CLC			; 93DE  18             
 .if ORIGINAL
-	ADC #$31		; 93DF  69 31          
+	ADC #$31		; 93DF  69 31		Military camp number
 .else
 	ADC #$42
 .endif
 	STA $0324		; 93E1  8D 24 03       
 	LDA #$E0		; 93E4  A9 E0          
-	LDY #$94		; 93E6  A0 94          
-	JSR $FB09		; 93E8  20 09 FB       
+	LDY #$94		; 93E6  A0 94		BANK 0C/94E0
+	JSR $FB09		; 93E8  20 09 FB
 	LDA $95			; 93EB  A5 95          
 	SEC			; 93ED  38             
 	SBC #$01		; 93EE  E9 01          
@@ -2278,7 +2278,7 @@ BC93B7:
 	BNE BC9428		; 9410  D0 16          
 BC9412:
 	LDA #$08		; 9412  A9 08          
-	LDY #$95		; 9414  A0 95          
+	LDY #$95		; 9414  A0 95		BANK 0C/9508
 	BNE BC9428		; 9416  D0 10          
 BC9418:
 	LDA #$1B		; 9418  A9 1B          
@@ -2292,22 +2292,26 @@ BC9424:
 	LDA #$28		; 9424  A9 28          
 	LDY #$95		; 9426  A0 95          
 BC9428:
-	JSR $FB09		; 9428  20 09 FB       
+	JSR $FB09		; 9428  20 09 FB	Write string
 	LDX $02			; 942B  A6 02          
 	LDA $6369,X		; 942D  BD 69 63       
-	JSR $C58C		; 9430  20 8C C5       
-	LDA #$17		; 9433  A9 17          
+	JSR $C58C		; 9430  20 8C C5	Get CITY NAME
+	LDA #$17		; 9433  A9 17
 	STA $12			; 9435  85 12          
 	LDA #$03		; 9437  A9 03          
 	STA $13			; 9439  85 13          
-	JSR $F408		; 943B  20 08 F4       
-	JSR $CAB6		; 943E  20 B6 CA       
+	JSR $F408		; 943B  20 08 F4	Check character
+	JSR $CAB6		; 943E  20 B6 CA	Apply to PPU
+.if ORIGINAL
 	LDA #$F0		; 9441  A9 F0          
+.else
+	LDA #B_HP
+.endif
 	STA $032B		; 9443  8D 2B 03       
 	STA $033A		; 9446  8D 3A 03       
 	LDX $02			; 9449  A6 02          
-	LDA $6379,X		; 944B  BD 79 63       
-	JSR $9562		; 944E  20 62 95       
+	LDA $6379,X		; 944B  BD 79 63	fleet status ??
+	JSR $9562		; 944E  20 62 95	Load UNIT NAME ??
 	LDX $02			; 9451  A6 02          
 	LDA $63B9,X		; 9453  BD B9 63       
 	JSR $9570		; 9456  20 70 95       
@@ -2318,12 +2322,16 @@ BC9428:
 	LDA $63C9,X		; 9463  BD C9 63       
 	JSR $9555		; 9466  20 55 95       
 	JSR $CAB6		; 9469  20 B6 CA       
+.if ORIGINAL
 	LDA #$2A		; 946C  A9 2A          
+.else
+	LDA #B_MULTI
+.endif
 	STA $032B		; 946E  8D 2B 03       
 	STA $033A		; 9471  8D 3A 03       
 	LDX $02			; 9474  A6 02          
 	LDA $6399,X		; 9476  BD 99 63       
-	JSR $9562		; 9479  20 62 95       
+	JSR $9562		; 9479  20 62 95	Load UNIT NAME ??
 	LDX $02			; 947C  A6 02          
 	LDA $63D9,X		; 947E  BD D9 63       
 	JSR $9570		; 9481  20 70 95       
@@ -2338,15 +2346,25 @@ BC9428:
 	INX			; 9499  E8             
 	CPX #$04		; 949A  E0 04          
 	BCS BC94B5  		; 949C  B0 17          
+.if ORIGINAL
 	LDA #$49		; 949E  A9 49          
+.else
+	LDA #B_MMTL
+.endif
 	LDY #$1D		; 94A0  A0 1D          
 BC94A2:
 	STA $0301,Y		; 94A2  99 01 03       
 	DEY			; 94A5  88             
 	BPL BC94A2		; 94A6  10 FA          
+.if ORIGINAL
 	LDA #$67		; 94A8  A9 67          
 	STA $0300		; 94AA  8D 00 03       
 	LDA #$68		; 94AD  A9 68          
+.else
+	LDA #B_MLTL		; 94A8  A9 67          
+	STA $0300		; 94AA  8D 00 03       
+	LDA #B_MRTL		; 94AD  A9 68          
+.endif
 	STA $031F		; 94AF  8D 1F 03       
 	JMP $93DB		; 94B2  4C DB 93       
 BC94B5:
@@ -2372,18 +2390,42 @@ BC94B5:
 .if ORIGINAL
 .byte $00,$03,$22,$80,$23,$72,$25,$76,$26,$9d,$27,$80,$28,$72,$29,$3a
 .byte $02,$de,$33,$8a,$13,$de,$34,$7c,$35,$6e,$36,$3a,$ff
-.else
-.byte $00,$03
-.byte $22,B_JAE,$25,B_HAAM,$26,B_DAE,$29,B_COLON
-.byte $33,B_DO,$34,B_SI,$36,B_COLON,$ff,$23,$72,$27,$80,$28,B_COLON,$02,$de,$13,$de,$35,$6e
-.endif
+;$94FD - data block = string - waiting
 .byte $00,$03,$2a
 ;$9500
-.byte $80,$2b,$72,$2c,$77,$2d,$4f,$ff,$00,$03,$2a,$7a,$2b,$73,$2c,$84
-.byte $0c,$de,$2d,$73,$2e,$7d,$0e,$de,$2f,$90,$ff,$00,$03,$2a,$7e,$2b
-.byte $9d,$2c,$84,$2d,$73,$2e,$4f,$ff,$00,$03,$2a,$80,$2b,$72,$2c,$77
-.byte $2d,$6c,$2e,$78,$2f,$4f,$ff,$00,$03,$2a,$7e,$2b,$9d,$2c,$84,$2d
+.byte $80,$2b,$72,$2c,$77,$2d,$4f,$ff
+;$9508 - data block = string - move done
+.byte $00,$03,$2a,$7a,$2b,$73,$2c,$84
+.byte $0c,$de,$2d,$73,$2e,$7d,$0e,$de,$2f,$90,$ff
+;$951B - data block = string - battling
+.byte $00,$03,$2a,$7e,$2b
+.byte $9d,$2c,$84,$2d,$73,$2e,$4f,$ff
+;$952B - data block = string - run awaying
+.byte $00,$03,$2a,$80,$2b,$72,$2c,$77
+.byte $2d,$6c,$2e,$78,$2f,$4f,$ff
+;$9537 - data block = string - cannot battle
+.byte $00,$03,$2a,$7e,$2b,$9d,$2c,$84,$2d
 .byte $73,$2e,$8c,$2f,$89,$30,$73,$ff
+.else
+;$94E0
+.byte $00,$03
+.byte $22,B_JAE,$25,B_HAAM,$26,B_DAE,$29,B_COLON
+.byte $33,B_JANG,$34,B_SO,$36,B_COLON,$ff,$23,$72,$27,$80,$28,B_COLON,$02,$de,$13,$de,$35,$6e
+;$94FD - data block = string - waiting
+.byte $00,$03,$2a,B_DAE,$2b,B_GI,$2c,B_JUNG,$ff
+.byte $2d,$4f					; Left
+;$9508 - data block = string - move done
+.byte $00,$03,$2a,B_EE,$2b,B_DONG,$2c,B_JONG,$2d,B_RYO,$ff
+.byte $0c,$de,$2e,$7d,$0e,$de,$2f,$90		; Left
+;$951B - data block = string - battling
+.byte $00,$03,$2a,B_JEON,$2b,B_TWO,$2c,B_JUNG,$ff,$2d,$73,$2e,$4f
+;$9528 - data block = string - run awaying
+.byte $00,$03,$2a,B_DO,$2b,B_ZOO,$2c,B_JUNG,$ff
+.byte $2d,$6c,$2e,$78,$2f,$4f			; Left
+;$9537 - data block = string - cannot battle
+.byte $00,$03,$2a,B_JEON,$2b,B_TWO,$2c,B_BUL,$2d,B_GA,$ff
+.byte $2e,$8c,$2f,$89,$30,$73			; Left
+.endif
 
 ; Name	:
 	JSR $F8D4		; 9548  20 D4 F8       
@@ -2400,7 +2442,7 @@ BC94B5:
 	RTS			; 9561  60             
 
 ; Name	:
-	JSR $C57C		; 9562  20 7C C5       
+	JSR $C57C		; 9562  20 7C C5	Load UNIT NAME ??
 	LDA #$03		; 9565  A9 03          
 	STA $12			; 9567  85 12          
 	LDA #$03		; 9569  A9 03          
@@ -2408,7 +2450,7 @@ BC94B5:
 	JMP $F408		; 956D  4C 08 F4       
 
 ; Name	:
-	JSR $C57C		; 9570  20 7C C5       
+	JSR $C57C		; 9570  20 7C C5	Load UNIT NAME ??
 	LDA #$12		; 9573  A9 12          
 	STA $12			; 9575  85 12          
 	LDA #$03		; 9577  A9 03          
@@ -2749,6 +2791,7 @@ BC97CA:
 .byte $90,$01,$60
 
 ; Name	:
+; Marks	: Draw Military camp command screen
 	JSR $87FB		; 986F  20 FB 87       
 	LDY $6213		; 9872  AC 13 62       
 	LDA $6242,Y		; 9875  B9 42 62       
@@ -2761,7 +2804,8 @@ BC97CA:
 .if ORIGINAL
 	JSR $F536		; 9884  20 36 F5	CHR ROM BANK subroutine
 .else
-	JSR $FF27
+	JSR $F536		;			DEBUG BANK
+	;JSR $FF27
 .endif
 	LDA #$AE		; 9887  A9 AE          
 	STA $44			; 9889  85 44          
@@ -2802,20 +2846,25 @@ BC97CA:
 	JSR $FB09		; 98D4  20 09 FB       
 	LDA $93			; 98D7  A5 93          
 	CLC			; 98D9  18             
-	ADC #$31		; 98DA  69 31          
+.if ORIGINAL
+	ADC #$31		; 98DA  69 31		Fleet number
 	STA $0324		; 98DC  8D 24 03       
-	JSR $CAB6		; 98DF  20 B6 CA       
+.else
+	ADC #$42		; 98DA  69 31          
+	STA $0323		; 98DC  8D 24 03       
+.endif
+	JSR $CAB6		; 98DF  20 B6 CA	Apply to PPU
 	LDA #$D9		; 98E2  A9 D9          
 	LDY #$9B		; 98E4  A0 9B		BANK 0C/9BD9
 	JSR $FB09		; 98E6  20 09 FB       
 	LDX $94			; 98E9  A6 94          
 	LDA $6369,X		; 98EB  BD 69 63       
-	JSR $C58C		; 98EE  20 8C C5       
+	JSR $C58C		; 98EE  20 8C C5	Get CITY NAME
 	LDA #$08		; 98F1  A9 08          
 	STA $12			; 98F3  85 12          
 	LDA #$03		; 98F5  A9 03          
 	STA $13			; 98F7  85 13          
-	JSR $F408		; 98F9  20 08 F4       
+	JSR $F408		; 98F9  20 08 F4	Check character
 	LDX $94			; 98FC  A6 94          
 	LDA $6359,X		; 98FE  BD 59 63       
 	TAY			; 9901  A8             
@@ -2829,7 +2878,7 @@ BC97CA:
 	AND #$40		; 990E  29 40          
 	BEQ BC9924		; 9910  F0 12          
 	LDA #$8E		; 9912  A9 8E          
-	LDY #$9B		; 9914  A0 9B          
+	LDY #$9B		; 9914  A0 9B		BANK 0C/9B8E
 	BNE BC992E		; 9916  D0 16          
 BC9918:
 	LDA #$99		; 9918  A9 99          
@@ -2848,20 +2897,20 @@ BC992A:
 	LDY #$9B		; 992C  A0 9B          
 BC992E:
 	JSR $FB09		; 992E  20 09 FB       
-	JSR $CAB6		; 9931  20 B6 CA       
+	JSR $CAB6		; 9931  20 B6 CA	Apply to PPU
 	LDX $94			; 9934  A6 94          
 	LDA $6379,X		; 9936  BD 79 63       
 	STA $0F			; 9939  85 0F          
-	JSR $C635		; 993B  20 35 C6       
+	JSR $C635		; 993B  20 35 C6	Get Mobile armor HP ??
 	STA $0D			; 993E  85 0D          
 	LDX $94			; 9940  A6 94          
 	LDA $6389,X		; 9942  BD 89 63       
 	STA $0E			; 9945  85 0E          
-	JSR $9CAA		; 9947  20 AA 9C       
+	JSR $9CAA		; 9947  20 AA 9C	Draw UNIT NAME / Gauge / HP
 	LDA #$F4		; 994A  A9 F4          
 	LDY #$9B		; 994C  A0 9B		BANK 0C/9BF4
 	JSR $FB09		; 994E  20 09 FB       
-	JSR $CAB6		; 9951  20 B6 CA       
+	JSR $CAB6		; 9951  20 B6 CA	Apply to PPU
 	LDX $94			; 9954  A6 94          
 	LDA $6399,X		; 9956  BD 99 63       
 	STA $0F			; 9959  85 0F          
@@ -2873,7 +2922,7 @@ BC992E:
 	LDA #$01		; 9967  A9 01          
 	LDY #$9C		; 9969  A0 9C          
 	JSR $FB09		; 996B  20 09 FB       
-	JSR $CAB6		; 996E  20 B6 CA       
+	JSR $CAB6		; 996E  20 B6 CA	Apply to PPU
 	LDX $94			; 9971  A6 94          
 	LDA $63B9,X		; 9973  BD B9 63       
 	STA $0F			; 9976  85 0F          
@@ -2886,7 +2935,7 @@ BC992E:
 	LDA #$12		; 9987  A9 12          
 	LDY #$9C		; 9989  A0 9C          
 	JSR $FB09		; 998B  20 09 FB       
-	JSR $CAB6		; 998E  20 B6 CA       
+	JSR $CAB6		; 998E  20 B6 CA	Apply to PPU
 	LDX $94			; 9991  A6 94          
 	LDA $63D9,X		; 9993  BD D9 63       
 	STA $0F			; 9996  85 0F          
@@ -2898,11 +2947,15 @@ BC992E:
 	LDA #$01		; 99A4  A9 01          
 	LDY #$9C		; 99A6  A0 9C          
 	JSR $FB09		; 99A8  20 09 FB       
-	JSR $CAB6		; 99AB  20 B6 CA       
+	JSR $CAB6		; 99AB  20 B6 CA	Apply to PPU
 	LDA #$23		; 99AE  A9 23          
-	LDY #$9C		; 99B0  A0 9C          
-	JSR $FB09		; 99B2  20 09 FB       
+	LDY #$9C		; 99B0  A0 9C		BANK 0C/9C23
+	JSR $FB09		; 99B2  20 09 FB	Draw Commander: Pilot:
+.if ORIGINAL
 	LDA #$49		; 99B5  A9 49          
+.else
+	LDA #B_MMTL
+.endif
 	LDY #$07		; 99B7  A0 07          
 BC99B9:
 	STA $0328,Y		; 99B9  99 28 03       
@@ -2912,25 +2965,25 @@ BC99B9:
 	LDX $94			; 99C2  A6 94          
 	LDA $0470,X		; 99C4  BD 70 04       
 	JSR $C5AC		; 99C7  20 AC C5       
-	LDA #$08		; 99CA  A9 08          
+	LDA #$08		; 99CA  A9 08		Get Pilot name ??
 	STA $12			; 99CC  85 12          
 	LDA #$03		; 99CE  A9 03          
 	STA $13			; 99D0  85 13          
-	JSR $F408		; 99D2  20 08 F4       
+	JSR $F408		; 99D2  20 08 F4	Check character
 	LDX $94			; 99D5  A6 94          
 	LDA $0480,X		; 99D7  BD 80 04       
-	JSR $C5AC		; 99DA  20 AC C5       
+	JSR $C5AC		; 99DA  20 AC C5	Get Pilot name ??
 	LDA #$17		; 99DD  A9 17          
 	STA $12			; 99DF  85 12          
 	LDA #$03		; 99E1  A9 03          
 	STA $13			; 99E3  85 13          
-	JSR $F408		; 99E5  20 08 F4       
-	JSR $CAB6		; 99E8  20 B6 CA       
+	JSR $F408		; 99E5  20 08 F4	Check character
+	JSR $CAB6		; 99E8  20 B6 CA	Apply to PPU
 	LDA #$EC		; 99EB  A9 EC          
 	STA $0328		; 99ED  8D 28 03       
 	STA $0337		; 99F0  8D 37 03       
 	LDA #$57		; 99F3  A9 57          
-	LDY #$9C		; 99F5  A0 9C          
+	LDY #$9C		; 99F5  A0 9C		BANK 0C/9C57 - FACE blank
 	JSR $FB09		; 99F7  20 09 FB       
 	LDX $94			; 99FA  A6 94          
 	LDA $0470,X		; 99FC  BD 70 04       
@@ -2956,7 +3009,7 @@ BC9A0F:
 	STA $05			; 9A29  85 05          
 BC9A2B:
 	LDA $01			; 9A2B  A5 01          
-	JSR $F8D4		; 9A2D  20 D4 F8       
+	JSR $F8D4		; 9A2D  20 D4 F8	Set decimal to ascii ??
 	STX $0329		; 9A30  8E 29 03       
 	STY $032A		; 9A33  8C 2A 03       
 	LDX $94			; 9A36  A6 94          
@@ -2986,9 +3039,9 @@ BC9A67:
 	JSR $F8D4		; 9A69  20 D4 F8       
 	STX $0338		; 9A6C  8E 38 03       
 	STY $0339		; 9A6F  8C 39 03       
-	JSR $CAB6		; 9A72  20 B6 CA       
+	JSR $CAB6		; 9A72  20 B6 CA	Apply to PPU
 	LDA #$44		; 9A75  A9 44          
-	LDY #$9C		; 9A77  A0 9C          
+	LDY #$9C		; 9A77  A0 9C		BANK 0C/9C44 - PL CL EX
 	JSR $FB09		; 9A79  20 09 FB       
 	LDA #$57		; 9A7C  A9 57          
 	LDY #$9C		; 9A7E  A0 9C          
@@ -3025,7 +3078,7 @@ BC9A67:
 	JSR $F8D4		; 9AD2  20 D4 F8       
 	STX $033C		; 9AD5  8E 3C 03       
 	STY $033D		; 9AD8  8C 3D 03       
-	JSR $CAB6		; 9ADB  20 B6 CA       
+	JSR $CAB6		; 9ADB  20 B6 CA	Apply to PPU
 	JSR $FC9F		; 9ADE  20 9F FC       
 	LDA PpuStatus_2002	; 9AE1  AD 02 20       
 	LDA #$23		; 9AE4  A9 23          
@@ -3099,15 +3152,10 @@ BC9B64:
 	JSR $F4EF		; 9B73  20 EF F4       
 	JMP $F346		; 9B76  4C 46 F3       
 
-;$9B79 - data block = ($9B79-$9B8D) No X navy
+;$9B79 - data block = string ($9B79-$9B8D) No X navy
 .if ORIGINAL
 .byte $00,$03,$22,$80,$23,$72,$25
 .byte $76,$26,$9d,$27,$80,$28,$72,$02,$de,$20,$47,$3f,$48,$ff
-.else
-.include "text/C_9B79.inc"
-;.byte $00,$03,$22,$85,$23,$86,$25
-;.byte $86,$26,$ac,$27,$90,$28,$82,$20,$47,$3f,$48,$ff,$02,$de
-.endif
 ;$9B8E
 .byte $00,$03
 .byte $37,$80,$38,$72,$39,$77,$3a,$4f,$ff,$00,$03,$37,$7a,$38,$73,$39
@@ -3120,39 +3168,48 @@ BC9B64:
 .byte $7c,$24,$6e,$27,$3a,$31,$7c,$11,$de,$32,$6e,$33,$73,$34,$80,$35
 .byte $72,$36,$3a,$ff
 ;$9BF4 - data block = ($9BF4-$9C00) mobile armor:
-.if ORIGINAL
 .byte $00,$03,$22,$77,$23,$76,$24,$9d,$27,$3a,$3a,$f0
 ;$9C00
 .byte $ff
-.else
-.include "text/C_9BF4.inc"
-.endif
 ;$9C01
 .byte $00,$03,$22,$98,$23,$6e,$24,$73,$25,$7b,$26,$9d,$27,$3a,$3a
 .byte $2a,$ff,$00,$03,$22,$7c,$23,$7b,$24,$78,$25,$4d,$26,$53,$27,$3a
-.byte $3a,$f0,$ff,$00,$03,$20,$67,$3f,$68,$22,$7c,$23,$9a,$24,$72,$25
+.byte $3a,$f0,$ff
+;$9C23 - data block = string - commander : / pilot :
+.byte $00,$03,$20,$67,$3f,$68,$22,$7c,$23,$9a,$24,$72,$25
 .byte $76,$26,$9d,$27,$3a,$11,$df,$31,$ca,$32,$b2,$33,$db,$34,$af,$35
-.byte $c4,$36,$3a,$ff,$00,$03,$08,$ed,$17,$ed,$28,$ee,$37,$ee,$0c,$f3
-.byte $1b,$f3,$2c,$f3,$3b,$f3,$ff,$00,$03,$02,$00,$03,$00,$04,$00,$05
+.byte $c4,$36,$3a,$ff
+;$9C44 - data block = string - PL CL EX
+.byte $00,$03,$08,$ed,$17,$ed,$28,$ee,$37,$ee,$0c,$f3
+.byte $1b,$f3,$2c,$f3,$3b,$f3,$ff
+;$9C57 - data block = string - blank
+.byte $00,$03,$02,$00,$03,$00,$04,$00,$05
 .byte $00,$22,$00,$23,$00,$24,$00,$25,$00,$11,$00,$12,$00,$13,$00,$14
-.byte $00,$31,$00,$32,$00,$33,$00,$34,$00,$ff,$55,$55,$55,$55,$55,$55
+.byte $00,$31,$00,$32,$00,$33,$00,$34,$00,$ff
+.else
+.include "text/C_9B79_MILITARYCAMP_STATUS.inc"
+.endif
+
+;$9C7A
+.byte $55,$55,$55,$55,$55,$55
 .byte $55,$55,$55,$55,$55,$55,$55,$55,$55,$55,$55,$55,$55,$55,$55,$55
 .byte $55,$55,$55,$55,$55,$55,$55,$55,$55,$55,$55,$55,$55,$55,$55,$55
 .byte $55,$55,$05,$05,$05,$05,$05,$05,$05,$05
 
 ; Name	:
+; Marks	: Draw UNIT NAME / Gauge / Digit
 	LDA $0F			; 9CAA  A5 0F          
-	JSR $C57C		; 9CAC  20 7C C5       
+	JSR $C57C		; 9CAC  20 7C C5	Load UNIT NAME ??
 	LDA #$08		; 9CAF  A9 08          
 	STA $12			; 9CB1  85 12          
 	LDA #$03		; 9CB3  A9 03          
 	STA $13			; 9CB5  85 13          
-	JSR $F408		; 9CB7  20 08 F4       
+	JSR $F408		; 9CB7  20 08 F4	Check character
 	LDA $0E			; 9CBA  A5 0E          
 	STA $19			; 9CBC  85 19          
 	LDA $0D			; 9CBE  A5 0D          
 	STA $16			; 9CC0  85 16          
-	JSR $FD7B		; 9CC2  20 7B FD       
+	JSR $FD7B		; 9CC2  20 7B FD	Make Gauge 8 ??
 	LDY #$07		; 9CC5  A0 07          
 BC9CC7:
 	LDA $0450,Y		; 9CC7  B9 50 04       
@@ -3160,7 +3217,7 @@ BC9CC7:
 	DEY			; 9CCD  88             
 	BPL BC9CC7		; 9CCE  10 F7          
 	LDA $0E			; 9CD0  A5 0E          
-	JSR $F8D4		; 9CD2  20 D4 F8       
+	JSR $F8D4		; 9CD2  20 D4 F8	Set decimal to ascii
 	STA $033B		; 9CD5  8D 3B 03       
 	STX $033C		; 9CD8  8E 3C 03       
 	STY $033D		; 9CDB  8C 3D 03       
