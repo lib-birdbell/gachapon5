@@ -1,4 +1,32 @@
-;Must maintain 134 bytes - 37 bytes left
+;Must maintain 148+134 bytes - 43+37 bytes left
+;$9877 - Earth
+.byte B_JI,B_SANG,$00
+.byte B_SA,B_EE,B_D_E,B_1,$00
+.byte B_SA,B_EE,B_D_E,B_2,$00
+.byte B_SA,B_EE,B_D_E,B_3,$00
+.byte B_SA,B_EE,B_D_E,B_4,$00
+.byte B_SA,B_EE,B_D_E,B_5,$00
+.byte B_SA,B_EE,B_D_E,B_6,$00
+.byte B_SA,B_EE,B_D_E,B_7,$00
+.byte B_ROO,B_NA,B_TWO,$00
+.byte B_SOL,B_RO,B_MON,$00
+.byte B_AH,B_BA,B_OH,B_AH,B_K_E,$00
+.byte B_ACK,B_SI,B_Z_E,$00
+.byte B_5,B_th,B_ROO,B_NA,$00
+.byte B_G_E,B_RA,B_NA,B_DA,$00
+.byte B_BIG,B_TO,B_RI,B_AH,$00
+.byte B_DA,B_CA,B_R_E,$00
+.byte B_OH,B_DI,B_SA,$00
+.byte B_BUEL,B_PA,B_S_E,B_T_E,$00
+.byte B_MA,B_CA,B_OH,$00
+.byte B_HE,B_CO,B_RI,$00
+.byte B_HE,B_ME,B_CA,$00
+.byte B_JA,B_B_E,B_RO,$00
+.byte $6d,$73,$31,$32,$33,$34,$35,$36,$37,$b0,$dd,$b8,$b0,$bd,$de,$a5
+.byte $d9,$c5,$c0,$de,$d8,$b1,$b0,$d9,$af,$bb,$a7,$bd,$c4,$ce,$dd,$ba
+.byte $dd,$d8,$b0,$b7,$de,$c6,$b1,$cc,$de,$db,$b0
+;$9906 - Earth
+.byte $81,$77,$6d,$73,$00
 .byte T_SA,T_EE,T_D_U,T_1,$00
 .byte T_SA,T_EE,T_D_U,T_2,$00
 .byte T_SA,T_EE,T_D_U,T_3,$00

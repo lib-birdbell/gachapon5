@@ -2407,7 +2407,7 @@ BC94B5:
 .byte $00,$03,$2a,$7e,$2b,$9d,$2c,$84,$2d
 .byte $73,$2e,$8c,$2f,$89,$30,$73,$ff
 .else
-;$94E0
+;$94E0 - data block = string - X fleet: position:
 .byte $00,$03
 .byte $22,B_JAE,$25,B_HAAM,$26,B_DAE,$29,B_COLON
 .byte $33,B_JANG,$34,B_SO,$36,B_COLON,$ff,$23,$72,$27,$80,$28,B_COLON,$02,$de,$13,$de,$35,$6e
@@ -2855,7 +2855,7 @@ BC97CA:
 .endif
 	JSR $CAB6		; 98DF  20 B6 CA	Apply to PPU
 	LDA #$D9		; 98E2  A9 D9          
-	LDY #$9B		; 98E4  A0 9B		BANK 0C/9BD9
+	LDY #$9B		; 98E4  A0 9B		BANK 0C/9BD9 - 
 	JSR $FB09		; 98E6  20 09 FB       
 	LDX $94			; 98E9  A6 94          
 	LDA $6369,X		; 98EB  BD 69 63       
@@ -2882,19 +2882,19 @@ BC97CA:
 	BNE BC992E		; 9916  D0 16          
 BC9918:
 	LDA #$99		; 9918  A9 99          
-	LDY #$9B		; 991A  A0 9B          
+	LDY #$9B		; 991A  A0 9B		BANK 0C/9B99
 	BNE BC992E		; 991C  D0 10          
 BC991E:
 	LDA #$AC		; 991E  A9 AC          
-	LDY #$9B		; 9920  A0 9B          
+	LDY #$9B		; 9920  A0 9B		BANK 0C/9BAC
 	BNE BC992E		; 9922  D0 0A          
 BC9924:
 	LDA #$C8		; 9924  A9 C8          
-	LDY #$9B		; 9926  A0 9B          
+	LDY #$9B		; 9926  A0 9B		BANK 0C/9BC8
 	BNE BC992E		; 9928  D0 04          
 BC992A:
 	LDA #$B9		; 992A  A9 B9          
-	LDY #$9B		; 992C  A0 9B          
+	LDY #$9B		; 992C  A0 9B		BANK 0C/9BB9
 BC992E:
 	JSR $FB09		; 992E  20 09 FB       
 	JSR $CAB6		; 9931  20 B6 CA	Apply to PPU
@@ -2908,7 +2908,7 @@ BC992E:
 	STA $0E			; 9945  85 0E          
 	JSR $9CAA		; 9947  20 AA 9C	Draw UNIT NAME / Gauge / HP
 	LDA #$F4		; 994A  A9 F4          
-	LDY #$9B		; 994C  A0 9B		BANK 0C/9BF4
+	LDY #$9B		; 994C  A0 9B		BANK 0C/9BF4 - Mobile armor: HP
 	JSR $FB09		; 994E  20 09 FB       
 	JSR $CAB6		; 9951  20 B6 CA	Apply to PPU
 	LDX $94			; 9954  A6 94          
@@ -2920,7 +2920,7 @@ BC992E:
 	STA $0D			; 9962  85 0D          
 	JSR $9CAA		; 9964  20 AA 9C       
 	LDA #$01		; 9967  A9 01          
-	LDY #$9C		; 9969  A0 9C          
+	LDY #$9C		; 9969  A0 9C		BANK 0C/9C01 - Mass product: X
 	JSR $FB09		; 996B  20 09 FB       
 	JSR $CAB6		; 996E  20 B6 CA	Apply to PPU
 	LDX $94			; 9971  A6 94          
@@ -2933,7 +2933,7 @@ BC992E:
 	STA $0E			; 9982  85 0E          
 	JSR $9CAA		; 9984  20 AA 9C       
 	LDA #$12		; 9987  A9 12          
-	LDY #$9C		; 9989  A0 9C          
+	LDY #$9C		; 9989  A0 9C		BANK 0C/9C12 - Prototype mobile suit: HP
 	JSR $FB09		; 998B  20 09 FB       
 	JSR $CAB6		; 998E  20 B6 CA	Apply to PPU
 	LDX $94			; 9991  A6 94          
@@ -2945,7 +2945,7 @@ BC992E:
 	STA $0D			; 999F  85 0D          
 	JSR $9CAA		; 99A1  20 AA 9C       
 	LDA #$01		; 99A4  A9 01          
-	LDY #$9C		; 99A6  A0 9C          
+	LDY #$9C		; 99A6  A0 9C		BANK 0C/9C01 - Mass product: X
 	JSR $FB09		; 99A8  20 09 FB       
 	JSR $CAB6		; 99AB  20 B6 CA	Apply to PPU
 	LDA #$23		; 99AE  A9 23          
@@ -2979,7 +2979,11 @@ BC99B9:
 	STA $13			; 99E3  85 13          
 	JSR $F408		; 99E5  20 08 F4	Check character
 	JSR $CAB6		; 99E8  20 B6 CA	Apply to PPU
+.if ORIGINAL
 	LDA #$EC		; 99EB  A9 EC          
+.else
+	LDA #B_NT
+.endif
 	STA $0328		; 99ED  8D 28 03       
 	STA $0337		; 99F0  8D 37 03       
 	LDA #$57		; 99F3  A9 57          
@@ -3044,7 +3048,7 @@ BC9A67:
 	LDY #$9C		; 9A77  A0 9C		BANK 0C/9C44 - PL CL EX
 	JSR $FB09		; 9A79  20 09 FB       
 	LDA #$57		; 9A7C  A9 57          
-	LDY #$9C		; 9A7E  A0 9C          
+	LDY #$9C		; 9A7E  A0 9C		BANK 0C/9C57 - Blank
 	JSR $FB09		; 9A80  20 09 FB       
 	LDA $02			; 9A83  A5 02          
 	JSR $F8D4		; 9A85  20 D4 F8       
@@ -3079,7 +3083,7 @@ BC9A67:
 	STX $033C		; 9AD5  8E 3C 03       
 	STY $033D		; 9AD8  8C 3D 03       
 	JSR $CAB6		; 9ADB  20 B6 CA	Apply to PPU
-	JSR $FC9F		; 9ADE  20 9F FC       
+	JSR $FC9F		; 9ADE  20 9F FC	Draw textbox middle bottom line (32 x 1)
 	LDA PpuStatus_2002	; 9AE1  AD 02 20       
 	LDA #$23		; 9AE4  A9 23          
 	STA PpuAddr_2006	; 9AE6  8D 06 20       
@@ -3156,24 +3160,26 @@ BC9B64:
 .if ORIGINAL
 .byte $00,$03,$22,$80,$23,$72,$25
 .byte $76,$26,$9d,$27,$80,$28,$72,$02,$de,$20,$47,$3f,$48,$ff
-;$9B8E
+;$9B8E - data block - string
 .byte $00,$03
 .byte $37,$80,$38,$72,$39,$77,$3a,$4f,$ff,$00,$03,$37,$7a,$38,$73,$39
 .byte $84,$19,$de,$3a,$73,$3b,$7d,$1b,$de,$3c,$90,$ff,$00,$03,$37,$7e
 .byte $38,$9d,$39,$84,$3a,$73,$3b,$4f,$ff,$00,$03,$37,$80,$38,$72,$39
 .byte $77,$3a,$6c,$3b,$78,$3c,$4f,$ff,$00,$03,$37,$7e,$38,$9d,$39,$84
 .byte $3a,$73,$3b,$8c,$3c,$89,$3d,$73,$ff
-;$9BD9 - data block = ($9BD9-$9BF3) include: did navy:
+;$9BD9 - data block = ($9BD9-$9BF3) position: company:
 .byte $00,$03,$02,$de,$22,$8a,$23
 .byte $7c,$24,$6e,$27,$3a,$31,$7c,$11,$de,$32,$6e,$33,$73,$34,$80,$35
 .byte $72,$36,$3a,$ff
-;$9BF4 - data block = ($9BF4-$9C00) mobile armor:
+;$9BF4 - data block = ($9BF4-$9C00) mobile armor: HP
 .byte $00,$03,$22,$77,$23,$76,$24,$9d,$27,$3a,$3a,$f0
 ;$9C00
 .byte $ff
-;$9C01
+;$9C01 - data block = string - Mass product mobile armor/suit: X
 .byte $00,$03,$22,$98,$23,$6e,$24,$73,$25,$7b,$26,$9d,$27,$3a,$3a
-.byte $2a,$ff,$00,$03,$22,$7c,$23,$7b,$24,$78,$25,$4d,$26,$53,$27,$3a
+.byte $2a,$ff
+;$9C12 - data block = string - Prototype mobile suit: HP
+.byte $00,$03,$22,$7c,$23,$7b,$24,$78,$25,$4d,$26,$53,$27,$3a
 .byte $3a,$f0,$ff
 ;$9C23 - data block = string - commander : / pilot :
 .byte $00,$03,$20,$67,$3f,$68,$22,$7c,$23,$9a,$24,$72,$25
@@ -3190,7 +3196,7 @@ BC9B64:
 .include "text/C_9B79_MILITARYCAMP_STATUS.inc"
 .endif
 
-;$9C7A
+;$9C7A - data block = PPU attribute table (PPU $23C0)
 .byte $55,$55,$55,$55,$55,$55
 .byte $55,$55,$55,$55,$55,$55,$55,$55,$55,$55,$55,$55,$55,$55,$55,$55
 .byte $55,$55,$55,$55,$55,$55,$55,$55,$55,$55,$55,$55,$55,$55,$55,$55

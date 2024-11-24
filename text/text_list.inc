@@ -111,6 +111,7 @@ B_RDTL	= $74
 B_MDTL	= $75
 B_LTL	= $76
 B_RTL	= $77
+B_PRO	= $78
 
 B_USD	= $79
 B_MK2_A = $7A

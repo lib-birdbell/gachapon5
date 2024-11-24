@@ -1667,6 +1667,7 @@ BFF30D:
 	RTS			; F315  $60
 
 ; Name	:
+; Marks	: Enable NMI, Set Sprite pattern $1000
 	LDA #$88		; F316  $A9 $88
 BFF318:
 	ORA $3C			; F318  $05 $3C
@@ -2916,7 +2917,7 @@ BFFC81:
 	RTS			; FC9E  $60
 
 ; Name	:
-; Marks	: Draw textbox bottom line
+; Marks	: Draw textbox bottom line (32 x 1)
 	LDA #$73		; FC9F  $A9 $73		LeftBottom textbox line
 	STA PpuData_2007	; FCA1  $8D $07 $20
 	LDA #$75		; FCA4  $A9 $75		Bottom textbox line
@@ -2935,7 +2936,7 @@ BFFC81:
 	RTS			; FCBE  $60
 
 ; Name	:
-; Marks	: Top textbox line (32 bytes Large)
+; Marks	: Top textbox line (32 x 1)
 ;	  MAY BE DO NOT NEED for HANGUL
 .if ORIGINAL
 	LDA #$61		; FCBF  $A9 $61

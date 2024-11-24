@@ -1136,6 +1136,7 @@ BEC80B:
 	JSR $F34A		; C817  20 4A F3       
 	JMP $F346		; C81A  4C 46 F3       
 
+.if ORIGINAL
 ;$C81D - data block = neutral fleet
 .byte $00,$03,$33
 .byte $81,$34,$6d,$35,$73,$36,$98,$37,$6d,$38,$73,$3a,$76,$3b,$9d,$3c
@@ -1148,6 +1149,25 @@ BEC80B:
 .byte $00,$03,$02,$de,$22
 .byte $8e,$23,$73,$24,$74,$25,$72,$33,$00,$34,$00,$35,$00,$36,$00,$37
 .byte $00,$39,$00,$3a,$00,$3b,$00,$3c,$00,$3d,$00,$ff
+.else
+;$C81D - data block = current fleet
+.byte $00,$03
+.byte $33,B_BAE,$34,B_CHI,$35,B_HAAM,$36,B_DAE
+.byte $00,B_LTL,$20,B_LTL,$1f,B_RTL,$3f,B_RTL,$ff,$3c,$80,$3d,$72
+.byte $37,$6d,$38,$73
+.byte $3a,B_HAAM,$3b,B_DAE
+;$C83C - data block = income $(money)
+.byte $00,$03
+.byte $22,B_SOO,$23,B_IP,$2b,B_0,$2c,B_USD
+.byte $33,$00,$34,$00,$35,$00,$36,$00,$37,$00
+.byte $39,$00,$3a,$00,$3b,$00,$3c,$00,$3d,$00,$ff
+;$C85B - data block = defense
+.byte $00,$03
+.byte $22,B_DO,$23,B_SI,$24,B_DF
+.byte $33,$00,$34,$00,$35,$00,$36,$00,$37,$00
+.byte $39,$00,$3a,$00,$3b,$00,$3c,$00,$3d,$00,$ff,$de,$22,$25,$72
+.endif
+
 ;$C87C - data block =
 .byte $aa,$aa,$aa,$aa
 .byte $ff,$ff,$ff,$ff,$aa,$aa,$aa,$aa,$ff,$ff,$ff,$ff,$aa,$aa,$aa,$aa
@@ -1356,7 +1376,7 @@ BECA13:
 	LDA #$00		; CA1C  A9 00          
 	STA $9D			; CA1E  85 9D          
 	JSR $C4DD		; CA20  20 DD C4       
-	JSR $986F		; CA23  20 6F 98       
+	JSR $986F		; CA23  20 6F 98	Draw Military camp command screen
 	LDA #$00		; CA26  A9 00          
 	STA $90			; CA28  85 90          
 BECA2A:
@@ -1391,8 +1411,13 @@ BECA4E:
 	JSR $F99F               ; CA62  20 9F F9       
 	LDA $93			; CA65  A5 93          
 	CLC			; CA67  18             
-	ADC #$31		; CA68  69 31          
+.if ORIGINAL
+	ADC #$31		; CA68  69 31		Military camp number
 	STA $0312		; CA6A  8D 12 03       
+.else
+	ADC #$42		; CA68  69 31          
+	STA $0311		; CA6A  8D 12 03       
+.endif
 	JSR $FAF0		; CA6D  20 F0 FA       
 	JSR $8007		; CA70  20 07 80       
 	LDA $90			; CA73  A5 90          
@@ -1680,9 +1705,20 @@ BECC21:
 	STA $2F			; CD7E  85 2F          
 	RTS			; CD80  60             
 
-;$CD81
-.byte $aa,$a5,$62,$4a,$48,$20,$68,$f5,$e0,$29,$90,$02,$a2,$28,$bd
-.byte $1e,$d6,$a8,$68,$4c,$70,$f5
+; Name	:
+	TAX			; CD81  AA             
+	LDA $62			; CD82  A5 62          
+	LSR A			; CD84  4A             
+	PHA			; CD85  48             
+	JSR $F568		; CD86  20 68 F5       
+	CPX #$29		; CD89  E0 29          
+	BCC BECD8F		; CD8B  90 02          
+	LDX #$28		; CD8D  A2 28          
+BECD8F:
+	LDA $D61E,X		; CD8F  BD 1E D6       
+	TAY			; CD92  A8             
+	PLA			; CD93  68             
+	JMP $F570		; CD94  4C 70 F5       
 
 ; Name	:
 	JSR $F95F		; CD97  20 5F F9       
@@ -2369,7 +2405,9 @@ BED606:
 .byte $14,$19,$15,$15,$15,$15,$19,$16,$16,$16,$16,$19,$17,$17,$17,$17
 .byte $19,$0f
 ;$D6C2 - data block = ??
-.byte $0f,$01,$05,$17,$1a,$00,$07,$03,$01,$06,$00,$d7,$b7,$d7
+.byte $0f
+;$D6C3 - data block = ??
+.byte $01,$05,$17,$1a,$00,$07,$03,$01,$06,$00,$d7,$b7,$d7
 .byte $87,$57,$1f,$1f,$47,$c8,$88,$20,$88,$b8,$4d,$18,$52,$34,$80,$af
 .byte $89,$d8,$00,$97,$87,$1f,$3f,$2f,$27,$8f,$97,$5f,$17,$57,$9f,$2f
 .byte $6f,$67,$47,$3e,$57,$36,$78,$5f,$00,$03,$03,$03,$03,$03,$03,$03

@@ -112,7 +112,7 @@ BDA0A1:
 	ADC #$42		; Fleet Number
 	STA $0324		; A0BA  8D 26 03       
 .endif
-	JSR $CAB6		; A0BD  20 B6 CA       
+	JSR $CAB6		; A0BD  20 B6 CA	Apply to PPU
 	LDA #$4E		; A0C0  A9 4E          
 	LDY #$A3		; A0C2  A0 A3		0D/A34E
 	JSR $FB09		; A0C4  20 09 FB       
@@ -1756,8 +1756,8 @@ BDAF44:
 	RTS			; AF47  60             
 BDAF48:
 	JSR $B077		; AF48  20 77 B0       
-	JSR $B0E4		; AF4B  20 E4 B0       
-	JSR $B8D1		; AF4E  20 D1 B8       
+	JSR $B0E4		; AF4B  20 E4 B0	Draw UNIT upgrade base screen
+	JSR $B8D1		; AF4E  20 D1 B8	Draw UNIT NAME on middle panel
 BDAF51:
 	JSR $AFB6		; AF51  20 B6 AF       
 	LDA #$10		; AF54  A9 10          
@@ -1795,7 +1795,7 @@ BDAF7E:
 BDAF9C:
 	LDA #$01		; AF9C  A9 01          
 	BIT $7E			; AF9E  24 7E          
-	BEQ BDAF51		; AFA0  F0 AF          
+	BEQ BDAF51		; AFA0  F0 AF		Loop for choose the production UNIT
 	JSR $F2D6		; AFA2  20 D6 F2       
 	LDA $61AB		; AFA5  AD AB 61       
 	BEQ BDAFB0		; AFA8  F0 06          
@@ -1957,6 +1957,7 @@ BDB0E3:
 	RTS			; B0E3  60             
 
 ; Name	:
+; Marks	: Draw Manufacture screen
 	JSR $F32B		; B0E4  20 2B F3       
 	JSR $F3C8		; B0E7  20 C8 F3       
 	LDA #$02		; B0EA  A9 02          
@@ -1985,15 +1986,20 @@ BDB0E3:
 	STA $2D			; B116  85 2D          
 	LDA #$60		; B118  A9 60          
 	STA $2C			; B11A  85 2C          
-	JSR $F982		; B11C  20 82 F9       
-	JSR $FCBF		; B11F  20 BF FC       
+	JSR $F982		; B11C  20 82 F9	Reset 2-line tile buffer (32 x 2)
+	JSR $FCBF		; B11F  20 BF FC	Draw top textbox line (32 x 1)
 	LDA #$21		; B122  A9 21          
-	LDY #$B2		; B124  A0 B2          
+	LDY #$B2		; B124  A0 B2		BANK 0D/B221 - X Fleet / Funds money
 	JSR $FB09		; B126  20 09 FB       
 	LDA $93			; B129  A5 93          
 	CLC			; B12B  18             
-	ADC #$31		; B12C  69 31          
+.if ORIGINAL
+	ADC #$31		; B12C  69 31		Fleet number
 	STA $0324		; B12E  8D 24 03       
+.else
+	ADC #$42
+	STA $0323		; B12E  8D 24 03       
+.endif
 	LDX $6213		; B131  AE 13 62       
 	LDA $6222,X		; B134  BD 22 62       
 	STA $18			; B137  85 18          
@@ -2001,40 +2007,40 @@ BDB0E3:
 	STA $19			; B13C  85 19          
 	LDA $622A,X		; B13E  BD 2A 62       
 	STA $00			; B141  85 00          
-	JSR $F8C3		; B143  20 C3 F8       
+	JSR $F8C3		; B143  20 C3 F8	Calc money ??
 	LDY #$04		; B146  A0 04          
 BDB148:
 	LDA $0450,Y		; B148  B9 50 04       
 	STA $0338,Y		; B14B  99 38 03       
 	DEY			; B14E  88             
 	BPL BDB148		; B14F  10 F7          
-	JSR $CAB6		; B151  20 B6 CA       
+	JSR $CAB6		; B151  20 B6 CA	Apply to PPU
 	LDA #$3E		; B154  A9 3E          
-	LDY #$B2		; B156  A0 B2          
+	LDY #$B2		; B156  A0 B2		BANK 0D/B23E - doing production / price
 	JSR $FB09		; B158  20 09 FB       
-	JSR $CAB6		; B15B  20 B6 CA       
+	JSR $CAB6		; B15B  20 B6 CA	Apply to PPU
 	LDA PpuStatus_2002	; B15E  AD 02 20       
 	LDA #$21		; B161  A9 21          
 	STA PpuAddr_2006	; B163  8D 06 20       
 	LDA #$E0		; B166  A9 E0          
 	STA PpuAddr_2006	; B168  8D 06 20       
-	JSR $FC9F		; B16B  20 9F FC       
+	JSR $FC9F		; B16B  20 9F FC	Draw textbox bottom line (32 x 1) top panel
 	LDA #$22		; B16E  A9 22          
 	STA $2D			; B170  85 2D          
 	LDA #$00		; B172  A9 00          
 	STA $2C			; B174  85 2C          
-	JSR $FCBF		; B176  20 BF FC       
+	JSR $FCBF		; B176  20 BF FC	Top textbox line (32 x 1) middle panel(MAY BE DO NOT NEED for HANGUL)
 	JSR $B203		; B179  20 03 B2       
-	JSR $CAB6		; B17C  20 B6 CA       
+	JSR $CAB6		; B17C  20 B6 CA	Apply to PPU
 	JSR $B203		; B17F  20 03 B2       
-	JSR $CAB6		; B182  20 B6 CA       
+	JSR $CAB6		; B182  20 B6 CA	Apply to PPU
 	LDA PpuStatus_2002	; B185  AD 02 20       
 	LDA #$22		; B188  A9 22          
 	STA PpuAddr_2006	; B18A  8D 06 20       
 	LDA #$80		; B18D  A9 80          
 	STA PpuAddr_2006	; B18F  8D 06 20       
-	JSR $FC9F		; B192  20 9F FC       
-	JSR $FC8F		; B195  20 8F FC       
+	JSR $FC9F		; B192  20 9F FC	Draw textbox bottom line (32 x 1) middle panel
+	JSR $FC8F		; B195  20 8F FC	Draw textbox top line (32 x 1) bottom panel
 	LDA #$22		; B198  A9 22          
 	STA $2D			; B19A  85 2D          
 	LDA #$C0		; B19C  A9 C0          
@@ -2048,15 +2054,15 @@ BDB148:
 .byte $4c,$b0,$b1
 
 BDB1AD:
-	JSR $CAB6		; B1AD  20 B6 CA       
-	JSR $CAB6		; B1B0  20 B6 CA       
-	JSR $CAB6		; B1B3  20 B6 CA       
+	JSR $CAB6		; B1AD  20 B6 CA	Apply to PPU - Draw textbox middle line (32 x 2) bottom panel
+	JSR $CAB6		; B1B0  20 B6 CA	Apply to PPU
+	JSR $CAB6		; B1B3  20 B6 CA	Apply to PPU
 	LDA PpuStatus_2002	; B1B6  AD 02 20       
 	LDA #$23		; B1B9  A9 23          
 	STA PpuAddr_2006	; B1BB  8D 06 20       
 	LDA #$80		; B1BE  A9 80          
 	STA PpuAddr_2006	; B1C0  8D 06 20       
-	JSR $FC9F		; B1C3  20 9F FC       
+	JSR $FC9F		; B1C3  20 9F FC	Draw textbox bottom line (32 x 1) bottom panel
 	LDA PpuStatus_2002	; B1C6  AD 02 20       
 	LDA #$23		; B1C9  A9 23          
 	STA PpuAddr_2006	; B1CB  8D 06 20       
@@ -2065,7 +2071,7 @@ BDB1AD:
 	LDY #$10		; B1D3  A0 10          
 	LDX #$00		; B1D5  A2 00          
 BDB1D7:
-	LDA $B253,X		; B1D7  BD 53 B2       
+	LDA $B253,X		; B1D7  BD 53 B2	PPU NT attribute for UNIT DISPLAY
 	STA PpuData_2007	; B1DA  8D 07 20       
 	INX			; B1DD  E8             
 	DEY			; B1DE  88             
@@ -2081,35 +2087,59 @@ BDB1D7:
 	LDA #$01		; B1F8  A9 01          
 	STA $2F			; B1FA  85 2F          
 	JSR $F34A		; B1FC  20 4A F3       
-	JSR $F3D0		; B1FF  20 D0 F3       
+	JSR $F3D0		; B1FF  20 D0 F3	Wait IRQ ??
 	RTS			; B202  60             
 
 ; Name	:
 	LDY #$06		; B203  A0 06          
+.if ORIGINAL
 	LDA #$2D		; B205  A9 2D          
+.else
+	LDA #B_MDOT
+.endif
 BDB207:
 	STA $0322,Y		; B207  99 22 03       
 	STA $0331,Y		; B20A  99 31 03       
 	DEY			; B20D  88             
 	BPL BDB207		; B20E  10 F7          
+.if ORIGINAL
 	LDA #$2A		; B210  A9 2A          
+.else
+	LDA #B_MULTI
+.endif
 	STA $032A		; B212  8D 2A 03       
 	STA $0339		; B215  8D 39 03       
+.if ORIGINAL
 	LDA #$30		; B218  A9 30          
+.else
+	LDA #B_0
+.endif
 	STA $032D		; B21A  8D 2D 03       
 	STA $033C		; B21D  8D 3C 03       
 	RTS			; B220  60             
 
-;$B221 - data block = ($B221-$B23D)
+;$B221 - data block = ($B221-$B23D) string - X Fleet / Funds money
+.if ORIGINAL
 .byte $00,$03,$22,$80,$23,$72,$25,$76,$26,$9d,$27,$80,$28,$72,$02
 .byte $de,$31,$75,$32,$e8,$3d,$30,$3e,$5c,$20,$47,$3f,$48,$ff
-;$B23E - data block = ($B23E-$B252)
+;$B23E - data block = ($B23E-$B252) string - Make / Make fee
 .byte $00,$03
 .byte $22,$79,$23,$6f,$24,$83,$25,$72,$31,$8b,$32,$96,$33,$73,$3d,$30
 .byte $3e,$5c,$ff
-;$B253 - $B2AB)
-.byte $c0,$f0,$f0,$30,$a0,$a0,$a0,$00,$cc,$ff,$ff,$33,$00
-.byte $00,$00,$00,$a9,$8d,$85,$10,$a9,$b2,$85,$11,$a9,$02,$85,$12,$a9
+.else
+;$B221
+.byte $00,$03
+.byte $22,B_JAE,$24,B_HAAM,$25,B_DAE,$31,B_YOU,$32,B_JI,$33,B_BI,$3d,B_0,$3e,B_USD,$20,B_LTL,$3f,B_RTL,$ff
+.byte $23,$72,$27,$80,$28,$72
+;$B23E
+.byte $00,$03
+.byte $22,B_SAENG,$23,B_SAN,$24,B_HA,$25,B_DA,$31,B_SAENG,$32,B_SAN,$33,B_BI,$3d,B_0
+.byte $3e,B_USD,$ff
+.endif
+;$B253 - data block = NT attribute ($B253-$B262)
+.byte $c0,$f0,$f0,$30,$a0,$a0,$a0,$00,$cc,$ff,$ff,$33,$00,$00,$00,$00
+;$B263
+.byte $a9,$8d,$85,$10,$a9,$b2,$85,$11,$a9,$02,$85,$12,$a9
 .byte $03,$85,$13,$20,$10,$f4,$20,$b6,$ca,$a9,$99,$85,$10,$a9,$b2,$85
 .byte $11,$a9,$02,$85,$12,$a9,$03,$85,$13,$20,$10,$f4,$60,$77,$76,$9d
 .byte $76,$de,$71,$98,$8f,$7e,$9d,$2e,$00,$8f,$7d,$de,$2c,$77,$76,$9d
@@ -2122,19 +2152,19 @@ BDB207:
 	STA $60			; B2B5  85 60          
 	JSR $F96D		; B2B7  20 6D F9       
 	LDA #$88		; B2BA  A9 88          
-	LDY #$B3		; B2BC  A0 B3          
+	LDY #$B3		; B2BC  A0 B3		BANK 0D/B388 - textbox side line
 	JSR $FB09		; B2BE  20 09 FB       
-	JSR $FCBF		; B2C1  20 BF FC       
+	JSR $FCBF		; B2C1  20 BF FC	Top textbox line (32 x 1) MAY BE DO NOT NEED for HANGUL
 	LDA $61AE		; B2C4  AD AE 61       
-	JSR $C57C		; B2C7  20 7C C5       
+	JSR $C57C		; B2C7  20 7C C5	Load UNIT NAME
 	LDA #$30		; B2CA  A9 30          
 	STA $12			; B2CC  85 12          
 	LDA #$03		; B2CE  A9 03          
 	STA $13			; B2D0  85 13          
-	JSR $F408		; B2D2  20 08 F4       
+	JSR $F408		; B2D2  20 08 F4	Check character
 	LDA #$80		; B2D5  A9 80          
 	STA $00			; B2D7  85 00          
-	JSR $F9CA		; B2D9  20 CA F9       
+	JSR $F9CA		; B2D9  20 CA F9	Text convert to tile by table
 	LDA $61AE		; B2DC  AD AE 61       
 	JSR $C67B		; B2DF  20 7B C6       
 	JSR $CEAD		; B2E2  20 AD CE       
@@ -2144,7 +2174,7 @@ BDB207:
 	STA $2C			; B2EB  85 2C          
 	LDA #$01		; B2ED  A9 01          
 	STA $33			; B2EF  85 33          
-	JSR $F4DC		; B2F1  20 DC F4       
+	JSR $F4DC		; B2F1  20 DC F4	Wait IRQ ?? Draw
 	LDA $61AE		; B2F4  AD AE 61       
 	JSR $C695		; B2F7  20 95 C6       
 	LDY #$03		; B2FA  A0 03          
@@ -2155,31 +2185,31 @@ BDB2FC:
 	BPL BDB2FC		; B303  10 F7          
 	LDA #$01		; B305  A9 01          
 	STA $2F			; B307  85 2F          
-	JSR $F4DC		; B309  20 DC F4       
+	JSR $F4DC		; B309  20 DC F4	Wait IRQ ?? Draw
 	JSR $F96D		; B30C  20 6D F9       
 	LDA #$88		; B30F  A9 88          
-	LDY #$B3		; B311  A0 B3          
+	LDY #$B3		; B311  A0 B3		BANK 0D/B388 - textbox side line
 	JSR $FB09		; B313  20 09 FB       
-	JSR $B3B4		; B316  20 B4 B3       
+	JSR $B3B4		; B316  20 B4 B3	Bottom textline (32 x 1)
 	LDA #$9B		; B319  A9 9B          
-	LDY #$B3		; B31B  A0 B3          
+	LDY #$B3		; B31B  A0 B3		BANK 0D/B39B - AT DF Product price
 	JSR $FB09		; B31D  20 09 FB       
 	LDA $61AE		; B320  AD AE 61       
 	JSR $C635		; B323  20 35 C6       
 	JSR $F8D4		; B326  20 D4 F8       
 	STA $0312		; B329  8D 12 03       
 	STX $0313		; B32C  8E 13 03       
-	STY $0314		; B32F  8C 14 03       
+	STY $0314		; B32F  8C 14 03	HP ?
 	LDA $61AE		; B332  AD AE 61       
 	JSR $C615		; B335  20 15 C6       
 	JSR $F8D4		; B338  20 D4 F8       
 	STX $0317		; B33B  8E 17 03       
-	STY $0318		; B33E  8C 18 03       
+	STY $0318		; B33E  8C 18 03	AT ?
 	LDA $61AE		; B341  AD AE 61       
 	JSR $C627		; B344  20 27 C6       
 	JSR $F8D4		; B347  20 D4 F8       
 	STX $031C		; B34A  8E 1C 03       
-	STY $031D		; B34D  8C 1D 03       
+	STY $031D		; B34D  8C 1D 03	DF ?
 	LDA $61AF		; B350  AD AF 61       
 	STA $18			; B353  85 18          
 	LDA $61B0		; B355  AD B0 61       
@@ -2193,7 +2223,7 @@ BDB35F:
 	BPL BDB35F		; B366  10 F7          
 	LDA #$80		; B368  A9 80          
 	STA $00			; B36A  85 00          
-	JSR $F9CA		; B36C  20 CA F9       
+	JSR $F9CA		; B36C  20 CA F9	text convert to tile by table
 	LDA $61AE		; B36F  AD AE 61       
 	JSR $C67B		; B372  20 7B C6       
 	JSR $CE9A		; B375  20 9A CE       
@@ -2206,22 +2236,49 @@ BDB35F:
 	JSR $F4DC		; B384  20 DC F4       
 	RTS			; B387  60             
 
-;$B388 - data block = ($B388-$B3B3)
+;$B388 - data block = ($B388-$B3B3) - string textbox side line
+.if ORIGINAL
 .byte $00,$03,$00,$47,$20,$47,$40,$47
-.byte $60,$47,$1f,$48,$3f,$48,$5f,$48,$7f,$48,$ff,$00,$03,$11,$f0,$16
+.byte $60,$47,$1f,$48,$3f,$48,$5f,$48,$7f,$48,$ff
+;$B39B - data block = string
+.byte $00,$03,$11,$f0,$16
 .byte $f1,$19,$25,$1b,$f2,$1e,$25,$51,$88,$52,$80,$32,$de,$53,$9d,$5d
 .byte $30,$5e,$5c,$ff
+.else
+;
+.byte $00,$03
+.byte $00,B_LTL,$20,B_LTL,$40,B_LTL,$60,B_LTL
+.byte $1f,B_RTL,$3f,B_RTL,$5f,B_RTL,$7f,B_RTL,$ff
+;$B39B - data block =
+.byte $00,$03
+.byte $11,B_HP,$16,B_AT,$19,B_PRO,$1b,B_DF,$1e,B_PRO
+.byte $51,B_SAENG,$52,B_SAN,$53,B_BI
+.byte $5d,B_0,$5e,B_USD,$ff,$32,$de
+.endif
 
 ; Name	:
+; Marks	: Bottom text line (32 x 1)
+.if ORIGINAL
 	LDA #$65		; B3B4  A9 65          
+.else
+	LDA #B_LDTL
+.endif
 	STA $0360		; B3B6  8D 60 03       
 	LDY #$1D		; B3B9  A0 1D          
+.if ORIGINAL
 	LDA #$4A		; B3BB  A9 4A          
+.else
+	LDA #B_MDTL
+.endif
 BDB3BD:
 	STA $0361,Y		; B3BD  99 61 03       
 	DEY			; B3C0  88             
 	BPL BDB3BD		; B3C1  10 FA          
+.if ORIGINAL
 	LDA #$66		; B3C3  A9 66          
+.else
+	LDA #B_RDTL
+.endif
 	STA $037F		; B3C5  8D 7F 03       
 	RTS			; B3C8  60             
 
@@ -2481,14 +2538,18 @@ BDB577:
 BDB5D5:
 	STY $9B			; B5D5  84 9B          
 	TXA			; B5D7  8A             
-	JSR $C57C		; B5D8  20 7C C5       
-	JSR $F408		; B5DB  20 08 F4       
+	JSR $C57C		; B5D8  20 7C C5	Load UNIT NAME
+	JSR $F408		; B5DB  20 08 F4	Check character
 	RTS			; B5DE  60             
 
 ; Name	:
 	LDA $61C6		; B5DF  AD C6 61       
 	CLC			; B5E2  18             
-	ADC #$30		; B5E3  69 30          
+.if ORIGINAL
+	ADC #$30		; B5E3  69 30		UNIT COUNT
+.else
+	ADC #B_0
+.endif
 	STA $032D		; B5E5  8D 2D 03       
 	LDA $61C7		; B5E8  AD C7 61       
 	JSR $F8D4		; B5EB  20 D4 F8       
@@ -2496,7 +2557,11 @@ BDB5D5:
 	STY $036D		; B5F1  8C 6D 03       
 	LDA $61C8		; B5F4  AD C8 61       
 	CLC			; B5F7  18             
-	ADC #$30		; B5F8  69 30          
+.if ORIGINAL
+	ADC #$30		; B5F8  69 30		UNIT COUNT
+.else
+	ADC #B_0
+.endif
 	STA $033C		; B5FA  8D 3C 03       
 	LDA $61C9		; B5FD  AD C9 61       
 	JSR $F8D4		; B600  20 D4 F8       
@@ -2839,10 +2904,10 @@ BDB893:
 .byte $22
 
 ; Name	:
-	JSR $F96D		; B8D1  20 6D F9       
-	JSR $FCBF		; B8D4  20 BF FC       
+	JSR $F96D		; B8D1  20 6D F9	Write tile buffer to upper textbox line
+	JSR $FCBF		; B8D4  20 BF FC	Top textbox line (32 x 1) - MAY BE DO NOT NEED for HANGUL
 	LDA #$90		; B8D7  A9 90          
-	LDY #$B9		; B8D9  A0 B9          
+	LDY #$B9		; B8D9  A0 B9		BANK 0D/B990 - UNIT COUNT
 	JSR $FB09		; B8DB  20 09 FB       
 	LDA #$02		; B8DE  A9 02          
 	STA $12			; B8E0  85 12          
@@ -2854,7 +2919,7 @@ BDB893:
 	STA $61B7		; B8EE  8D B7 61       
 	LDA $61B2		; B8F1  AD B2 61       
 	STA $61B8		; B8F4  8D B8 61       
-	JSR $B58F		; B8F7  20 8F B5       
+	JSR $B58F		; B8F7  20 8F B5	Load UNIT NAME ??
 	LDA $9B			; B8FA  A5 9B          
 	STA $61C2		; B8FC  8D C2 61       
 	LDA $18			; B8FF  A5 18          
@@ -2869,8 +2934,8 @@ BDB893:
 	STA $61B7		; B914  8D B7 61       
 	LDA $61B3		; B917  AD B3 61       
 	STA $61B8		; B91A  8D B8 61       
-	JSR $B58F		; B91D  20 8F B5       
-	LDA $9B			; B920  A5 9B          
+	JSR $B58F		; B91D  20 8F B5	Load UNIT NAME ??
+	LDA $9B			; B920  A5 9B
 	STA $61C3		; B922  8D C3 61       
 	LDA $18			; B925  A5 18          
 	STA $61C7		; B927  8D C7 61       
@@ -2884,7 +2949,7 @@ BDB893:
 	STA $61B7		; B93A  8D B7 61       
 	LDA $61B4		; B93D  AD B4 61       
 	STA $61B8		; B940  8D B8 61       
-	JSR $B58F		; B943  20 8F B5       
+	JSR $B58F		; B943  20 8F B5	Load UNIT NAME ??
 	LDA $9B			; B946  A5 9B          
 	STA $61C4		; B948  8D C4 61       
 	LDA $18			; B94B  A5 18          
@@ -2899,7 +2964,7 @@ BDB893:
 	STA $61B7		; B960  8D B7 61       
 	LDA $61B5		; B963  AD B5 61       
 	STA $61B8		; B966  8D B8 61       
-	JSR $B58F		; B969  20 8F B5       
+	JSR $B58F		; B969  20 8F B5	Load UNIT NAME ??
 	LDA $9B			; B96C  A5 9B          
 	STA $61C5		; B96E  8D C5 61       
 	LDA $18			; B971  A5 18          
@@ -2917,9 +2982,18 @@ BDB893:
 	JSR $F4DC		; B98C  20 DC F4       
 	RTS			; B98F  60             
 
-;$B990 - data block = ($B990-$B9B1)
+;$B990 - data block = ($B990-$B9B1) string - textbox side / X 0 for UNIT count
+.if ORIGINAL
 .byte $00,$03,$20,$47,$40,$47,$60,$47,$3f,$48,$5f,$48,$7f,$48,$2a,$2a
-.byte $2d,$30,$6a,$2a,$6d,$30,$39,$2a,$3c,$30,$79,$2a,$7c,$30,$ff,$90
+.byte $2d,$30,$6a,$2a,$6d,$30,$39,$2a,$3c,$30,$79,$2a,$7c,$30,$ff
+.else
+.byte $00,$03
+.byte $20,B_LTL,$40,B_LTL,$60,B_LTL,$3f,B_RTL,$5f,B_RTL,$7f,B_RTL
+.byte $2a,B_MULTI,$2d,B_0,$6a,B_MULTI,$6d,B_0,$39,B_MULTI,$3c,B_0,$79,B_MULTI,$7c,B_0,$ff
+.endif
+
+;$B9AF
+.byte $90
 .byte $01,$60
 
 ; Name	:

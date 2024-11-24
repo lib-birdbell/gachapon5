@@ -463,6 +463,7 @@
 .include "text/8_9835_PARTY_NAME.inc"
 .endif
 ;$9877 - data block = CITY NAME A
+.if ORIGINAL
 ;$9877 - Earth
 .byte $81,$77,$6d,$73,$00
 .byte $bb,$b2,$c4,$de
@@ -479,7 +480,6 @@
 ;$9906 - Earth
 .byte $81,$77,$6d,$73,$00
 ;$990B - data block = CITY NAME B
-.if ORIGINAL
 .byte $bb,$b2,$c4,$de,$31
 .byte $00,$bb,$b2,$c4,$de,$32,$00,$bb,$b2,$c4,$de,$33,$00,$bb,$b2,$c4
 .byte $de,$34,$00,$bb,$b2,$c4,$de,$35,$00,$bb,$b2,$c4,$de,$36,$00,$bb

@@ -875,7 +875,7 @@ BBB0B4:
 	LDA #$3F		; B301  A9 3F          
 	STA PpuAddr_2006	; B303  8D 06 20       
 	LDA #$00		; B306  A9 00          
-	STA PpuAddr_2006	; B308  8D 06 20       
+	STA PpuAddr_2006	; B308  8D 06 20	Palette RAM indexes
 	LDX #$A0		; B30B  A2 A0          
 	JSR $F164		; B30D  20 64 F1       
 	LDA #$3F		; B310  A9 3F          
